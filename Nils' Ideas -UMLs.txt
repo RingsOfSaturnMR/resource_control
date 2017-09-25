@@ -1,0 +1,82 @@
+GameControl
+- GamePane
+- Player
+- DAO
++ GameControl(Player, DAO)
+
+
+Player
+- String Name
+- String PasswordCipherText
+- double cashOnHand
+- List<Equipment> WorkResources
+- List<Fish> FishResources
++ getName():  String
++ getPasswordCipherText:  String
++ getCashOnHand():  double
++ getWorkResources(): List<Equipment> 
++ getFishResources(): List<Fish>
+
+
+
+DAO
++ getPlayerById(): User
++ saveGameState(GameControl): void
++ getGameState(String name, password): String
+
+
+SeaCreature
+- int prefDepth
+- int swimmingSpeed
++ getPrefDepth(): int 
++ getswimmingSpeed(): int
+
+
+Fish extends SeaCreature
+- FishType
++ getSpecies(): FishType
++ getWeight(): double
++ getLength(): double
+
+
+
+
+Equipment
+- EquipType
++ getSpecies(): Species
++ getWeight(): double
++ getLength(): double
+
+
+Market
+-List transactions
++ double doTransaction(Resource)
++ getTransactionList()
+
+
+<<Enum>>
+FishType
+COD
+SALMON
+LOBSTER
+HADDOCK
+FLOUNDER
+
+
+<<Enum>>
+BoatType
+ROW_BOAT
+SKIFF
+TRAWLER
+COMERCIAL_TRAWLER
+
+
+<<Enum>>
+ShellFishType
+LOBSTER
+OYSTER
+MUSSEL
+QUAHOG
+
+
+
