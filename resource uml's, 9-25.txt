@@ -1,0 +1,20 @@
+Resource
+	limited resource
+	unlimited resource
+
+So the limited resource would start out with a certain plentifulness.
+As people used it, this value would go down
+Specifically, when consumeResource was called, the time and amount would be passed to the resource, and based on the plentifulness, women amount would actually get consumed (and returned)
+behind the scenes, determineResource would adjust based on a formula we’d determine what the new plentifulness is. (First it would update how much time had passed since the resource was last used, and update the plentifulness.  Then it would update from this value based on how much was used now.)
+
+Limited Resource—an abstract base class
+
+-plentifulness: int
+
++getPlentifulness(time: Date) int
++toString(): String
++consumeResource(units: int, time: Date()): int
+-determinePlentifulness(time: Date): int
+
+Unlimited Resource—maybe unnecessary
++toString(): String
