@@ -39,10 +39,9 @@ Fish extends SeaCreature
 + getLength(): double
 
 
-
-
 Equipment
 - EquipType
++ getEquipType(): EquipType
 + getSpecies(): Species
 + getWeight(): double
 + getLength(): double
