@@ -1,0 +1,101 @@
+So we have resources
+Some are limited, some are unlimited (at least at this stage in the project)
+
+Abstract resource class
+	I think we should have resource classes that represent all the resources of a given type, and
+	maybe resources that represent individual items (like a fish, a crab)
+	It may sound crazy, but if you think about it the resource as a whole may be more important 	than as an individual— we may or may not need specifics on an individual fish, for example
+
+Resource uml
+	-limited: final boolean
+	-plentifulness—start plentiful, become scarce, replenish overtime
+	-can be overfished!! Extinction!!!
+
+Money
+	unlimited
+	plentifulness is always true
+	can only be sold (taken away)
+	no subclasses (just dollars)
+
+Supplies
+	limited
+	vary how plentiful they are
+	buy/sell a supply
+		ships
+		fuel
+		food
+		nets
+		etc.
+		
+Labor
+	Unlimited
+	Can only be bought
+		repair my ship!
+
+Seafood
+	limited
+	vary how plentiful they are
+	can only be sold
+		cod
+		lobsters
+		shrimp
+		crab
+
+Crew
+	unlimited
+	can be paid
+		skipper
+		fisher
+		repair person?
+
+Market class
+	-determines price of a resource
+	-resource has a normal price, a max price, and a min price (though the min can go very low)
+	-based on number of purchases
+	-based on time as well
+
+For dealing with time, I suggest we just have it check the system time as needed
+However, using a timer of some sort might bring in threading
+
+At it’s most basic
+“Welcome to your boat.”
+Option to buy gear supplies at any point
+If gear or supplies run to low, you lose?
+	For example, no fuel and out at sea means you die
+All this appears in a special supplies area of the screen
+Money is always limited for the player, but unlimited as a resource (you can always get paid if you sell 	something)
+You can press a button to perform a task
+Maybe a (quick) progress bar shows the tasks completion?
+When another player does something, it appears in a different part of your screen
+I think the market should “react” to things being sold
+	more things sold, cheaper value
+	fewer things sold, greater value
+If no one fishes, fish become really expensive
+You should have to pay rent—don’t live on your boat
+So timing becomes an issue
+	
+
+The main should ultimately receive actions, process them, and spit back stuff to the users
+
+
+
+Gui
+	at it’s most basic, for starts
+	Single window
+	The window should have 
+	a place where actions are output as text
+	A stats box
+		should have buttons that let you choose how it is displayed
+e server? Whoever logs on first?
+	possibly there is a computer that serves it that is not a player’s (but this sounds unlikely)
+	
+Records
+	state of game
+	state of players
+	will be maintained in databases, should be updated continually (I’m guessing) as the game is 		played
+
+Multi/parallel threading
+	I do not know how this will fit in yet
+
+The main program will output the stats upon request (I’m guessing, but here’s where parallel processing might come into play)
+Search sort this info could be local
