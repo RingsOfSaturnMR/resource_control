@@ -1,0 +1,173 @@
+
+UMLs:	Caileigh Fitzgerald 9/22/17 CIT_287
+—————
+=============================================================================
+enum Specialties:
+
+public final int FISH = 0;
+public final int PORK = 1;
+public final int FOUL = 2;
+
+enum Repairs:
+
+public final int MINOR_REPAIR = 0;
+public final int REPAIR = 1;
+public final int MAJOR_REPAIR = 2;
+
+=============================================================================
+virtual class Goods:
+
+virtual private double price;
+
+public Goods(double) throws Throwable;
+
+private void setPrice(double);			// overridden in sub classes
+public double getPrice() const;			// overridden in sub classes
+public virtual String toString() const;		// overridden in sub classes
+
+=============================================================================
+Fish extends Goods:
+
+private String type;
+private double weight;
+
+public Fish(double, String) throws Throwable;
+
+private void setPrice(double);
+public double getPrice() const;
+public String toString() const;
+
+=============================================================================
+Meat extends Goods:
+
+private int type;
+private double pricePerPound;
+private int numPounds;
+
+public Meat(int, double, double, double) throws; // last double for super
+
+private void setType(int);
+private void setPPP(double);
+private void setNumPounds(int);
+public Boolean orderMore(int, Money);  // true if $ is enough for request xPPP
+
+=============================================================================
+Money:
+
+private double value;
+
+public Money(double) throw Throwable;
+
+private void setValue(double);
+public double getValue() const;
+
+=============================================================================
+Wallet:
+
+private Money value;
+
+public Wallet() throws Throwable;
+public Wallet(double) throws Throwable;
+ 
+private void setValue(double);
+private Boolean isValidTransaction(double);
+public Boolean withdraw(double) throws Throwable;
+public Boolean deposit(double) throws Throwable;
+public double getValue() const;
+public String toString() const;
+
+=============================================================================
+Boat:
+
+private String name;
+private int length;
+public Boolean repairStatus = false;
+public int repairNeeded = null;
+
+public Boat(String, int);
+
+private void setName(String);
+private void setLength(int);
+public String toString();
+
+=============================================================================
+Player:
+
+private String handle; 		// possibly public if you’re allowed to change
+private String fileName;	// to keep track of points etc…
+private double netWorth;
+public Wallet wallet;
+
+public virtual Player(String) throws Throwable;		// If handle is taken
+public virtual Player(String, double) throws Throwable; // double is for Wallet
+
+private void setHandle(String);
+private void setFileName(String);	// fileName will be handle + .someExtension
+public String getHandle() const;
+public double getNetWorth() const;
+public Boolean withdraw(double) throws Throwable;
+public Boolean deposit(double) throws Throwable;
+public String toString() const;
+
+=============================================================================
+Fisherman extends Player:
+
+private Boat boat;
+private int numFish;
+public ArrayList<Fish> caughtFish;
+
+public Fisherman(String, String, String, int);
+public Fisherman(String, String, String, int, double) throws Throwable;	// double for super
+
+private void setBoatName(String);
+public String toString() const;
+public void catch(Fish); // this will ++numFish and add to array
+public Fish sell(); 	 // this will pop a fish off the array
+public Fish sell(int type, double weight) throws Throwable;
+public void tossBack(Fish);  // this will pop off the caught fish (for weight)
+public Boolean repair(int);  // true if sufficient funds for repair else false
+public String toString();
+
+=============================================================================
+Butcher extends Player:
+
+private String address;
+private String shopName;
+private int numMeats;
+public ArrayList<Meat> meats;
+public int specialty; // possible use an enum type class and set specialties? 
+
+public Butcher(String, String, String, double);		// double is for super
+public Butcher(String, String, String, int, double);
+
+private void setAddress(String);
+private void setShopName(String);
+public void setSpecialty(int) throws Throwable;
+public int getNumMeats() const;
+public Meat sell(Player);		// poly 
+public Meat sell(Player, int type, double weight) throws Throwable;
+public String toString();
+
+=============================================================================
+Mechanic extends Player:
+
+private String address;
+private String shopName;
+private static int numCurrentRepairs;
+private final int MAX_REPAIRS_AT_A_TIME = 10; 		// could kick out when shop full
+public ArrayList<Repairs> repairs;
+
+public Mechanic(String, String, String, double);	// double is for super
+
+private void setAddress(String);
+private void setShopName(String);
+public int getNumCurrentRepairs() const;
+public Boolean makeRepair(Boat) throws Throwable;
+public void getPaid(Player);		// poly
+public String toString();
+
+
+
+
+
+
