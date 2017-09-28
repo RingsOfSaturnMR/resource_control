@@ -1,0 +1,38 @@
+
+
+Player:
+
+Create username and password for players:
+getUsername(): String
+getPassword(): String
+Money(name, balance);
+
+Fish:
+Create its type and weight and how much for a unit weight:
+getType(): char
+getWeight(): double
+getUnitWeight(): double
+
+Money:
+Create money for the transactions
+getBalance(): double
+getName(): String
+void withdraw(amount): double
+void deposit(amount): double
+
+Sea:
+getLengh(): double
+getWidth(): double
+
+Boat:
+getLength(): double
+geHeight(): double
+getType(): char
+
+Market:
+List all of the goods and seafood:
+Players buy and sell food here.
+
+
+
+
