@@ -1,0 +1,36 @@
+Market—sell a lot, the price goes down
+Similar to growth formula for getting current price
+Price will go up if none are sold
+Buy a lot of supplies, price goes up
+Wait, and they will reappear
+
+A player class
+Have to pay bills
+Have money
+Can have ships and supplies too
+Ships and supplies get old/used up
+Can hire crew
+
+A game class
+Controls flow of time.
+Tells all the objects to update themselves from time too time, by calling some of their methods periodically
+
+Can choose where to fish
+Can see other players boats
+Can choose when to fish
+Can be good to buy supplies/invest, can be bad
+Can be good to fish, can be bad
+
+There are dilemmas.  For example, you could win the game by making the fish go extinct and outlasting your opponent.
+You could ally with your opponent.
+Should have a chat feature?
+You could buy up a resource in the market, and could leave your opponent unable to get that resource.
+You could take a trip to the market, but that takes time.  You could fish for one kind of seafood, or another.  You could specialize what supplies you buy.  Maybe you would have to try to figure out where the sea creatures were plentiful or not.
+The fish you catch could go bad if you stay out at sea too long.
+
+You could have an option “change is in the air”
+Then you could change a setting of the world.  For example, if you’re opponent is specializing in lobster, one option could be to make lobster 50 percent less plentiful.  If you were catching lobster, you could make lobster 50n percent more plentiful.
+
+It could be sort of a bizarre world where you just do whatever you want, but with consequences.
+
+Your boats could be selectable.  They could be like game pieces, with circles around their image.  Then if you select them, you can tell them what to do.
