@@ -10,66 +10,56 @@ import javafx.event.EventHandler;
 public class GameControl
 {
 	private GamePane gamePane;
-	private LoginPane loginPane;
-	private Ocean ocean = new Ocean();
-	
+// private, stream, socket? network stuff 
+	private Player player;
+	private String socket;
+
 	private Stage gameStage = new Stage();
-	
-	public Ocean getOcean()
+
+	public GameControl(Player player)
 	{
-		return ocean;
+		this.player = player;
+		loadGamePane();
 	}
 
-	public void setOcean(Ocean ocean)
+
+
+	public void loadGamePane()
 	{
-		this.ocean = ocean;
+
+		// the height and width
+		int GAME_WIDTH = 400;
+		int GAME_HEIGHT = 400;
+
+		// add code--should set window width/height max/min to height and width
+
+		gamePane = new GamePane(new ExtractFishAction(), new SellFishAction());
+
+		Scene gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT);
+
+		// show GamePane
+		gameStage.setScene(gameScene);
+		gameStage.setTitle("Catch!");
+		gameStage.centerOnScreen();
+		gameStage.show();
+		gameStage.requestFocus();
 	}
-	
-	public void loadGamePane(){
 
-        //the height and width
-        int GAME_WIDTH=800;
-        int GAME_HEIGHT=800;
-
-        //add code--should set window width/height max/min to height and width
-
-        gamePane=new GamePane();
-
-        Scene gameScene=new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT);
-
-        //show GamePane
-        gameStage.setScene(gameScene);
-        gameStage.setTitle("Catch!");
-        gameStage.centerOnScreen();
-        gameStage.show();
-        gameStage.requestFocus();
-    }
-	
-	public void loadLoginPane(){
-        //the height and width
-        int GAME_WIDTH=400;
-        int GAME_HEIGHT=400;
-
-        //add code--should set window width/height max/min to height and width
-
-        loginPane=new LoginPane(new LoginHandler());
-
-        Scene loginScene=new Scene(loginPane, GAME_WIDTH, GAME_HEIGHT);
-
-        //show LoginPane
-        gameStage.setScene(loginScene);
-        gameStage.setTitle("Catch! Log-in");
-        gameStage.centerOnScreen();
-        gameStage.show();
-        gameStage.requestFocus();
-    }
-	
-	public class LoginHandler implements EventHandler<ActionEvent>
+	private class ExtractFishAction implements EventHandler<ActionEvent>
 	{
 		@Override
 		public void handle(ActionEvent e)
 		{
-			loadGamePane();
+			System.out.println("Extract fish action triggered(fish caught)");
+		};
+	}
+	
+	private class SellFishAction implements EventHandler<ActionEvent>
+	{
+		@Override
+		public void handle(ActionEvent e)
+		{
+			System.out.println("Sell Fish action triggered(fish sold to market)");
 		};
 	}
 }
