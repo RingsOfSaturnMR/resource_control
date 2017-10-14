@@ -22,16 +22,11 @@ public class GameControl
 		loadGamePane();
 	}
 
-
-
 	public void loadGamePane()
 	{
-
 		// the height and width
 		int GAME_WIDTH = 400;
 		int GAME_HEIGHT = 400;
-
-		// add code--should set window width/height max/min to height and width
 
 		gamePane = new GamePane(new ExtractFishAction(), new SellFishAction());
 

@@ -2,35 +2,34 @@ package resources;
 
 import java.util.ArrayList;
 
-public class ShellFishBushel
+public class ShellfishBushel
 {
-	private ShellFishSpecies speciesInBushel;
+	private ShellfishSpecies speciesInBushel;
 	private double totalBushelWeight = 0;
-	private ArrayList <ShellFish> items = new ArrayList<>();
+	private ArrayList <Shellfish> items = new ArrayList<>();
 	
-	public ShellFishBushel(ShellFishSpecies species)
+	public ShellfishBushel(ShellfishSpecies species)
 	{
 		setBushelContent(species);
 	}
 
-	public void add(ShellFish item)
+	public void add(Shellfish item)
 	{
 		if(item.getSpecies() == speciesInBushel)
 		{
 			items.add(item);
+			updateTotalBushelWeight();
 		}
 		else
 		{
 			System.out.println("This bushel is for species type " + speciesInBushel.toString() );
-		}
-		
-		updateTotalBushelWeight();
+		}	
 	}
 
 	
 	private void updateTotalBushelWeight()
 	{
-		totalBushelWeight += items.get(items.size()).getWeight();
+		totalBushelWeight += items.get(items.size()-1).getWeight();
 	}
 
 	public double getWeight()
@@ -38,12 +37,12 @@ public class ShellFishBushel
 		return this.totalBushelWeight;
 	}
 
-	public ShellFishSpecies getBushelContent()
+	public ShellfishSpecies getBushelContent()
 	{
 		return speciesInBushel;
 	}
 
-	public void setBushelContent(ShellFishSpecies species)
+	public void setBushelContent(ShellfishSpecies species)
 	{
 		this.speciesInBushel = species;
 	}

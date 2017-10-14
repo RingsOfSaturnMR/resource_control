@@ -1,15 +1,6 @@
 package resources;
 
 /**
- * 
- * @author Nils 
- *			Create the UML for your resource Class name Extends? Implements?
- *         Runnable*? instance variables - private / public setters & getters
- *         specialized methods - private / public Create the class (write the
- *         Java code!) Create a test program to exercise the class - you should
- *         be able to instantiate one and multiple instances of your class. Make
- *         sure your code has your name in the comments, and a space for change
- *         history.
  */
 public abstract class SeaCreature <T>
 {

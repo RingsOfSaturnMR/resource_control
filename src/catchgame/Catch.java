@@ -27,11 +27,6 @@ public class Catch extends Application
 		loadLoginPane();
 	}
 
-	public static void main(String[] args)
-	{
-		launch(args);
-	}
-
 	public void loadLoginPane()
 	{
 
@@ -65,5 +60,10 @@ public class Catch extends Application
 		{
 			System.out.println("New User Clicked");
 		};
+	}
+	
+	public static void main(String[] args)
+	{
+		launch(args);
 	}
 }

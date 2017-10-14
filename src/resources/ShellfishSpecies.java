@@ -1,6 +1,6 @@
 package resources;
 
-public enum ShellFishSpecies
+public enum ShellfishSpecies
 {
 	OYSTER,
 	QUAHOG,
