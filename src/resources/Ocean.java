@@ -1,208 +1,132 @@
 package resources;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Ocean
-{
-	private static final double COD_WEIGHT_MAX = 27;
-	private static final double COD_WEIGHT_MIN = 10;
-	
-	private static final double SALMON_WEIGHT_MAX = 16;
-	private static final double SALMON_WEIGHT_MIN = 7;
-	
-	private static final double CLAM_WEIGHT = .02;
-	private static final double QUAHOG_WEIGHT = .03;
-	private static final double OYSTER_WEIGHT = .015;
-	
-	private static int INITIAL_TOTAL_POPULATION = 8;
-	
-	private static int NUM_DECIMAL_PLACES = 2;
-	
-	private Random rand = new Random();
-	
-	private ArrayList<Fish>codPopulation = new ArrayList<>();
+import catchgame.Constants;
 
-	private ArrayList<Fish>salmonPopulation = new ArrayList<>();
+public class Ocean implements Serializable
+{
+	// have a population for each FishSpecies and ShellfishSpecies
+	// resounces.FishSpecies
+	private ArrayList<Fish>codPopulation = new ArrayList<>();
+	private ArrayList<Fish>salmonPopulation = new ArrayList<>(); 
+	private ArrayList<Fish>tunaPopulation = new ArrayList<>();
+	
+	// resounces.ShellFishSpecies
+	private ArrayList<Shellfish>lobsterPopulation = new ArrayList<>();
+	private ArrayList<Shellfish>crabPopulation = new ArrayList<>(); 
+	private ArrayList<Fish>oysterPopuliation = new ArrayList<>();
+	
+	// for randomly generating weights
+	private Random rand = new Random();
 	
 	public Ocean()
 	{
-		int randomInt;
+		// populate each array list with appropriate SeaCreatures.
+		// Randomly generate each SeaCreature's weight by randomly generating a number between
+		// the INITIAL_WEIGHT_MIN and INITAL_WEIGHT_MAX
+		// get values from catchgame.Constants
+		System.out.println("In the Ocean Constructor");
+	}
+	
+	
+	public SeaCreature extractRandomSeaCreature()
+	{
+		// STUBB
+		int random = getRandomInt(0, 6);
 		
-		for (int i = 0; i < INITIAL_TOTAL_POPULATION; i++)
+		switch (random)
 		{
-			randomInt = getRandomInt(0, 2);
-			
-			if(randomInt == 0)
-			{
-				addRandomFish(FishSpecies.COD);
-			}
-			else if(randomInt == 1)
-			{
-				addRandomFish(FishSpecies.SALMON);
-			}
-			else
-			{
-				System.out.println("This shouldnt happen!");
-			}
-			
+		case 0:
+			return new Fish(FishSpecies.COD, 1);
+		case 1:
+			return new Fish(FishSpecies.SALMON, 1);
+		case 2:
+			return new Fish(FishSpecies.TUNA, 1);
+		case 3:
+			return new Shellfish(ShellfishSpecies.CRAB, 1);
+		case 4:
+			return new Shellfish(ShellfishSpecies.LOBSTER, 1);
+		case 5:
+			return new Shellfish(ShellfishSpecies.OYSTER, 1);	
+		default:
+			return null;
 		}
 	}
 	
-	
-	private void addRandomFish(FishSpecies type)
+	public Fish extractCod()
 	{
-		double weight;
-		if (type == FishSpecies.COD)
-		{
-			weight = round(getRandomDouble(COD_WEIGHT_MIN, COD_WEIGHT_MAX), NUM_DECIMAL_PLACES);
-			codPopulation.add(new Fish(FishSpecies.COD, weight ));
-		}
-		if (type == FishSpecies.SALMON)
-		{
-			weight = round(getRandomDouble(SALMON_WEIGHT_MIN, SALMON_WEIGHT_MAX), NUM_DECIMAL_PLACES);
-			salmonPopulation.add(new Fish(FishSpecies.SALMON, weight));
-		}
+		return new Fish(FishSpecies.COD, 1);
 	}
 	
-	private double getRandomDouble(double min, double max)
+	public Fish extractSalmon()
 	{
-		return  min + (rand.nextDouble() * (max - min));	
+		return new Fish(FishSpecies.SALMON, 1);
 	}
 	
+	public Fish extractTuna()
+	{
+		return new Fish(FishSpecies.TUNA, 1);
+	}
+	
+	public Shellfish extractCrab()
+	{
+		return new Shellfish(ShellfishSpecies.CRAB, 1);
+	}
+	
+	public Shellfish extractLobster()
+	{
+		return new Shellfish(ShellfishSpecies.LOBSTER, 1);
+	}
+	
+	public Shellfish extractOyster()
+	{
+		return new Shellfish(ShellfishSpecies.OYSTER, 1);
+	}
+	
+	public int getCurrentCodPopulation()
+	{
+		int random = getRandomInt(0, Constants.COD_INITIAL_POPULATION);
+		return random;
+	}
+	
+	public int getCurrentSalmonPopulation()
+	{
+		int random = getRandomInt(0, Constants.SALMON_INITIAL_POPULATION);
+		return random;
+	}
+	
+	public int getCurrentTunaPopulation()
+	{
+		int random = getRandomInt(0, Constants.TUNA_INITIAL_POPULATION);
+		return random;
+	}
+	
+	public int getCurrentCrabPopulation()
+	{
+		int random = getRandomInt(0, Constants.CRAB_INITIAL_POPULATION);
+		return random;
+	}
+	
+	public int getCurrentLobsterPopulation()
+	{
+		int random = getRandomInt(0, Constants.LOBSTER_INITIAL_POPULATION);
+		return random;
+	}
+	
+	public int getCurrentOysterPopulation()
+	{
+		int random = getRandomInt(0, Constants.OYSTER_INITIAL_POPULATION);
+		return random;
+	}
+	
+	
+	// helper function
 	private int getRandomInt(int min, int max)
 	{
-		return  rand.nextInt(max) + min;
+		int randomInt = rand.nextInt(max) + min;
+		return randomInt;
 	}
-	
-	public ArrayList<Fish> getCodPopulation()
-	{
-		return codPopulation;
-	}
-
-	public void setCodPopulation(ArrayList<Fish> codPopulation)
-	{
-		this.codPopulation = codPopulation;
-	}
-
-	public ArrayList<Fish> getSalmonPopulation()
-	{
-		return salmonPopulation;
-	}
-
-	public void setSalmonPopulation(ArrayList<Fish> salmonPopulation)
-	{
-		this.salmonPopulation = salmonPopulation;
-	}
-	
-	public static double round(double value, int places)
-	{
-		double scale = Math.pow(10, places);
-		return Math.round(value * scale) / scale;
-	}
-	
 }
-
-
-/*
- public class Ocean
-{
-	private static final double COD_WEIGHT_MAX = 27;
-	private static final double COD_WEIGHT_MIN = 10;
-	
-	private static final double SALMON_WEIGHT_MAX = 16;
-	private static final double SALMON_WEIGHT_MIN = 7;
-	
-	private static final double CLAM_WEIGHT = .02;
-	private static final double QUAHOG_WEIGHT = .03;
-	private static final double OYSTER_WEIGHT = .015;
-	
-	private static int INITIAL_TOTAL_POPULATION = 8;
-	
-	private static int NUM_DECIMAL_PLACES = 2;
-	
-	private Random rand = new Random();
-	
-	private ArrayList<Fish>codPopulation = new ArrayList<>();
-
-	private ArrayList<Fish>salmonPopulation = new ArrayList<>();
-	
-	public Ocean()
-	{
-		int randomInt;
-		
-		for (int i = 0; i < INITIAL_TOTAL_POPULATION; i++)
-		{
-			randomInt = getRandomInt(0, 2);
-			
-			if(randomInt == 0)
-			{
-				addRandomFish(FishSpecies.COD);
-			}
-			else if(randomInt == 1)
-			{
-				addRandomFish(FishSpecies.SALMON);
-			}
-			else
-			{
-				System.out.println("This shouldnt happen!");
-			}
-			
-		}
-	}
-	
-	
-	private void addRandomFish(FishSpecies type)
-	{
-		double weight;
-		if (type == FishSpecies.COD)
-		{
-			weight = round(getRandomDouble(COD_WEIGHT_MIN, COD_WEIGHT_MAX), NUM_DECIMAL_PLACES);
-			codPopulation.add(new Fish(FishSpecies.COD, weight ));
-		}
-		if (type == FishSpecies.SALMON)
-		{
-			weight = round(getRandomDouble(SALMON_WEIGHT_MIN, SALMON_WEIGHT_MAX), NUM_DECIMAL_PLACES);
-			salmonPopulation.add(new Fish(FishSpecies.SALMON, weight));
-		}
-	}
-	
-	private double getRandomDouble(double min, double max)
-	{
-		return  min + (rand.nextDouble() * (max - min));	
-	}
-	
-	private int getRandomInt(int min, int max)
-	{
-		return  rand.nextInt(max) + min;
-	}
-	
-	public ArrayList<Fish> getCodPopulation()
-	{
-		return codPopulation;
-	}
-
-	public void setCodPopulation(ArrayList<Fish> codPopulation)
-	{
-		this.codPopulation = codPopulation;
-	}
-
-	public ArrayList<Fish> getSalmonPopulation()
-	{
-		return salmonPopulation;
-	}
-
-	public void setSalmonPopulation(ArrayList<Fish> salmonPopulation)
-	{
-		this.salmonPopulation = salmonPopulation;
-	}
-	
-	public static double round(double value, int places)
-	{
-		double scale = Math.pow(10, places);
-		return Math.round(value * scale) / scale;
-	}
-	
-}
-
-*/

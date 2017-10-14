@@ -11,11 +11,7 @@ import javafx.stage.Stage;
 import userinterface.LoginPane;
 
 public class Catch extends Application
-{
-	public final static double TUNA_PRICE_PER_POUND = 6.40;
-	public final static double SALMON_PRICE_PER_POUND = 12.0;
-	public final static double COD_PRICE_PER_POUND = 17.0;
-	
+{	
 	private final int LOGIN_WIDTH = 400;
 	private final int LOGIN_HEIGHT = 400;
 
@@ -29,7 +25,6 @@ public class Catch extends Application
 
 	public void loadLoginPane()
 	{
-
 		Stage loginStage = new Stage();
 
 		loginPane = new LoginPane(new LoginHandler(), new NewUserHandler());

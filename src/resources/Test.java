@@ -44,11 +44,7 @@ public class Test
         Fish fish2 = new Fish(FishSpecies.SALMON, 17);
         System.out.println("fish2.getWeight(): " + fish2.getWeight());
         System.out.println("fish2.getSpecies(): " + fish2.getSpecies() + "\n");
-        
-        // make a Shellfish of type CLAM
-        Shellfish clam = new Shellfish(ShellfishSpecies.CLAM, .02);
-        System.out.println("clam.getWeight(): " + clam.getWeight());
-        System.out.println("clam.getSpecies(): " + clam.getSpecies() + "\n");
+     
         
         // make a Shellfish of type LOBSTER
         Shellfish Shellfish2 = new Shellfish(ShellfishSpecies.LOBSTER, 1.4);
@@ -61,9 +57,9 @@ public class Test
         System.out.println("'bushel.getBushelContent()': " + bushel.getBushelContent());
         System.out.println("'bushel.getWeight()': " + bushel.getWeight() + "\n");
         
-        // Add a Shellfish of type CLAM to the Bushel for type CRAB
-        bushel.add(clam);
-        System.out.println("'bushel.getWeight()' after attempting to add a CLAM: " + bushel.getWeight() + "\n");
+        // Add a Shellfish of type OYSTER to the Bushel for type CRAB
+        bushel.add(new Shellfish(ShellfishSpecies.OYSTER, 1.4));
+        System.out.println("'bushel.getWeight()' after attempting to add an OYSTER: " + bushel.getWeight() + "\n");
         
         // Try it with a CRAB
         bushel.add(new Shellfish(ShellfishSpecies.CRAB, 1.3));
@@ -74,6 +70,19 @@ public class Test
         bushel.add(new Shellfish(ShellfishSpecies.CRAB, 1.9));
         bushel.add(new Shellfish(ShellfishSpecies.CRAB, 1.2));
         System.out.println("'bushel.getWeight()' after adding 3 crabs: " + bushel.getWeight() + "\n");
+        
+        // Testing the Ocean class
+        System.out.println("Testing the Ocean Class...");
+        Ocean ocean = new Ocean();
+        
+        System.out.println("'ocean.getCurrentCodPopulation()': " + ocean.getCurrentCodPopulation());
+        System.out.println("'ocean.getCurrentSalmonPopulation()': " + ocean.getCurrentSalmonPopulation());
+        System.out.println("'ocean.getCurrentTunaPopulation()': " + ocean.getCurrentTunaPopulation());
+        System.out.println("'ocean.ocean.getCurrentCrabPopulation()': " + ocean.getCurrentCrabPopulation());
+        System.out.println("'ocean.ocean.getCurrentLobsterPopulation()': " + ocean.getCurrentLobsterPopulation());
+        System.out.println("'ocean.getCurrentOysterPopulation()': " + ocean.getCurrentOysterPopulation());
+        
+        
 	}
 
 }

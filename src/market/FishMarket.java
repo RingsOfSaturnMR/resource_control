@@ -4,13 +4,10 @@ import java.util.ArrayList;
 
 import catchgame.Catch;
 import resources.Fish;
+import catchgame.Constants;
 
 public class FishMarket extends Market<Fish>
 {
-	private double tunaPrice = Catch.TUNA_PRICE_PER_POUND;
-	private double codPrice = Catch.COD_PRICE_PER_POUND;
-	private double salmonPrice = Catch.SALMON_PRICE_PER_POUND;
-
 	public FishMarket(String name)
 	{
 		super(name);
@@ -24,13 +21,13 @@ public class FishMarket extends Market<Fish>
 		switch (fish.getSpecies())
 		{
 		case TUNA:
-			currentPrice = tunaPrice;
+			currentPrice = Constants.TUNA_INITIAL_PRICE_PER_POUND;
 			break;
 		case COD:
-			currentPrice = codPrice;
+			currentPrice = Constants.COD_INITIAL_PRICE_PER_POUND;
 			break;
 		case SALMON:
-			currentPrice = salmonPrice;
+			currentPrice = Constants.SALMON_INITIAL_PRICE_PER_POUND;
 			break;
 		default:
 			// TODO
