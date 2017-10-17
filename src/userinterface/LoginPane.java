@@ -26,11 +26,13 @@ public class LoginPane extends VBox
 
 	private Button btnLogin = new Button("Login");
 	private Button btnNewUser = new Button("New User");
+	private Button btnNewServer = new Button("New Server");
 
-	public LoginPane(EventHandler<ActionEvent> loginAction, EventHandler<ActionEvent> newUserAction)
+	public LoginPane(EventHandler<ActionEvent> loginAction, EventHandler<ActionEvent> newUserAction, EventHandler<ActionEvent> newServerAction)
 	{
 		btnLogin.setOnAction(loginAction);
 		btnNewUser.setOnAction(newUserAction);
+		btnNewServer.setOnAction(newServerAction);
 
 		// node, col, row
 		loginGridPane.add(lblName, 0, 0);
@@ -38,7 +40,7 @@ public class LoginPane extends VBox
 		loginGridPane.add(lblPassword, 0, 1);
 		loginGridPane.add(pfPassword, 1, 1);
 
-		buttonHBox.getChildren().addAll(btnLogin, btnNewUser);
+		buttonHBox.getChildren().addAll(btnLogin, btnNewUser, btnNewServer);
 
 		this.getChildren().addAll(loginGridPane, buttonHBox);
 	}

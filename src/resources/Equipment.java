@@ -4,6 +4,7 @@ public abstract class Equipment<T>
 {
 	private T type;
 	private Usage usage;
+	
 	protected Equipment(T type)
 	{
 		this.type = type;

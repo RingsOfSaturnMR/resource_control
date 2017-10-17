@@ -2,7 +2,11 @@ package catchgame;
 
 public class Constants
 {
-	// initial Market values of resounces
+	// window sizes
+	public final static int LOGIN_PANE_WIDTH = 400;
+	public final static int LOGIN_PANE_HEIGHT = 250;
+	
+	// initial Market values of resources
 	public final static double TUNA_INITIAL_PRICE_PER_POUND = 6.40;
 	public final static double SALMON_INITIAL_PRICE_PER_POUND = 12.0;
 	public final static double COD_INITIAL_PRICE_PER_POUND = 17.0;
