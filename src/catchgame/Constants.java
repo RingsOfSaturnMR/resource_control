@@ -20,6 +20,16 @@ public class Constants
 	public final static int LOBSTER_INITIAL_POPULATION = 100;
 	public final static int OYSTER_INITIAL_POPULATION = 100;
 	
+	// maximum population sizes
+	// for now they are equal to initial, but that could be changed
+	public final static int COD_MAX_POPULATION = 100;
+	public final static int SALMON_MAX_POPULATION = 100;
+	public final static int TUNA_MAX_POPULATION = 100;
+	
+	public final static int CRAB_MAX_POPULATION = 100;
+	public final static int LOBSTER_MAX_POPULATION = 100;
+	public final static int OYSTER_MAX_POPULATION = 100;
+	
 	// initial SeaCreature min/max weight
 	public final static double COD_INITIAL_WEIGHT_MIN = 5;
 	public final static double COD_INITIAL_WEIGHT_MAX = 12;
