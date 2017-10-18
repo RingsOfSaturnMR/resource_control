@@ -1,6 +1,19 @@
-package resources;
+package catchgametest;
 
-public class Test
+import catchgame.Ocean;
+import resources.Boat;
+import resources.BoatTypes;
+import resources.Fish;
+import resources.FishSpecies;
+import resources.LobsterTrap;
+import resources.Shellfish;
+import resources.ShellfishBushel;
+import resources.ShellfishSpecies;
+import resources.SimpleFishingItem;
+import resources.SimpleFishingItemType;
+import resources.Usage;
+
+public class ResouceTest
 {
 
 	public static void main(String[] args)
@@ -21,11 +34,11 @@ public class Test
 		System.out.println("'getUsage()': " + commericalTrawler.getUsage()+ "\n");
 		
 		System.out.println("Making and testing new SimpleFishingItems ...");
-		SimpleFishingItem net = new SimpleFishingItem(SimpleFishingItemTypes.NET);
+		SimpleFishingItem net = new SimpleFishingItem(SimpleFishingItemType.NET);
 		System.out.println("'getType()': " + net.getType());
 		System.out.println("'getUsage()': " + net.getUsage()+ "\n");
 		
-		SimpleFishingItem largeNet = new SimpleFishingItem(SimpleFishingItemTypes.LARGE_NET);
+		SimpleFishingItem largeNet = new SimpleFishingItem(SimpleFishingItemType.LARGE_NET);
 		System.out.println("'getType()': " + largeNet.getType());
 		System.out.println("'getUsage()': " + largeNet.getUsage()+ "\n");
 		

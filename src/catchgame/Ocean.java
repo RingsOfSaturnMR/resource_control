@@ -1,10 +1,14 @@
-package resources;
+package catchgame;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
-import catchgame.Constants;
+import resources.Fish;
+import resources.FishSpecies;
+import resources.SeaCreature;
+import resources.Shellfish;
+import resources.ShellfishSpecies;
 
 public class Ocean implements Serializable
 {
@@ -28,6 +32,8 @@ public class Ocean implements Serializable
 		// Randomly generate each SeaCreature's weight by randomly generating a number between
 		// the INITIAL_WEIGHT_MIN and INITAL_WEIGHT_MAX
 		// get values from catchgame.Constants
+		//
+		//maybe use a timeline to regenrate fish if isfh is less than max population
 		System.out.println("In the Ocean Constructor");
 	}
 	

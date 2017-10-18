@@ -9,7 +9,7 @@ public abstract class Equipment<T>
 	{
 		this.type = type;
 		
-		if (type instanceof SimpleFishingItemTypes)
+		if (type instanceof SimpleFishingItemType)
 		{
 			usage = Usage.SIMPLE_FISHING;
 		}

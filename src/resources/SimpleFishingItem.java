@@ -1,9 +1,9 @@
 package resources;
 
-public class SimpleFishingItem extends Equipment<SimpleFishingItemTypes>
+public class SimpleFishingItem extends Equipment<SimpleFishingItemType>
 {
 
-	protected SimpleFishingItem(SimpleFishingItemTypes type)
+	protected SimpleFishingItem(SimpleFishingItemType type)
 	{
 		super(type);
 	}

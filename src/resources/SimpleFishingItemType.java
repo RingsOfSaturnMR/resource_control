@@ -1,6 +1,6 @@
 package resources;
 
-public enum SimpleFishingItemTypes
+public enum SimpleFishingItemType
 {
 	NET,
 	LARGE_NET

@@ -3,8 +3,8 @@ package catchgame;
 public class Constants
 {
 	// window sizes
-	public final static int LOGIN_PANE_WIDTH = 400;
-	public final static int LOGIN_PANE_HEIGHT = 250;
+	public final static int LOGIN_PANE_WIDTH = 350;
+	public final static int LOGIN_PANE_HEIGHT = 200;
 	
 	// initial Market values of resources
 	public final static double TUNA_INITIAL_PRICE_PER_POUND = 6.40;
@@ -34,5 +34,8 @@ public class Constants
 	public final static double LOBSTER_INITIAL_WEIGHT_MAX = 7;
 	public final static double OYSTER_INITIAL_WEIGHT_MIN = .1;
 	public final static double OYSTER_INITIAL_WEIGHT_MAX = .4;
+	
+	// Basics
+	public final static String APPLICATION_NAME = "Catch!";
 
 }

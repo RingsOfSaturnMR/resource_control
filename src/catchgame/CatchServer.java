@@ -2,7 +2,6 @@ package catchgame;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import resources.Ocean;
 import userinterface.GamePane;
 import userinterface.ServerPane;
 
@@ -32,7 +31,9 @@ public class CatchServer
 	 */
 //	public class DAO
 //	{
-//		public String getUserByName();
+//		public String getUserByName() {
+//			
+//		}
 //	}
 	
 	public void loadServerPane()

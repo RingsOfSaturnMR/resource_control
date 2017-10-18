@@ -18,6 +18,7 @@ public class GameControl
 
 	public GameControl(Player player)
 	{
+		
 		this.player = player;
 		loadGamePane();
 	}
