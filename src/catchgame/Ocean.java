@@ -31,9 +31,22 @@ public class Ocean implements Serializable
 		// populate each array list with appropriate SeaCreatures.
 		// Randomly generate each SeaCreature's weight by randomly generating a number between
 		// the INITIAL_WEIGHT_MIN and INITAL_WEIGHT_MAX
-		// get values from catchgame.Constants
+		// get values from catchgame.Constant
 		//
 		//maybe use a timeline to regenrate fish if isfh is less than max population
+
+		// this includes max_population for each fish
+		// if they are not there, please add them
+		// also, ocean should somehow regnerate it's population over time
+		// this would require a formula
+		// and some time related feature
+		// maybe try the java class Timeline?
+		// for the formula could use the formula in matt_branch in seafoodPopulation.java
+		// different from seaCreature.java
+		// formula is called getPopulationWithGrowth
+		// would have to get the number of seacreatures to add to each array list,
+		// using a formula like getPopulationWithGrowth
+		// and then add them to each array list
 		System.out.println("In the Ocean Constructor");
 	}
 	
