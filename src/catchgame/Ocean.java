@@ -69,6 +69,13 @@ public class Ocean implements Serializable
 		it calculates a number of fish to give
 		extracts them from the arraylist
 		returns a new arraylist
+		
+	the extract fish functions should take last fish off end of arraylist, return it, and delete the last fish from the arraylist
+	
+	regneratePopulation
+	it should be called by a timer
+	it should use the formula
+	it should take for time just some constant that you choose
 	}
 	*/
 	
