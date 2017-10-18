@@ -77,6 +77,19 @@ public class Ocean implements Serializable
 	it should use the formula
 	it should take for time just some constant that you choose
 	}
+	
+	@Override
+    protected final int getPopulationRegneration(long elapsedTime, rawPopulation, mxaPopulation) {
+        int carryingCapacityPopulation=maxPopulation
+        int lastPopulation=rawPopulation
+        double A=(double)(carryingCapacityPopulation-lastPopulation)/(double)lastPopulation;
+        double denominator=1+A*Math.exp(-relativeGrowthRate*elapsedTime);
+        double rawPopulation=(double)carryingCapacityPopulation/denominator;
+        return rawPopulation;
+    }
+    
+    updateSeaCreaturePopulation(arraylist seacreature, species){
+    add until (int)rawpopulation==arraylist.length
 	*/
 	
 	
