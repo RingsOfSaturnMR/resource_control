@@ -49,6 +49,15 @@ public class Ocean implements Serializable
 		// and then add them to each array list
 		System.out.println("In the Ocean Constructor");
 	}
+	/*
+	add to population function
+	populationAmount, arraytlist, while arraylist is less than population, adds a fish
+		call add a fish function in add to population function
+	
+	add fish
+	enum fish type, max weight, min weight
+	returns a fish of that kind between min and max weight using random number between min and max
+	*/
 	
 	
 	public SeaCreature extractRandomSeaCreature()
