@@ -34,6 +34,12 @@ public class Ocean implements Serializable
 		// this would require a formula
 		// and some time related feature
 		// maybe try the java class Timeline?
+		// for the formula could use the formula in matt_branch in seafoodPopulation.java
+		// different from seaCreature.java
+		// formula is called getPopulationWithGrowth
+		// would have to get the number of seacreatures to add to each array list,
+		// using a formula like getPopulationWithGrowth
+		// and then add them to each array list
 		System.out.println("In the Ocean Constructor");
 	}
 	
