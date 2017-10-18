@@ -57,6 +57,19 @@ public class Ocean implements Serializable
 	add fish
 	enum fish type, max weight, min weight
 	returns a fish of that kind between min and max weight using random number between min and max
+	
+	random function for returning weight between max and min
+	
+	add to population function using initial population size for all species in ocean
+	
+	return a packet of fish, takes as parameter a plentifulnes variable, also subtracts fish from ocean
+	
+	returnPacketOfFish(int plentifullness, typeOfFish){
+		if plentifullness of fish in ocean<plentifullness of fish from parameter,
+		it calculates a number of fish to give
+		extracts them from the arraylist
+		returns a new arraylist
+	}
 	*/
 	
 	
