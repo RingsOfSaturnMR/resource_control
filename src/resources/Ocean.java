@@ -28,6 +28,12 @@ public class Ocean implements Serializable
 		// Randomly generate each SeaCreature's weight by randomly generating a number between
 		// the INITIAL_WEIGHT_MIN and INITAL_WEIGHT_MAX
 		// get values from catchgame.Constants
+		// this includes max_population for each fish
+		// if they are not there, please add them
+		// also, ocean should somehow regnerate it's population over time
+		// this would require a formula
+		// and some time related feature
+		// maybe try the java class Timeline?
 		System.out.println("In the Ocean Constructor");
 	}
 	
