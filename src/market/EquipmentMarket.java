@@ -14,7 +14,7 @@ public class EquipmentMarket extends Market<Equipment>
 	}
 
 	@Override
-	public double getCurrentPrice(Equipment sellable)
+	public double getCurrentPrice(Equipment item)
 	{
 		// TODO Auto-generated method stub
 		return 0;

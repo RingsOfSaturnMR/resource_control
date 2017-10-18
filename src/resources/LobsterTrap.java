@@ -2,7 +2,7 @@ package resources;
 
 public class LobsterTrap extends Equipment<Usage>
 {
-	protected LobsterTrap(Usage usage)
+	public LobsterTrap(Usage usage)
 	{
 		super(usage);
 	}

@@ -29,12 +29,12 @@ public abstract class Equipment<T>
 		}
 
 	}
-	protected T getType()
+	public T getType()
 	{
 		return this.type;
 	}
 	
-	protected Usage getUsage()
+	public Usage getUsage()
 	{
 		return this.usage;
 	}

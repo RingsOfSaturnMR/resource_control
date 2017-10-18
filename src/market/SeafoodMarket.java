@@ -18,7 +18,7 @@ public class SeafoodMarket extends Market<SeaCreature>
 	}
 
 	@Override
-	public double getCurrentPrice(SeaCreature sellable)
+	public double getCurrentPrice(SeaCreature item)
 	{
 		// TODO Auto-generated method stub
 		return 0;

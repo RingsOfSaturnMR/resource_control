@@ -1,0 +1,13 @@
+To Do list
+
+In the game there will be two types of Markets:
+
+	 SeafoodMarket: Where the player sells SeaCreatures they bought
+	 EquipmentMarket: Where the player buys equipment
+	 
+Look at ResourceTest in the test package to get an idea of how resources work.
+
+
+The contract of the package:
+
+Implemnt the methods of the abstract base class. You can change as much as you want, but keep the public methods the same
