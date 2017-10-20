@@ -173,13 +173,18 @@ public class Catch extends Application
 						Platform.runLater(() -> {
 							gameControl = new GameControl(socket, new Player());
 						});
+						
+						break;
 
 					case ServerCodeConstants.INVALID_PASSWORD_CODE:
 						System.out.println("Invalid Password.");
+						
+						break;
 
 					case ServerCodeConstants.INVALID_PLAYER_CODE:
 						System.out.println("Not a registered user.");
-						;
+						
+						break;
 					}
 				} catch (IOException ex) {
 					System.out.println(ex.toString());
