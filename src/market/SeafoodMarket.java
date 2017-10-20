@@ -1,6 +1,7 @@
 package market;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import catchgame.Catch;
 import resources.Fish;
@@ -8,6 +9,14 @@ import resources.FishSpecies;
 import resources.SeaCreature;
 import catchgame.Constants;
 
+
+/*
+ 
+ -Make prices change at a set interval of time. (Example: Every 10 minutes, make the price for any item go up or down percentage, depending on how stable the market is.)
+ 
+ - Use the Constants class to get the market fluctuation value, and how long before prices expire.
+ 
+ */
 public class SeafoodMarket extends Market<SeaCreature>
 {
 
@@ -36,6 +45,11 @@ public class SeafoodMarket extends Market<SeaCreature>
 	{
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	
+	public Date getNextPriceChange()
+	{
+		return new Date();
 	}
 
 

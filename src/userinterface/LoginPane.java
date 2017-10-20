@@ -20,16 +20,20 @@ import userinterface.LoginPane;
 
 public class LoginPane extends VBox
 {
+	// title
 	private Text txtTitle = new Text("Welcome to " + Constants.APPLICATION_NAME);
+	
 	// labels for fields
 	private Label lblName = new Label("Username: ");
 	private Label lblPassword = new Label("Password: ");
 	private Label lblServerIp = new Label("Server ip: ");
+	private Label lblClientPort = new Label("Client Port: ");
 
-	// fields for entry
-	private TextField tfName = new TextField();
-	private PasswordField pfPassword = new PasswordField();
-	private TextField tfServerIp = new TextField();
+	// fields for entry, filled with default values for easy testing
+	private TextField tfName = new TextField("user");
+	private TextField pfPassword = new TextField("pass");
+	private TextField tfServerIp = new TextField("localhost");
+	private TextField tfClientPort = new TextField("8030");
 	
 	// containers
 	private GridPane loginGridPane = new GridPane();
@@ -48,10 +52,12 @@ public class LoginPane extends VBox
 		// node, col, row
 		loginGridPane.add(lblServerIp, 0, 0);
 		loginGridPane.add(tfServerIp, 1, 0);
-		loginGridPane.add(lblName, 0, 1);
-		loginGridPane.add(tfName, 1, 1);
-		loginGridPane.add(lblPassword, 0, 2);
-		loginGridPane.add(pfPassword, 1, 2);
+		loginGridPane.add(lblClientPort, 0, 1);
+		loginGridPane.add(tfClientPort, 1, 1);
+		loginGridPane.add(lblName, 0, 2);
+		loginGridPane.add(tfName, 1, 2);
+		loginGridPane.add(lblPassword, 0, 3);
+		loginGridPane.add(pfPassword, 1, 3);
 
 		// add vertical spacing, put in center and add padding to top/bottom
 		loginGridPane.setVgap(5);
@@ -71,5 +77,26 @@ public class LoginPane extends VBox
 		btnLogin.setOnAction(loginAction);
 		btnNewUser.setOnAction(newUserAction);
 		btnNewServer.setOnAction(newServerAction);
+	}
+	
+	public String getPlayerName()
+	{
+		return tfName.getText();
+	}
+	
+	public String getPlayerPassword()
+	{
+		return pfPassword.getText();
+	}
+	
+	public String getServerIpAddress()
+	{
+		return tfServerIp.getText();
+	}
+	
+	//NEED TO ADD check for exceptions!!!
+	public int getClientPort()
+	{
+		return Integer.parseInt((tfClientPort.getText()));
 	}
 }

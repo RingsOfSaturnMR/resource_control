@@ -2,6 +2,10 @@ package catchgame;
 
 public class Constants
 {
+	// market price changes
+	public static final double MARKET_FLUCTUATION = .10;
+	public static final int TIME_BEFORE_PRICE_EXPIRATION = 1000000;// milliseconds? 
+	
 	// window sizes
 	public final static int LOGIN_PANE_WIDTH = 350;
 	public final static int LOGIN_PANE_HEIGHT = 200;
