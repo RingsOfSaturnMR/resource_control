@@ -153,16 +153,15 @@ public class Catch extends Application
 			if (connected && !loggedIn) {
 				try {
 					ObjectOutputStream toServer = new ObjectOutputStream(socket.getOutputStream());
-					DataInputStream fromServer = new DataInputStream(socket.getInputStream());
+					ObjectInputStream fromServer = new ObjectInputStream(socket.getInputStream());
 
 					LoginPacket loginPacket = new LoginPacket(enteredName, enteredPassword);
 					toServer.writeObject(loginPacket);
 
 					System.out.println("In client waiting for server code.");
-					int serverCode = fromServer.readInt();
-					System.out.println("In client serverCode received.");
-
-					switch (serverCode) {
+					try{
+					ServerCodePacket serverCode = (ServerCodePacket)fromServer.readObject();
+					switch (serverCode.SERVER_CODE) {
 
 					case ServerCodeConstants.VALID_PLAYER_AND_PASSWOORD_CODE:
 						loggedIn = true; // now logged in
@@ -171,7 +170,7 @@ public class Catch extends Application
 						// start gameControl
 
 						Platform.runLater(() -> {
-							gameControl = new GameControl(socket, new Player());
+							gameControl = new GameControl(toServer, fromServer, new Player());
 						});
 						
 						break;
@@ -186,6 +185,11 @@ public class Catch extends Application
 						
 						break;
 					}
+					}
+					catch(ClassNotFoundException ex){
+						System.out.println(ex.toString());
+					}
+					System.out.println("In client serverCode received.");
 				} catch (IOException ex) {
 					System.out.println(ex.toString());
 				}

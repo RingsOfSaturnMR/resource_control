@@ -56,6 +56,7 @@ public class Ocean implements Serializable
 	        @Override
 	        public void run() { 
 	        int codToAdd=updateCodPopulation(10);
+	        System.out.println("Cod to add "+codToAdd);
 	        addABunchOfFish(codPopulation, FishSpecies.COD, codToAdd);
 	        }
 	        	
@@ -149,11 +150,12 @@ public class Ocean implements Serializable
 	}
 	
 	public ArrayList<Fish> givePacketOfFish(FishSpecies fish, int currentPopulation, int maxPopulation ) throws Exception{
+		System.out.println("in giving packet");
 		double clientPlentifullness=(double)currentPopulation/(double)maxPopulation;
 		ArrayList<Fish> fishPacket=new ArrayList<>();
 		switch (fish){
 		case COD:
-			double oceanPlentifullness=codPopulation.size()/Constants.COD_MAX_POPULATION;
+			double oceanPlentifullness=(double)codPopulation.size()/(double)Constants.COD_MAX_POPULATION;
 			return getPacketOfFish(codPopulation, 
 					oceanPlentifullness, clientPlentifullness, maxPopulation, currentPopulation);
 			//break;
@@ -164,8 +166,11 @@ public class Ocean implements Serializable
 	
 	public ArrayList<Fish> getPacketOfFish(ArrayList<Fish> fishPopulation, 
 			double oceanPlentifullness, double clientPlentifullness, int maxPopulation, int currentPopulation)throws Exception{
+		System.out.println("Ocean p: "+oceanPlentifullness);
+		System.out.println("Client p:"+clientPlentifullness);
 		if (oceanPlentifullness>clientPlentifullness) {
-			int numFish=(int)(oceanPlentifullness/maxPopulation)-currentPopulation;
+			int numFish=(int)(oceanPlentifullness*maxPopulation)-currentPopulation;
+			System.out.println("Num fish for packet"+numFish);
 			return extractABunchOfFish(fishPopulation, numFish);
 		}
 		else {

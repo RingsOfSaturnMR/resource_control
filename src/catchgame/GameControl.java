@@ -20,6 +20,7 @@ import javafx.event.EventHandler;
 public class GameControl
 {
 	Player player = new Player();
+	ClientSubOcean fishOnScreen;
 	
 	// constants
 	private static final int INITIAL_WIDTH = 500;
@@ -32,11 +33,20 @@ public class GameControl
 
 	// server communication stuff;
 	private ObjectOutputStream toServer = null;
-	private DataInputStream fromServer = null;
+	private ObjectInputStream fromServer = null;
 
 	//public GameControl(String serverIpAddress, int clientPort, String enteredName, String enteredPassword) throws Exception
-	public GameControl(Socket socket, Player loggedInPlayer)
+	public GameControl(ObjectOutputStream toServer, ObjectInputStream fromServer, Player loggedInPlayer)
 	{
+		fishOnScreen=new ClientSubOcean(toServer, fromServer);
+		UpdateFishOnScreenTask updateFishOnScreenTask=new UpdateFishOnScreenTask();
+		new Thread(updateFishOnScreenTask).start();
+		//fishOnScreen.updateFishPopulationsFromServer();
+		/*
+		 could be nice to have a clientSubOcean//seaCreaturesOnScreen
+		 it could contain all the seaCreatures available to the user
+		 could be subclassed for different fishing activities if necessary
+		 */
 		//I commented this out because I think it belongs in catch,
 		//and the game should handle once the person is logged in
 		/*
@@ -92,7 +102,16 @@ public class GameControl
 		@Override
 		public void handle(ActionEvent e)
 		{
-			System.out.println("Extract fish action triggered(fish caught)");
+			System.out.println("Extract fish action "
+					+ "triggered(fish caught)");
+			try{
+			fishOnScreen.extractFish(fishOnScreen.codPopulation);
+			UpdateFishOnScreenTask updateFishOnScreenTask=new UpdateFishOnScreenTask();
+			new Thread(updateFishOnScreenTask).start();
+			}
+			catch (Exception ex){
+				System.out.println(ex.toString());
+			}
 		};
 	}
 
@@ -105,5 +124,10 @@ public class GameControl
 		};
 	}
 	
-
+	class UpdateFishOnScreenTask implements Runnable{
+		
+		public void run(){
+			fishOnScreen.updateFishPopulationsFromServer();
+		}
+	}
 }

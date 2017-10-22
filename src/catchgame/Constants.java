@@ -16,23 +16,23 @@ public class Constants
 	public final static double COD_INITIAL_PRICE_PER_POUND = 17.0;
 	
 	// initial population sizes
-	public final static int COD_INITIAL_POPULATION = 100;
-	public final static int SALMON_INITIAL_POPULATION = 100;
+	public final static int COD_INITIAL_POPULATION = 1000;
+	public final static int SALMON_INITIAL_POPULATION = 1000;
 	public final static int TUNA_INITIAL_POPULATION = 100;
 	
-	public final static int CRAB_INITIAL_POPULATION = 100;
-	public final static int LOBSTER_INITIAL_POPULATION = 100;
-	public final static int OYSTER_INITIAL_POPULATION = 100;
+	public final static int CRAB_INITIAL_POPULATION = 1000;
+	public final static int LOBSTER_INITIAL_POPULATION = 1000;
+	public final static int OYSTER_INITIAL_POPULATION = 1000;
 	
 	// maximum population sizes
 	// for now they are equal to initial, but that could be changed
-	public final static int COD_MAX_POPULATION = 100;
-	public final static int SALMON_MAX_POPULATION = 100;
-	public final static int TUNA_MAX_POPULATION = 100;
+	public final static int COD_MAX_POPULATION = 1000;
+	public final static int SALMON_MAX_POPULATION = 1000;
+	public final static int TUNA_MAX_POPULATION = 1000;
 	
-	public final static int CRAB_MAX_POPULATION = 100;
-	public final static int LOBSTER_MAX_POPULATION = 100;
-	public final static int OYSTER_MAX_POPULATION = 100;
+	public final static int CRAB_MAX_POPULATION = 1000;
+	public final static int LOBSTER_MAX_POPULATION = 1000;
+	public final static int OYSTER_MAX_POPULATION = 1000;
 	
 	// initial SeaCreature min/max weight
 	public final static double COD_INITIAL_WEIGHT_MIN = 5;

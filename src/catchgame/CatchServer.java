@@ -23,7 +23,7 @@ public class CatchServer
 {
 	private Stage serverStage = new Stage();
 	private ServerPane serverPane = new ServerPane();
-	private ArrayList <DataOutputStream> ouputToClientStreamList=new ArrayList<DataOutputStream>();
+	private ArrayList <ObjectOutputStream> ouputToClientStreamList=new ArrayList<ObjectOutputStream>();
 	//maybe useful later
 	boolean quit=false;
 	//a starting code (no meaning)
@@ -118,7 +118,7 @@ public class CatchServer
 		public void run() {
 			try {
 				
-				DataOutputStream toClient=new DataOutputStream(socket.getOutputStream());
+				ObjectOutputStream toClient=new ObjectOutputStream(socket.getOutputStream());
 				ouputToClientStreamList.add(toClient);
 				ObjectInputStream fromClient = new ObjectInputStream(socket.getInputStream());
 				
@@ -147,6 +147,11 @@ public class CatchServer
                         			loggedIn=true;//logged in
                         			//I think we should have a member class here for 
                         			//handling the actual interaction with game control
+                        			//ServerSideGameControl serverSideGameControl
+                        			//=new ServerSideGameControl(toClient, fromClient, ocean);
+                        			HandleServerSideGameControl handleServerSideGameControl=
+                        					new HandleServerSideGameControl(toClient, fromClient);
+                        			new Thread(handleServerSideGameControl).start();
                         		}
                         		else{
                         			serverCode=INVALID_PASSWORD_CODE;
@@ -157,7 +162,7 @@ public class CatchServer
                         	}
                         	
                         	//tell the outcome to client
-                        	toClient.writeInt(serverCode);
+                        	toClient.writeObject(new ServerCodePacket(serverCode));
                         	
                         	System.out.println("In server serverCode wrote.");
                         	
@@ -260,5 +265,20 @@ public class CatchServer
 		serverStage.centerOnScreen();
 		serverStage.show();
 		serverStage.requestFocus();
+	}
+	class HandleServerSideGameControl implements Runnable{
+		ObjectOutputStream toClient;
+		ObjectInputStream fromClient;
+		
+		HandleServerSideGameControl(ObjectOutputStream toClient, 
+				ObjectInputStream fromClient){
+			this.toClient=toClient;
+			this.fromClient=fromClient;
+		}
+		
+		public void run(){
+			ServerSideGameControl serverSideGameControl
+			=new ServerSideGameControl(toClient, fromClient, ocean);
+		}
 	}
 }

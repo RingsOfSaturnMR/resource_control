@@ -9,6 +9,10 @@ public abstract class SeaCreature <T>
 	private double weight;
 	private T species;
 
+	SeaCreature(){
+		
+	}
+	
 	protected SeaCreature(T species, double weight)
 	{
 		setSpecies(species);
