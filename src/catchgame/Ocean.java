@@ -23,7 +23,7 @@ public class Ocean implements Serializable
 	// resounces.ShellFishSpecies
 	private ArrayList<Shellfish>lobsterPopulation = new ArrayList<>();
 	private ArrayList<Shellfish>crabPopulation = new ArrayList<>(); 
-	private ArrayList<Fish>oysterPopuliation = new ArrayList<>();
+	private ArrayList<Shellfish>oysterPopulation = new ArrayList<>();
 	
 	// for randomly generating weights
 	private Random rand = new Random();
@@ -65,48 +65,78 @@ public class Ocean implements Serializable
 	}
 	
 	private int updateCodPopulation(long elapsedTime) {
-        int carryingCapacityPopulation=Constants.COD_MAX_POPULATION;
-        int lastPopulation=codPopulation.size();
-        double A=(double)(carryingCapacityPopulation-lastPopulation)/(double)lastPopulation;
-        double denominator=1+A*Math.exp(-relativeGrowthRate*elapsedTime);
-        double rawPopulation=(double)carryingCapacityPopulation/denominator;
+		int carryingCapacityPopulation=Constants.COD_MAX_POPULATION;
+		int lastPopulation=codPopulation.size();
+		double A=(double)(carryingCapacityPopulation-lastPopulation)/(double)lastPopulation;
+		double denominator=1+A*Math.exp(-relativeGrowthRate*elapsedTime);
+		double rawPopulation=(double)carryingCapacityPopulation/denominator;
         //make it an int becuase we can't have (viable) fractions of seafood
-        int updatedPopulation=(int)rawPopulation;
+		int updatedPopulation=(int)rawPopulation;
         //next line for debug
-        System.out.println(updatedPopulation);
-        return updatedPopulation-codPopulation.size();
+		System.out.println(updatedPopulation);
+		return updatedPopulation-codPopulation.size();
     }
-	/*add to population function
-	populationAmount, arraytlist, while arraylist is less than population, adds a fish
-		call add a fish function in add to population function
 	
-	//add fish
-	//enum fish type, max weight, min weight
-	//returns a fish of that kind between min and max weight using random number between min and max
-	
-	//random function for returning weight between max and min
-	
-	//add to population function using initial population size for all species in ocean
-	
-	return a packet of fish, takes as parameter a plentifulnes variable, also subtracts fish from ocean
-	
-	returnPacketOfFish(int plentifullness, typeOfFish){
-		if plentifullness of fish in ocean<plentifullness of fish from parameter,
-		it calculates a number of fish to give
-		extracts them from the arraylist
-		returns a new arraylist
+	private int updateSalmonPopulation(long elapsedTime) {
+		int carryingCapacityPopulation = Constants.SALMON_MAX_POPULATION;
+		int lastPopulation = salmonPopulation.size();
+		double A=(double)(carryingCapacityPopulation-lastPopulation)/(double)lastPopulation;
+		double denominator=1+A*Math.exp(-relativeGrowthRate*elapsedTime);
+		double rawPopulation=(double)carryingCapacityPopulation/denominator;
+		int updatedPopulation=(int)rawPopulation;
+		System.out.println(updatedPopulation);
+		return updatedPopulation-salmonPopulation.size();
 		
-	the extract fish functions should take last fish off end of arraylist, return it, and delete the last fish from the arraylist
-	
-	regneratePopulation
-	it should be called by a timer
-	it should use the formula
-	it should take for time just some constant that you choose
 	}
 	
+	private int updateTunaPopulation(long elapsedTime) {
+		int carryingCapacityPopulation = Constants.TUNA_MAX_POPULATION;
+		int lastPopulation = tunaPopulation.size();
+		double A=(double)(carryingCapacityPopulation-lastPopulation)/(double)lastPopulation;
+		double denominator=1+A*Math.exp(-relativeGrowthRate*elapsedTime);
+		double rawPopulation=(double)carryingCapacityPopulation/denominator;
+		int updatedPopulation=(int)rawPopulation;
+		System.out.println(updatedPopulation);
+		return updatedPopulation-tunaPopulation.size();
+		
+	}
+	private int updateOysterPopulation(long elapsedTime) {
+		int carryingCapacityPopulation = Constants.OYSTER_MAX_POPULATION;
+		int lastPopulation = oysterPopulation.size();
+		double A=(double)(carryingCapacityPopulation-lastPopulation)/(double)lastPopulation;
+		double denominator=1+A*Math.exp(-relativeGrowthRate*elapsedTime);
+		double rawPopulation=(double)carryingCapacityPopulation/denominator;
+		int updatedPopulation=(int)rawPopulation;
+		System.out.println(updatedPopulation);
+		return updatedPopulation-oysterPopulation.size();
+	}
+	
+	private int updateLobsterPopulation(long elapsedTime) {
+		int carryingCapacityPopulation = Constants.LOBSTER_MAX_POPULATION;
+		int lastPopulation = lobsterPopulation.size();
+		double A=(double)(carryingCapacityPopulation-lastPopulation)/(double)lastPopulation;
+		double denominator=1+A*Math.exp(-relativeGrowthRate*elapsedTime);
+		double rawPopulation=(double)carryingCapacityPopulation/denominator;
+		int updatedPopulation=(int)rawPopulation;
+		System.out.println(updatedPopulation);
+		return updatedPopulation-lobsterPopulation.size();
+	}
+	
+	private int updateCrabPopulation(long elapsedTime) {
+		int carryingCapacityPopulation = Constants.CRAB_MAX_POPULATION;
+		int lastPopulation = crabPopulation.size();
+		double A=(double)(carryingCapacityPopulation-lastPopulation)/(double)lastPopulation;
+		double denominator=1+A*Math.exp(-relativeGrowthRate*elapsedTime);
+		double rawPopulation=(double)carryingCapacityPopulation/denominator;
+		int updatedPopulation=(int)rawPopulation;
+		System.out.println(updatedPopulation);
+		return updatedPopulation-crabPopulation.size();
+	}
+	
+	
 	//this is a general algorithim for a formula which will tell you the new population
-    @Override
-    protected final int getPopulationWithGrowth(long elapsedTime) {
+   // @Override
+    /*protected final int getPopulationWithGrowth(long elapsedTime) {
         int carryingCapacityPopulation=getNormalPopulation();
         int lastPopulation=getPopulation();
         double A=(double)(carryingCapacityPopulation-lastPopulation)/(double)lastPopulation;
@@ -155,27 +185,72 @@ public class Ocean implements Serializable
 		ArrayList<Fish> fishPacket=new ArrayList<>();
 		switch (fish){
 		case COD:
-			double oceanPlentifullness=(double)codPopulation.size()/(double)Constants.COD_MAX_POPULATION;
+			double codPlentifullness=(double)codPopulation.size()/(double)Constants.COD_MAX_POPULATION;
 			return getPacketOfFish(codPopulation, 
-					oceanPlentifullness, clientPlentifullness, maxPopulation, currentPopulation);
+					codPlentifullness, clientPlentifullness, maxPopulation, currentPopulation);
 			//break;
-		}
+		case SALMON: 
+			double salmonPlentifullness=(double)salmonPopulation.size()/(double)Constants.SALMON_MAX_POPULATION;
+			return getPacketOfFish(salmonPopulation, 
+					salmonPlentifullness, clientPlentifullness, maxPopulation, currentPopulation);
 		
+		case TUNA:
+			double tunaPlentifullness=(double)tunaPopulation.size()/(double)Constants.TUNA_MAX_POPULATION;
+			return getPacketOfFish(tunaPopulation, 
+					tunaPlentifullness, clientPlentifullness, maxPopulation, currentPopulation);
+		}
 		return fishPacket;
 	}
 	
+	public ArrayList<Shellfish>givePacketOfFish(ShellfishSpecies shellfish, int currentPopulation, int maxPopulation){
+		System.out.println("in giving packet");
+		double clientPlentifullness=(double)currentPopulation/(double)maxPopulation;
+		ArrayList<Shellfish> shellfishPacket = new ArrayList<>();
+		switch(shellfish) {
+		case OYSTER: 
+			double oysterPlentifullness = (double)oysterPopulation.size()/(double)Constants.OYSTER_MAX_POPULATION;
+			return getPacketOfShellfish(oysterPopulation, 
+				oysterPlentifullness, clientPlentifullness, maxPopulation, currentPopulation);
+			
+		case LOBSTER: 
+			double lobsterPlentifullness = (double)lobsterPopulation.size()/(double)Constants.LOBSTER_MAX_POPULATION;
+			return getPacketOfShellfish(lobsterPopulation, 
+					lobsterPlentifullness, clientPlentifullness, maxPopulation, currentPopulation);
+		case CRAB: 
+			double crabPlentifullness = (double)crabPopulation.size()/(double)Constants.CRAB_MAX_POPULATION;
+			return getPacketOfShellfish(crabPopulation, 
+					crabPlentifullness, clientPlentifullness, maxPopulation, currentPopulation);
+			
+		//default;
+		}
+		return shellfishPacket;
+	}
 	public ArrayList<Fish> getPacketOfFish(ArrayList<Fish> fishPopulation, 
 			double oceanPlentifullness, double clientPlentifullness, int maxPopulation, int currentPopulation)throws Exception{
 		System.out.println("Ocean p: "+oceanPlentifullness);
 		System.out.println("Client p:"+clientPlentifullness);
 		if (oceanPlentifullness>clientPlentifullness) {
 			int numFish=(int)(oceanPlentifullness*maxPopulation)-currentPopulation;
-			System.out.println("Num fish for packet"+numFish);
+			System.out.println("Number of fish for packet"+numFish);
 			return extractABunchOfFish(fishPopulation, numFish);
 		}
 		else {
 			ArrayList<Fish> fishPacket=new ArrayList<>();
 			return fishPacket;
+		}
+	}
+	public ArrayList<Shellfish> getPacketOfShellfish(ArrayList<Shellfish> shellfishPopulation, 
+			double oceanPlentifullness, double clientPlentifullness, int maxPopulation, int currentPopulation){
+		System.out.println("Ocean p: "+oceanPlentifullness);
+		System.out.println("Client p:"+clientPlentifullness);
+		if (oceanPlentifullness>clientPlentifullness) {
+			int numShellfish=(int)(oceanPlentifullness*maxPopulation)-currentPopulation;
+			System.out.println("Number of shellfish for packet"+numShellfish);
+			return extractABunchOfShellfish(shellfishPopulation, numShellfish);
+		}
+		else {
+			ArrayList<Shellfish> shellfishPacket = new ArrayList<>();
+			return shellfishPacket;
 		}
 	}
 	
@@ -188,12 +263,25 @@ public class Ocean implements Serializable
 		
 		return extractedFishes;
 	}
+	public ArrayList<Shellfish>extractABunchOfShellfish(ArrayList<Shellfish>shellfishPopulation, int num){
+		ArrayList<Shellfish>extractedShellfish = new ArrayList<Shellfish>();
+		for (int i=0; i<num-1; i++) {
+			extractedShellfish.add(extractShellfish(shellfishPopulation));
+		}
+		return extractedShellfish;
+	}
 	
 	public Fish extractFish(ArrayList<Fish>fishPopulation) throws Exception{
 		Fish fish=fishPopulation.get(fishPopulation.size()-1);
 		fishPopulation.remove(fishPopulation.size()-1);
 		
 		return fish;
+	}
+	
+	public Shellfish extractShellfish(ArrayList<Shellfish>shellfishPopulation) {
+		Shellfish shellfish = shellfishPopulation.get(shellfishPopulation.size()-1);
+		shellfishPopulation.remove(shellfishPopulation.size()-1);
+		return shellfish;
 	}
 	
 	public Fish extractCod()
@@ -228,7 +316,12 @@ public class Ocean implements Serializable
 	
 	public void fillOceanInitially() {
 		addABunchOfFish(codPopulation, FishSpecies.COD, Constants.COD_INITIAL_POPULATION);
-		//add for all other populations
+		addABunchOfFish(salmonPopulation, FishSpecies.SALMON, Constants.SALMON_INITIAL_POPULATION);
+		addABunchOfFish(tunaPopulation, FishSpecies.TUNA, Constants.TUNA_INITIAL_POPULATION);
+		addABunchOfShellfish(oysterPopulation, ShellfishSpecies.OYSTER, Constants.OYSTER_INITIAL_POPULATION);
+		addABunchOfShellfish(lobsterPopulation, ShellfishSpecies.LOBSTER, Constants.LOBSTER_INITIAL_POPULATION);
+		addABunchOfShellfish(crabPopulation, ShellfishSpecies.CRAB, Constants.CRAB_INITIAL_POPULATION);
+		
 	}
 	
 	public void addABunchOfFish(ArrayList<Fish>fishPopulation, FishSpecies species, int num) {
@@ -237,10 +330,19 @@ public class Ocean implements Serializable
 		}
 	}
 	
+	public void addABunchOfShellfish(ArrayList<Shellfish>shellfishPopulation, ShellfishSpecies species, int num) {
+		for (int i=0; i<=num-1; i++) {
+			addShellfish(shellfishPopulation, species);
+		}
+	}
+	
 	public void addFish(ArrayList<Fish>fishPopulation, FishSpecies species) {
 		fishPopulation.add(new Fish(species, getFishSpeciesRandomWeight(species)));
 	}
 	
+	public void addShellfish(ArrayList<Shellfish>shellfishPopulation, ShellfishSpecies species) {
+		shellfishPopulation.add(new Shellfish(species, getShellfishSpeciesRandomWeight(species)));
+	}
 	public int getCurrentCodPopulation()
 	{
 		int random = getRandomInt(0, Constants.COD_INITIAL_POPULATION);
@@ -311,9 +413,23 @@ public class Ocean implements Serializable
 	}
 	
 	public double getFishSpeciesRandomWeight(FishSpecies species) {
-		double weight=0;
+		double weight = 0;
 		switch (species) {
 		case COD: weight = getCodWeight(); break;
+		case SALMON: weight = getSalmonWeight(); break;
+		case TUNA: weight = getTunaWeight(); break;
+		
+		}
+		return weight;
+	}
+	
+	public double getShellfishSpeciesRandomWeight(ShellfishSpecies species) {
+		double weight = 0;
+		switch (species) {
+		case OYSTER: weight = getOysterWeight(); break;
+		case LOBSTER: weight = getLobsterWeight(); break;
+		case CRAB: weight = getCrabWeight(); break;
+		
 		}
 		return weight;
 	}
