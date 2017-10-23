@@ -65,27 +65,27 @@ public class Ocean implements Serializable
 	}
 	
 	private int updateCodPopulation(long elapsedTime) {
-        int carryingCapacityPopulation=Constants.COD_MAX_POPULATION;
-        int lastPopulation=codPopulation.size();
-        double A=(double)(carryingCapacityPopulation-lastPopulation)/(double)lastPopulation;
-        double denominator=1+A*Math.exp(-relativeGrowthRate*elapsedTime);
-        double rawPopulation=(double)carryingCapacityPopulation/denominator;
+		int carryingCapacityPopulation=Constants.COD_MAX_POPULATION;
+		int lastPopulation=codPopulation.size();
+		double A=(double)(carryingCapacityPopulation-lastPopulation)/(double)lastPopulation;
+		double denominator=1+A*Math.exp(-relativeGrowthRate*elapsedTime);
+		double rawPopulation=(double)carryingCapacityPopulation/denominator;
         //make it an int becuase we can't have (viable) fractions of seafood
-        int updatedPopulation=(int)rawPopulation;
+		int updatedPopulation=(int)rawPopulation;
         //next line for debug
-        System.out.println(updatedPopulation);
-        return updatedPopulation-codPopulation.size();
+		System.out.println(updatedPopulation);
+		return updatedPopulation-codPopulation.size();
     }
 	
 	private int updateSalmonPopulation(long elapsedTime) {
 		int carryingCapacityPopulation = Constants.SALMON_MAX_POPULATION;
 		int lastPopulation = salmonPopulation.size();
 		double A=(double)(carryingCapacityPopulation-lastPopulation)/(double)lastPopulation;
-        double denominator=1+A*Math.exp(-relativeGrowthRate*elapsedTime);
-        double rawPopulation=(double)carryingCapacityPopulation/denominator;
-        int updatedPopulation=(int)rawPopulation;
-        System.out.println(updatedPopulation);
-        return updatedPopulation-salmonPopulation.size();
+		double denominator=1+A*Math.exp(-relativeGrowthRate*elapsedTime);
+		double rawPopulation=(double)carryingCapacityPopulation/denominator;
+		int updatedPopulation=(int)rawPopulation;
+		System.out.println(updatedPopulation);
+		return updatedPopulation-salmonPopulation.size();
 		
 	}
 	
@@ -93,44 +93,44 @@ public class Ocean implements Serializable
 		int carryingCapacityPopulation = Constants.TUNA_MAX_POPULATION;
 		int lastPopulation = tunaPopulation.size();
 		double A=(double)(carryingCapacityPopulation-lastPopulation)/(double)lastPopulation;
-        double denominator=1+A*Math.exp(-relativeGrowthRate*elapsedTime);
-        double rawPopulation=(double)carryingCapacityPopulation/denominator;
-        int updatedPopulation=(int)rawPopulation;
-        System.out.println(updatedPopulation);
-        return updatedPopulation-tunaPopulation.size();
+		double denominator=1+A*Math.exp(-relativeGrowthRate*elapsedTime);
+		double rawPopulation=(double)carryingCapacityPopulation/denominator;
+		int updatedPopulation=(int)rawPopulation;
+		System.out.println(updatedPopulation);
+		return updatedPopulation-tunaPopulation.size();
 		
 	}
 	private int updateOysterPopulation(long elapsedTime) {
 		int carryingCapacityPopulation = Constants.OYSTER_MAX_POPULATION;
 		int lastPopulation = oysterPopulation.size();
 		double A=(double)(carryingCapacityPopulation-lastPopulation)/(double)lastPopulation;
-        double denominator=1+A*Math.exp(-relativeGrowthRate*elapsedTime);
-        double rawPopulation=(double)carryingCapacityPopulation/denominator;
-        int updatedPopulation=(int)rawPopulation;
-        System.out.println(updatedPopulation);
-        return updatedPopulation-oysterPopulation.size();
+		double denominator=1+A*Math.exp(-relativeGrowthRate*elapsedTime);
+		double rawPopulation=(double)carryingCapacityPopulation/denominator;
+		int updatedPopulation=(int)rawPopulation;
+		System.out.println(updatedPopulation);
+		return updatedPopulation-oysterPopulation.size();
 	}
 	
 	private int updateLobsterPopulation(long elapsedTime) {
 		int carryingCapacityPopulation = Constants.LOBSTER_MAX_POPULATION;
 		int lastPopulation = lobsterPopulation.size();
 		double A=(double)(carryingCapacityPopulation-lastPopulation)/(double)lastPopulation;
-        double denominator=1+A*Math.exp(-relativeGrowthRate*elapsedTime);
-        double rawPopulation=(double)carryingCapacityPopulation/denominator;
-        int updatedPopulation=(int)rawPopulation;
-        System.out.println(updatedPopulation);
-        return updatedPopulation-lobsterPopulation.size();
+		double denominator=1+A*Math.exp(-relativeGrowthRate*elapsedTime);
+		double rawPopulation=(double)carryingCapacityPopulation/denominator;
+		int updatedPopulation=(int)rawPopulation;
+		System.out.println(updatedPopulation);
+		return updatedPopulation-lobsterPopulation.size();
 	}
 	
 	private int updateCrabPopulation(long elapsedTime) {
 		int carryingCapacityPopulation = Constants.CRAB_MAX_POPULATION;
 		int lastPopulation = crabPopulation.size();
 		double A=(double)(carryingCapacityPopulation-lastPopulation)/(double)lastPopulation;
-        double denominator=1+A*Math.exp(-relativeGrowthRate*elapsedTime);
-        double rawPopulation=(double)carryingCapacityPopulation/denominator;
-        int updatedPopulation=(int)rawPopulation;
-        System.out.println(updatedPopulation);
-        return updatedPopulation-crabPopulation.size();
+		double denominator=1+A*Math.exp(-relativeGrowthRate*elapsedTime);
+		double rawPopulation=(double)carryingCapacityPopulation/denominator;
+		int updatedPopulation=(int)rawPopulation;
+		System.out.println(updatedPopulation);
+		return updatedPopulation-crabPopulation.size();
 	}
 	
 	
