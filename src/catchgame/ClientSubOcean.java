@@ -25,6 +25,7 @@ public class ClientSubOcean extends AbstractOcean{
 			return fish;
 	}
 	
+	 /*
 	 public void updateFishPopulationsFromServer(){
 		 SubOceanFishStatePacket codStatePacket=new SubOceanFishStatePacket(super.codPopulation.size(), 100);
 		 try{
@@ -39,6 +40,7 @@ public class ClientSubOcean extends AbstractOcean{
 			 System.out.println("Over here");
 		 }
 	 }
+	 */
 	 
 	 public void addPacketOfCod(ArrayList<Fish> codPopulation){
 		 super.codPopulation.addAll(codPopulation);

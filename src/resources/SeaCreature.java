@@ -1,5 +1,7 @@
 package resources;
 
+import javafx.scene.shape.Circle;
+
 /**
  */
 public abstract class SeaCreature <T>
@@ -8,6 +10,7 @@ public abstract class SeaCreature <T>
 	
 	private double weight;
 	private T species;
+	public Circle GUICircle=null;
 
 	SeaCreature(){
 		

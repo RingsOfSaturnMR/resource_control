@@ -22,7 +22,7 @@ public class GamePane extends VBox
 	private ActionVBox actionHBox = new ActionVBox();
 	private MyStatsPane myStatsPane = new MyStatsPane();
 	
-	private SimpleFishingPane simpleFishingPane;
+	public SimpleFishingPane simpleFishingPane;
 	private MarketsPane marketsPane;
 	
 	public GamePane(EventHandler<ActionEvent> extractFishAction, EventHandler<ActionEvent> sellFishAction, Player player)
@@ -117,6 +117,7 @@ public class GamePane extends VBox
 		}
 	}
 	
+	/*
 	private class SimpleFishingPane extends StackPane
 	{
 		private Button btnExtractFishAction = new Button("Extract Fish");
@@ -130,6 +131,7 @@ public class GamePane extends VBox
 			this.getChildren().addAll(btnExtractFishAction);
 		}
 	}
+	*/
 
 	private class BoatFishingPane extends Pane
 	{
