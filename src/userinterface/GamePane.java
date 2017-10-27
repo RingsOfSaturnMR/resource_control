@@ -1,5 +1,7 @@
 package userinterface;
 
+import java.util.ArrayList;
+
 import catchgame.Player;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,21 +15,29 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import resources.Boat;
+import resources.BoatTypes;
+import resources.Equipment;
+import resources.Fish;
+import resources.FishSpecies;
+import resources.SeaCreature;
 
 public class GamePane extends VBox
 {
-	private Player player = new Player();
+	private Player player;
 	
 	private StackPane primaryPane = new StackPane();
 	private ActionVBox actionHBox = new ActionVBox();
-	private MyStatsPane myStatsPane = new MyStatsPane();
+	private MyStatsPane myStatsPane;
 	
-	private SimpleFishingPane simpleFishingPane;
+	public SimpleFishingPane simpleFishingPane;
 	private MarketsPane marketsPane;
 	
 	public GamePane(EventHandler<ActionEvent> extractFishAction, EventHandler<ActionEvent> sellFishAction, Player player)
 	{
-		//this.player = player;
+		this.player = player;
+		myStatsPane = new MyStatsPane();
+		
 		simpleFishingPane = new SimpleFishingPane(extractFishAction);
 		marketsPane = new MarketsPane(sellFishAction);
 		
@@ -117,6 +127,7 @@ public class GamePane extends VBox
 		}
 	}
 	
+	/*
 	private class SimpleFishingPane extends StackPane
 	{
 		private Button btnExtractFishAction = new Button("Extract Fish");
@@ -130,6 +141,7 @@ public class GamePane extends VBox
 			this.getChildren().addAll(btnExtractFishAction);
 		}
 	}
+	*/
 
 	private class BoatFishingPane extends Pane
 	{

@@ -12,9 +12,9 @@ public class ServerPane extends Pane
 		getChildren().addAll(taOutput);
 	}
 	
-	public void appendTaOutput(String str)
+	public void appendToOutput(String str)
 	{
-		taOutput.appendText(str);
+		taOutput.appendText(str + "\n");
 	}
 	
 }
