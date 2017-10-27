@@ -46,5 +46,5 @@ userinterface
 	userinterface is for only user interface stuff it contains panes
 	that can be loaded and can be passed EventHandlers from where they are instantiated
 	
-Please see the pseudocode PseudoCode_catchgame for more info on ctach and ocean
+Please see the pseudocode PseudoCode_catchgame for more info on Catch and Ocean
 */
