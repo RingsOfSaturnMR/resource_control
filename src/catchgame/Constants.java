@@ -52,6 +52,6 @@ public class Constants
 	public final static double OYSTER_INITIAL_WEIGHT_MAX = .4;
 	
 	// Basics
-	public final static String APPLICATION_NAME = "Catch!";
+	public final static String APPLICATION_NAME = "Catch! - By Caileigh, Matt, Nils, Thanh";
 
 }

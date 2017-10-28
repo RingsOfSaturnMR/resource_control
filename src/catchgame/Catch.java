@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import authentication.NewUserException;
 import catchgame.Catch.LoginPacket;
@@ -16,9 +17,9 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 
 import javafx.stage.Stage;
+import resources.SeaCreature;
 import userinterface.LoginPane;
 import userinterface.NewUserPane;
-import userinterface.RealNewUserPane;
 
 public class Catch extends Application
 {
@@ -26,8 +27,7 @@ public class Catch extends Application
 	private Stage loginStage = new Stage();
 	private GameControl gameControl;
 	static CatchServer catchServer;
-
-	Socket socket = null;
+	private Socket socket = null;
 
 	@Override
 	public void start(Stage primaryStage)
@@ -142,6 +142,22 @@ public class Catch extends Application
 		};
 	}
 
+
+	
+	public void launchGameControl(String serverIpAddress, int clientPort, String playerName, String playerPassword)
+	{
+		try
+		{
+			new GameControl(serverIpAddress, clientPort, playerName, playerPassword);
+		}
+		catch (Exception e1)
+		{
+			System.out.println("A new GameControl was made from outside of a LoginPane (proabably a NewUserPane), and threw an exception.\n" + 
+					e1.getMessage());
+		}	
+	}
+	
+	// main method to launch program
 	public static void main(String[] args)
 	{
 		Runtime.getRuntime().addShutdownHook(new Thread()
@@ -156,7 +172,7 @@ public class Catch extends Application
 		});
 		launch(args);
 	}
-
+	
 	// Packets for server/client communication
 	public static class LoginPacket implements Serializable
 	{
@@ -184,77 +200,26 @@ public class Catch extends Application
 		}
 	}
 	
-	public void launchGameControl(String serverIpAddress, int clientPort, String playerName, String playerPassword)
+	public static class SeaCreaturePacket implements Serializable
 	{
-		try
+		public SeaCreature creature;
+		
+		public SeaCreaturePacket(SeaCreature creature)
 		{
-			new GameControl(serverIpAddress, clientPort, playerName, playerPassword);
+			this.creature = creature;
 		}
-		catch (Exception e1)
-		{
-			if(loginPane != null)
-			{
-			loginPane.setErrorText(e1.getMessage());
-			}
-			else
-			{
-				System.out.println("A new GameControl was made from outside of a LoginPane (proabably a NewUserPane), and threw an exception.\n" + 
-				e1.getMessage());
-				//e1.printStackTrace();
-			}
-		}	
 	}
+	
+	public static class SeaCreatureRequestPacket implements Serializable
+	{
+		int code;
+		
+		public SeaCreatureRequestPacket(int code)
+		{
+			this.code = code;
+		}
+	}
+	
+	
 }
 
-/*
- * // I think with some changes this could be it's own file. // it's too long
- * for this file private class LoginTask implements Runnable {
- * 
- * private String serverIPAdress; private int port; private String enteredName;
- * private String enteredPassword;
- * 
- * private LoginTask(String serverIPAdress, int port, String enteredName, String
- * enteredPassword) { this.serverIPAdress = serverIPAdress; this.port = port;
- * this.enteredName = enteredName; this.enteredPassword = enteredPassword; }
- * 
- * public void run() { while (!connected) { try { // exception will be thrown
- * here if not connected // then it would skip to the catch block socket = new
- * Socket(serverIPAdress, port); connected = true; // now connected
- * System.out.println("In client connected is true.");
- * 
- * } // control shifts to here if there is no connection // catch any exception
- * catch (final IOException ex) { System.out.println(ex.toString()); } } // once
- * connected, it handles the login if (connected && !loggedIn) { try {
- * ObjectOutputStream toServer = new
- * ObjectOutputStream(socket.getOutputStream()); ObjectInputStream fromServer =
- * new ObjectInputStream(socket.getInputStream());
- * 
- * LoginPacket loginPacket = new LoginPacket(enteredName, enteredPassword);
- * toServer.writeObject(loginPacket);
- * 
- * try { ServerCodePacket serverCode = (ServerCodePacket)
- * fromServer.readObject(); switch (serverCode.SERVER_CODE) {
- * 
- * case ServerCodeConstants.VALID_PLAYER_AND_PASSWOORD_CODE: loggedIn = true;
- * System.out.println("Server Response: User logged in.");
- * 
- * Platform.runLater(() -> { Player player = new Player(enteredName,
- * enteredPassword); // gameControl = new GameControl(toServer, fromServer,
- * player); }); break;
- * 
- * case ServerCodeConstants.INVALID_PASSWORD_CODE:
- * System.out.println("Server Response: Invalid Password.");
- * Platform.runLater(() -> {
- * 
- * });
- * 
- * break;
- * 
- * case ServerCodeConstants.INVALID_PLAYER_CODE:
- * System.out.println("Not a registered user.");
- * 
- * break; } } catch (ClassNotFoundException ex) {
- * System.out.println(ex.toString()); }
- * System.out.println("In client serverCode received."); } catch (IOException
- * ex) { System.out.println(ex.toString()); } } } }
- */

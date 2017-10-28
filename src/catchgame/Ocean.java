@@ -286,17 +286,17 @@ public class Ocean implements Serializable
 	
 	public Fish extractCod()
 	{
-		return new Fish(FishSpecies.COD, 1);
+		return new Fish(FishSpecies.COD, 20);
 	}
 	
 	public Fish extractSalmon()
 	{
-		return new Fish(FishSpecies.SALMON, 1);
+		return new Fish(FishSpecies.SALMON, 20);
 	}
 	
 	public Fish extractTuna()
 	{
-		return new Fish(FishSpecies.TUNA, 1);
+		return new Fish(FishSpecies.TUNA, 20);
 	}
 	
 	public Shellfish extractCrab()
@@ -436,7 +436,7 @@ public class Ocean implements Serializable
 		// helper function
 	private int getRandomInt(int min, int max)
 	{
-		int randomInt = rand.nextInt(max) + min;
+		int randomInt = rand.nextInt(max - min) + min;
 		return randomInt;
 	}
 	private double getRandomDouble(double max, double min) {

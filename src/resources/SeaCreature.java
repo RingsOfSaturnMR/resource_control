@@ -1,16 +1,18 @@
 package resources;
 
+import java.io.Serializable;
+
 import javafx.scene.shape.Circle;
 
 /**
  */
-public abstract class SeaCreature <T>
+public abstract class SeaCreature <T> implements Serializable
 {
 	protected static int totalPopulation = 0;
 	
 	private double weight;
 	private T species;
-	public Circle GUICircle=null;
+	private Circle GUICircle = null;
 
 	SeaCreature(){
 		
@@ -48,5 +50,21 @@ public abstract class SeaCreature <T>
 	public T getSpecies()
 	{
 		return this.species;
+	}
+	
+	public Circle getBody()
+	{
+		return this.GUICircle;
+	}
+	
+	public void SetBodyByWeight()
+	{
+		this.GUICircle = new Circle(weight);
+	}
+	
+	// for serializing
+	public void setBodyToNull()
+	{
+		this.GUICircle = null;
 	}
 }

@@ -10,7 +10,7 @@ import javafx.scene.layout.StackPane;
 /*
 
  */
-public class SimpleFishingPane extends Pane
+/*public class SimpleFishingPane extends Pane
 {
 	private Button btnExtractFishAction = new Button("Extract Fish");
 	private Label labelExplanation = new Label("Right now the fish are shown as dots, and" + "when you extract a fish, a fish is removed, " + "and if fish are sent from the server, "
@@ -27,4 +27,4 @@ public class SimpleFishingPane extends Pane
 		this.getChildren().addAll(btnExtractFishAction, labelExplanation);
 
 	}
-}
+}*/

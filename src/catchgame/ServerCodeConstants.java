@@ -17,10 +17,12 @@ public class ServerCodeConstants
 	public final static int NEW_USER_ERR_ILLEGAL_NAME_CODE = 13; 
 	public final static int NEW_USER_ERR_UNKNOWN_CODE = 13; 
 
-	// do one for each ocean method?
-	// Let's talk about this part
-	public static int EXTRACT_RANDOM_CODE = 20;
-	public static int EXTRACT_COD_CODE = 21;
-	public static int EXTRACT_CRAB_CODE = 22;
-	public static int EXTRACT_LOBSTER_CODE = 23;
+	
+	// request codes
+	public static final int REQUEST_RANDOM_SEACREATURE_CODE = 20;
+	public static final int REQUEST_COD_CODE = 21;
+	public static final int REQUEST_SALMON_CODE = 22;
+	public static final int REQUEST_TUNA_CODE = 23;
+	
+	
 }
