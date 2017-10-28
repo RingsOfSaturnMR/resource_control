@@ -31,8 +31,8 @@ public class LoginPane extends VBox
 	private Label lblClientPort = new Label("Client Port: ");
 
 	// fields for entry, filled with default values for easy testing
-	private TextField tfName = new TextField("Tina");
-	private TextField pfPassword = new TextField("Pass123$");
+	private TextField tfName = new TextField("");
+	private TextField pfPassword = new TextField("");
 	private TextField tfServerIp = new TextField("localhost");
 	private TextField tfClientPort = new TextField("8000");
 	
