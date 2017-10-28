@@ -1,5 +1,12 @@
 package authentication;
 
+/**
+ * This Exception class is thrown when a user is attempting to make an account and enters in an invalid password.
+ * It contains an ArrayList with enums describing each case why the password might invalid.
+ * It contains a String describing the reason the Exception was thrown.
+ * 
+ *  @author Nils Johnson
+ */
 import java.util.ArrayList;
 
 public class BadPasswordException extends NewUserException

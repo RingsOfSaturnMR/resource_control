@@ -1,5 +1,8 @@
 package catchgame;
 
+/**
+ * Constants for initial used throughout program.
+ */
 public class Constants
 {
 	// market price changes
@@ -11,6 +14,10 @@ public class Constants
 	public final static int LOGIN_PANE_HEIGHT = 275;
 	public final static int NEW_USER_PANE_WIDTH = 500;
 	public final static int NEW_USER_PANE_HEIGHT = 300;
+	public final static int INITIAL_SERVER_PANE_WIDTH = 400;
+	public final static int INITIAL_SERVER_PANE_HEIGHT = 400;
+	public final static int INITIAL_GAME_PANE_WIDTH = 500;
+	public final static int INITIAL_GAME_PANE_HEIGHT = 500;
 	
 	// initial Market values of resources
 	public final static double TUNA_INITIAL_PRICE_PER_POUND = 6.40;

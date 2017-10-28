@@ -1,34 +1,29 @@
 package authentication;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
-/*
- * WHat do I do in this classss??
+/**
+ * This class contains defines the parameters required for user names and
+ * passwords It also contains methods for validation for conforming to these
+ * parameters.
+ * 
+ * @author Nils Johnson
+ *
  */
 public class Authenticator
 {
-	// length of randomly generated keys, if chosen to use.
-	private static int KEY_LENGTH = 35;
-
 	// for passwords
-	public static final char[] LEGAL_PW_SPECIAL_CHARACTER = { '!', '@', '#', '$', '^', '&', '*' };
+	public static final char[] LEGAL_PW_SPECIAL_CHARACTER =
+	{ '!', '@', '#', '$', '^', '&', '*' };
 	public static final int MIN_PW_LENGTH = 4;
 	public static final int MAX_PW_LENGTH = 20;
 
 	// for usernames
 	public static final int MIN_NAME_LENGTH = 4;
 	public static final int MAX_NAME_LENGTH = 15;
-	public static final char[] ILLEGAL_NAME_CHARACTER = { ' ', '!', '#', '%', '^', '&', '*' };
-
-
+	public static final char[] ILLEGAL_NAME_CHARACTER =
+	{ ' ', '!', '#', '%', '^', '&', '*' };
 
 	public static ArrayList<PasswordError> checkPasswordLegality(String enteredPassword)
 	{
@@ -166,23 +161,4 @@ public class Authenticator
 			return errorList;
 		}
 	}
-
-	public static String getRandomKey()
-	{
-		Random rand = new Random();
-		StringBuilder key = new StringBuilder(KEY_LENGTH);
-
-		for (int i = 0; i < KEY_LENGTH; i++)
-		{
-			key.append((char) (rand.nextInt(255) + 0));
-		}
-
-		return key.toString();
-	}
-
-	
-
-
-
-
 }

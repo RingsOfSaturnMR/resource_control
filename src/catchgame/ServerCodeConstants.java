@@ -1,5 +1,7 @@
 package catchgame;
-
+/**
+ * Constant values that represent different results that get sent back and forth from the server to the client. 
+ */
 public class ServerCodeConstants
 {
 	// login response codes

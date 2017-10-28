@@ -1,5 +1,12 @@
 package authentication;
 
+/**
+ * These are used to represent the possible errors that can occur when creating
+ * a user name.
+ * 
+ * @author Nils
+ *
+ */
 public enum UsernameError
 {
 	TOO_SHORT,

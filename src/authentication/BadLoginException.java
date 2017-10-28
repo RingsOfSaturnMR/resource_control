@@ -1,5 +1,14 @@
 package authentication;
 
+/**
+ * This Exception class describes is thrown when a user cannot login.
+ * It describes why providing an enum value corresponding to the problem,
+ * or a String based on that value.
+ *  
+ * @author Nils
+ *
+ */
+
 public class BadLoginException extends Exception
 {
 	private LoginError loginError;

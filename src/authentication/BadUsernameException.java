@@ -2,8 +2,18 @@ package authentication;
 
 import java.util.ArrayList;
 
+/**
+ * This Exception is thrown when a user attempts to make a new account with an
+ * invalid user name. It contains an ArrayList with enums describing each case
+ * why the user name might invalid. It contains a String describing the reason
+ * the Exception was thrown.
+ * 
+ * @author Nils
+ *
+ */
 public class BadUsernameException extends NewUserException
 {
+	// TODO use built in string from parent Exception class.
 	private String message = null;
 	private ArrayList<UsernameError> errorList = new ArrayList<>();
 
@@ -12,7 +22,7 @@ public class BadUsernameException extends NewUserException
 		this.setErrorList(errorList);
 		StringBuilder temp = new StringBuilder();
 		boolean shouldBreak = false;
-		
+
 		for (int i = 0; i < errorList.size(); i++)
 		{
 			switch (errorList.get(i))
@@ -34,18 +44,18 @@ public class BadUsernameException extends NewUserException
 				shouldBreak = true;
 				break;
 			}
-			
+
 			if (shouldBreak)
 			{
 				break;
 			}
-			
+
 			if (i >= 1 && i < errorList.size())
 			{
 				temp.append(", ");
 			}
 		}
-		if(!shouldBreak)
+		if (!shouldBreak)
 		{
 			message = temp.toString();
 		}

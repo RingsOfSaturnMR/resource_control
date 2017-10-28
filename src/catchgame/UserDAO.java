@@ -111,7 +111,7 @@ public class UserDAO implements IUserDAO
 			loadUserList();
 		}
 
-		if (!isAvailable(enteredUserName))
+		if (!usernameIsAvailable(enteredUserName))
 		{
 			ArrayList<UsernameError> errors = new ArrayList<>();
 			errors.add(UsernameError.UNAVAILABLE);
@@ -227,7 +227,7 @@ public class UserDAO implements IUserDAO
 	}
 
 	@Override
-	public boolean isAvailable(String enteredUserName)
+	public boolean usernameIsAvailable(String enteredUserName)
 	{
 		String nameInFile;
 		int i = 0;

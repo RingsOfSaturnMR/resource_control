@@ -28,28 +28,59 @@ import javafx.stage.Stage;
 import resources.SeaCreature;
 import userinterface.ServerPane;
 
+/**
+ * This class Handles requests from clients for logging in, making new accounts
+ * and extracting SeaCreatures from the Ocean.
+ * 
+ * @author Matt Roberts
+ * @author Nils Johnson
+ *
+ */
+
 public class CatchServer
 {
 	private Stage serverStage = new Stage();
 	private ServerPane serverPane = new ServerPane();
-	// maybe useful later
-	boolean quit = false;
-
 	private ServerSocket serverSocket;
 	private UserDAO userDAO = new UserDAO();
 
 	public Ocean ocean = new Ocean();
 
+	/**
+	 * Loads the GUI and starts listening for requests to login or make a new account.
+	 */
 	public CatchServer()
 	{
 		loadServerPane();
+		new Thread(new HandleNewRequestsTask()).start();
+	}
 
-		new Thread(() -> {
+	private void loadServerPane()
+	{
+		// makes a scene with a serverPane
+		Scene serverScene = new Scene(serverPane, Constants.INITIAL_SERVER_PANE_WIDTH, Constants.INITIAL_SERVER_PANE_HEIGHT);
+		// show serverPane
+		serverStage.setScene(serverScene);
+		serverStage.setTitle("Catch Server");
+		serverStage.centerOnScreen();
+		serverStage.show();
+		serverStage.requestFocus();
+	}
+
+	/**
+	 * Listens for initial requests to login or make new accounts.
+	 */
+	private class HandleNewRequestsTask implements Runnable
+	{
+		@Override
+		public void run()
+		{
 			try
 			{
 				serverSocket = new ServerSocket(8000);
 
-				Platform.runLater(() -> {
+				Platform.runLater(() ->
+				{
 					serverPane.appendToOutput("Server Started at: " + new Date());
 					serverPane.appendToOutput("Open to clients.");
 				});
@@ -78,7 +109,7 @@ public class CatchServer
 							{
 								serverCode = ServerCodeConstants.LOGIN_SUCCESS_CODE;
 								// start serving this client
-								new Thread(new HandleAClient(socket, toClient, fromClient)).start();
+								new Thread(new ServeOceanTask(socket, toClient, fromClient)).start();
 							}
 						}
 						catch (BadLoginException e)
@@ -105,7 +136,8 @@ public class CatchServer
 
 						// reassign for scoping reasons
 						final int code = serverCode;
-						Platform.runLater(() -> {
+						Platform.runLater(() ->
+						{
 							serverPane.appendToOutput("Login Attempted, Username: " + loginPacket.enteredName);
 							serverPane.appendToOutput("Result: " + (code == ServerCodeConstants.LOGIN_SUCCESS_CODE ? "Success" : "Not Success"));
 						});
@@ -117,7 +149,8 @@ public class CatchServer
 					{
 						NewUserPacket newUserPacket = (NewUserPacket) userData;
 
-						Platform.runLater(() -> {
+						Platform.runLater(() ->
+						{
 							serverPane.appendToOutput("New Account Attempt, Desired Username: " + newUserPacket.enteredName);
 						});
 
@@ -154,7 +187,8 @@ public class CatchServer
 
 						int code = serverCode;
 
-						Platform.runLater(() -> {
+						Platform.runLater(() ->
+						{
 							String result;
 
 							switch (code)
@@ -185,42 +219,33 @@ public class CatchServer
 			{
 				e.printStackTrace();
 			}
-		}).start();
+		}
 	}
 
-	class HandleAClient implements Runnable
+	/**
+	 * Listens for requests from logged in users to extract resources from Ocean
+	 */
+	private class ServeOceanTask implements Runnable
 	{
 		private Socket socket;
 		private ObjectOutputStream toClient;
 		private ObjectInputStream fromClient;
 
-		HandleAClient(Socket socket, ObjectOutputStream toClient, ObjectInputStream fromClient)
+		ServeOceanTask(Socket socket, ObjectOutputStream toClient, ObjectInputStream fromClient)
 		{
 			this.socket = socket;
 			this.toClient = toClient;
 			this.fromClient = fromClient;
-			
 		}
 
 		@Override
 		public void run()
 		{
-			System.out.println("run started - handle");
+			System.out.println("Started spinning a new 'while true' loop to listen for request.");
 			try
 			{
-				//ObjectInputStream fromClient = new ObjectInputStream(socket.getInputStream());
-				//ObjectOutputStream toClient = new ObjectOutputStream(socket.getOutputStream());
-
-				int i = 0;
 				while (true)
 				{
-					if (i == 0)
-					{
-						System.out.println("running while true");
-					}
-
-					i++;
-
 					SeaCreature creature = null;
 					SeaCreatureRequestPacket packet = (SeaCreatureRequestPacket) fromClient.readObject();
 
@@ -241,7 +266,6 @@ public class CatchServer
 					default:
 						creature = null;
 						System.out.println("Request Code Not recognized.");
-
 					}
 					System.out.println("sending resouce packet with " + creature.getSpecies());
 					SeaCreaturePacket sendPacket = new SeaCreaturePacket(creature);
@@ -254,21 +278,5 @@ public class CatchServer
 				System.out.println(e.getMessage());
 			}
 		}
-	}
-
-	public void loadServerPane()
-	{
-		// the height and width
-		int GAME_WIDTH = 400;
-		int GAME_HEIGHT = 400;
-
-		Scene gameScene = new Scene(serverPane, GAME_WIDTH, GAME_HEIGHT);
-
-		// show GamePane
-		serverStage.setScene(gameScene);
-		serverStage.setTitle("Catch Server");
-		serverStage.centerOnScreen();
-		serverStage.show();
-		serverStage.requestFocus();
 	}
 }

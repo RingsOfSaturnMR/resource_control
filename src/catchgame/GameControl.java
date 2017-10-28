@@ -28,13 +28,17 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
+/**
+ * This class is a client that lets users extract resources, and drives the GUI
+ * for the gameplay.
+ * 
+ * @author Nils Johnson
+ * @author Matt Roberts
+ *
+ */
 public class GameControl
 {
 	private Player player = null;
-
-	// constants
-	private static final int INITIAL_WIDTH = 500;
-	private static final int INITIAL_HEIGHT = 500;
 
 	// GUI stuff
 	private GamePane gamePane;
@@ -48,26 +52,54 @@ public class GameControl
 
 	private Random rand = new Random();
 
+	/**
+	 * Starts a new game by connecting to CatchServer and getting a response equal to LOGIN_SUCCESS_CODE.
+	 * 
+	 * @param serverIPAdress The network address of CatchServer.
+	 * @param port The port the client is on.
+	 * @param enteredName The name the user enters.
+	 * @param enteredPassword The password the user enters.
+	 * @throws Exception The Exception thrown back to where the game was instantiated from, if login fails. 
+	 */
 	public GameControl(String serverIPAdress, int port, String enteredName, String enteredPassword) throws Exception
 	{
-		// set sockets and streams
 		try
 		{
 			socket = new Socket(serverIPAdress, port);
 			toServer = new ObjectOutputStream(socket.getOutputStream());
 			fromServer = new ObjectInputStream(socket.getInputStream());
-
+			String errorMessage = null;
+			
 			// make a LoginPacket and send to server
 			LoginPacket loginPacket = new LoginPacket(enteredName, enteredPassword);
 			toServer.writeObject(loginPacket);
 			toServer.flush();
 
 			// get response from server
-			ServerCodePacket serverCode = (ServerCodePacket) fromServer.readObject();
+			ServerCodePacket serverCodePacket = (ServerCodePacket) fromServer.readObject();
 
-			if (serverCode.SERVER_CODE != ServerCodeConstants.LOGIN_SUCCESS_CODE)
+			if (serverCodePacket.SERVER_CODE != ServerCodeConstants.LOGIN_SUCCESS_CODE)
 			{
-				throw new Exception("Invalid Name or Password");
+				switch(serverCodePacket.SERVER_CODE)
+				{
+				case ServerCodeConstants.LOGIN_ERR_INVALID_PASSWORD_CODE:
+					errorMessage = "Invalid Password";
+					break;
+				case ServerCodeConstants.LOGIN_ERR_NO_USERS_FOUND_CODE:
+					errorMessage = "This Server Has No Users Yet!";
+					break;
+				case ServerCodeConstants.LOGIN_ERR_USER_NOT_FOUND_CODE:
+					errorMessage = "Invalid Username";
+					break;
+				case ServerCodeConstants.LOGIN_ERR_UNKNOWN_ERROR_CODE:
+					errorMessage = "The Server Doesnt Know Why You Cant Login :(";
+					break;
+				default:
+					errorMessage = "The server responded '" + serverCodePacket.SERVER_CODE + "', I dont know what that means :(" ;
+					break;
+				}
+				
+				throw new Exception(errorMessage);
 			}
 		}
 		catch (ClassNotFoundException ex)
@@ -81,7 +113,7 @@ public class GameControl
 
 		// Display GUI
 		gamePane = new GamePane(new ExtractFishAction(), new SellFishAction(), player);
-		gameScene = new Scene(gamePane, INITIAL_WIDTH, INITIAL_HEIGHT);
+		gameScene = new Scene(gamePane, Constants.INITIAL_GAME_PANE_WIDTH, Constants.INITIAL_GAME_PANE_HEIGHT);
 		gameStage.setScene(gameScene);
 		gameStage.setTitle("Catch!");
 		gameStage.centerOnScreen();
@@ -139,9 +171,7 @@ public class GameControl
 		public void handle(ActionEvent e)
 		{
 			System.out.println("Extract fish action " + "triggered(fish caught)");
-
 		}
-
 	}
 
 	private class SellFishAction implements EventHandler<ActionEvent>

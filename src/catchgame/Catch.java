@@ -21,6 +21,14 @@ import resources.SeaCreature;
 import userinterface.LoginPane;
 import userinterface.NewUserPane;
 
+/**
+ * This class is used to start a came of 'Catch!'. Primarily, it can instantiate a CatchServer,
+ * instantiate a GameControl and communicate with CatchServer to make new accounts. It is also used to define packets to transfer information from
+ * CatchServer to GameControl and vice versa.
+ * 
+ * @author Nils Johnson
+ * @author Matt Roberts
+ */
 public class Catch extends Application
 {
 	private LoginPane loginPane;
@@ -61,7 +69,7 @@ public class Catch extends Application
 		private NewUserPane newUserPane = null;
 		private ObjectOutputStream toServer = null;
 		private ObjectInputStream fromServer = null;
-		
+
 		@Override
 		public void handle(ActionEvent e)
 		{
@@ -83,7 +91,7 @@ public class Catch extends Application
 
 						toServer.writeObject(newUserPacket);
 						Object data = fromServer.readObject();
-						
+
 						if (data instanceof ServerCodePacket)
 						{
 							ServerCodePacket packet = (ServerCodePacket) data;
@@ -105,7 +113,7 @@ public class Catch extends Application
 								break;
 							}
 						}
-						
+
 					}
 					catch (IOException | ClassNotFoundException e1)
 					{
@@ -142,8 +150,6 @@ public class Catch extends Application
 		};
 	}
 
-
-	
 	public void launchGameControl(String serverIpAddress, int clientPort, String playerName, String playerPassword)
 	{
 		try
@@ -152,11 +158,10 @@ public class Catch extends Application
 		}
 		catch (Exception e1)
 		{
-			System.out.println("A new GameControl was made from outside of a LoginPane (proabably a NewUserPane), and threw an exception.\n" + 
-					e1.getMessage());
-		}	
+			loginPane.setErrorText(e1.getMessage());
+		}
 	}
-	
+
 	// main method to launch program
 	public static void main(String[] args)
 	{
@@ -172,7 +177,7 @@ public class Catch extends Application
 		});
 		launch(args);
 	}
-	
+
 	// Packets for server/client communication
 	public static class LoginPacket implements Serializable
 	{
@@ -199,27 +204,25 @@ public class Catch extends Application
 			this.enteredPasswordConfirm = passwordConfirm;
 		}
 	}
-	
+
 	public static class SeaCreaturePacket implements Serializable
 	{
 		public SeaCreature creature;
-		
+
 		public SeaCreaturePacket(SeaCreature creature)
 		{
 			this.creature = creature;
 		}
 	}
-	
+
 	public static class SeaCreatureRequestPacket implements Serializable
 	{
 		int code;
-		
+
 		public SeaCreatureRequestPacket(int code)
 		{
 			this.code = code;
 		}
 	}
-	
-	
-}
 
+}

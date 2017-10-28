@@ -1,5 +1,11 @@
 package authentication;
 
+/**
+ * These are the possible errors that can be describe an incorrectly formatted
+ * password.
+ * 
+ * @author Nils Johnson
+ */
 public enum PasswordError
 {
 	TOO_SHORT,
