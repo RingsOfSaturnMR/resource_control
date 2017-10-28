@@ -1,21 +1,15 @@
 package catchgame;
 
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
-import java.util.ArrayList;
 
-import authentication.NewUserException;
-import catchgame.Catch.LoginPacket;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-
 import javafx.stage.Stage;
 import resources.SeaCreature;
 import userinterface.LoginPane;

@@ -1,27 +1,22 @@
 package catchgame;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Date;
-
-import javax.lang.model.element.ElementKind;
 
 import authentication.BadLoginException;
 import authentication.BadPasswordException;
 import authentication.BadUsernameException;
 import authentication.LoginError;
 import authentication.NewUserException;
-import authentication.PasswordError;
 import authentication.UsernameError;
 import catchgame.Catch.LoginPacket;
 import catchgame.Catch.NewUserPacket;
-import catchgame.Catch.SeaCreatureRequestPacket;
 import catchgame.Catch.SeaCreaturePacket;
+import catchgame.Catch.SeaCreatureRequestPacket;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -87,7 +82,7 @@ public class CatchServer
 				// listens for initial requests
 				while (true)
 				{
-					// set to -1 because needs requires initialization
+					// set to -1 because int requires initialization
 					int serverCode = -1;
 					Socket socket = new Socket();
 					socket = serverSocket.accept();
@@ -139,7 +134,7 @@ public class CatchServer
 						Platform.runLater(() ->
 						{
 							serverPane.appendToOutput("Login Attempted, Username: " + loginPacket.enteredName);
-							serverPane.appendToOutput("Result: " + (code == ServerCodeConstants.LOGIN_SUCCESS_CODE ? "Success" : "Not Success"));
+							serverPane.appendToOutput("Result: " + (code == ServerCodeConstants.LOGIN_SUCCESS_CODE ? "Successful" : "Not Successful"));
 						});
 
 					}

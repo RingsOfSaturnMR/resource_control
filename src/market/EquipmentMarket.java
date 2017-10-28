@@ -2,8 +2,6 @@ package market;
 
 import java.util.ArrayList;
 
-import resources.Boat;
-import resources.BoatTypes;
 import resources.Equipment;
 
 

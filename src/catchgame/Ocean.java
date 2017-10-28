@@ -39,7 +39,7 @@ public class Ocean implements Serializable
 
 	public Ocean()
 	{
-		System.out.println("In the Ocean Constructor");
+		//System.out.println("In the Ocean Constructor");
 		boolean newGame = true;
 		if (newGame)
 		{
@@ -82,7 +82,7 @@ public class Ocean implements Serializable
 		// make it an int becuase we can't have (viable) fractions of seafood
 		int updatedPopulation = (int) rawPopulation;
 		// next line for debug
-		System.out.println(updatedPopulation);
+		//System.out.println(updatedPopulation);
 		return updatedPopulation - codPopulation.size();
 	}
 
@@ -94,7 +94,7 @@ public class Ocean implements Serializable
 		double denominator = 1 + A * Math.exp(-relativeGrowthRate * elapsedTime);
 		double rawPopulation = (double) carryingCapacityPopulation / denominator;
 		int updatedPopulation = (int) rawPopulation;
-		System.out.println(updatedPopulation);
+		//System.out.println(updatedPopulation);
 		return updatedPopulation - salmonPopulation.size();
 
 	}
@@ -107,7 +107,7 @@ public class Ocean implements Serializable
 		double denominator = 1 + A * Math.exp(-relativeGrowthRate * elapsedTime);
 		double rawPopulation = (double) carryingCapacityPopulation / denominator;
 		int updatedPopulation = (int) rawPopulation;
-		System.out.println(updatedPopulation);
+		//System.out.println(updatedPopulation);
 		return updatedPopulation - tunaPopulation.size();
 
 	}
@@ -120,7 +120,7 @@ public class Ocean implements Serializable
 		double denominator = 1 + A * Math.exp(-relativeGrowthRate * elapsedTime);
 		double rawPopulation = (double) carryingCapacityPopulation / denominator;
 		int updatedPopulation = (int) rawPopulation;
-		System.out.println(updatedPopulation);
+		//System.out.println(updatedPopulation);
 		return updatedPopulation - oysterPopulation.size();
 	}
 
@@ -132,7 +132,7 @@ public class Ocean implements Serializable
 		double denominator = 1 + A * Math.exp(-relativeGrowthRate * elapsedTime);
 		double rawPopulation = (double) carryingCapacityPopulation / denominator;
 		int updatedPopulation = (int) rawPopulation;
-		System.out.println(updatedPopulation);
+		//System.out.println(updatedPopulation);
 		return updatedPopulation - lobsterPopulation.size();
 	}
 
@@ -144,7 +144,7 @@ public class Ocean implements Serializable
 		double denominator = 1 + A * Math.exp(-relativeGrowthRate * elapsedTime);
 		double rawPopulation = (double) carryingCapacityPopulation / denominator;
 		int updatedPopulation = (int) rawPopulation;
-		System.out.println(updatedPopulation);
+		//System.out.println(updatedPopulation);
 		return updatedPopulation - crabPopulation.size();
 	}
 

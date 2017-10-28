@@ -1,7 +1,6 @@
 package authentication;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * This class contains defines the parameters required for user names and

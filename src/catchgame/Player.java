@@ -1,9 +1,9 @@
 package catchgame;
 
 import java.util.ArrayList;
-import resources.SeaCreature;
+
 import resources.Equipment;
-import resources.Fish;
+import resources.SeaCreature;
 /*
 TODO
 

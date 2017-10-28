@@ -1,7 +1,18 @@
 package catchgame;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Random;
+
+import catchgame.Catch.LoginPacket;
+import catchgame.Catch.SeaCreaturePacket;
+import catchgame.Catch.SeaCreatureRequestPacket;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import resources.Boat;
 import resources.BoatTypes;
@@ -10,23 +21,6 @@ import resources.Fish;
 import resources.FishSpecies;
 import resources.SeaCreature;
 import userinterface.GamePane;
-import userinterface.LoginPane;
-
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Random;
-
-import catchgame.Catch.LoginPacket;
-import catchgame.Catch.SeaCreaturePacket;
-import catchgame.Catch.SeaCreatureRequestPacket;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 
 /**
  * This class is a client that lets users extract resources, and drives the GUI
@@ -133,7 +127,7 @@ public class GameControl
 
 				SeaCreature creature = creaturePacket.creature;
 
-				System.out.println("The server extracted a " + creature.getSpecies());
+				System.out.println("Client Has Recieved a " + creature.getSpecies());
 				creature.SetBodyByWeight();
 
 				gamePane.simpleFishingPane.addCreature(creature);
