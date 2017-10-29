@@ -131,10 +131,11 @@ public class CatchServer
 
 						// reassign for scoping reasons
 						final int code = serverCode;
+						LoginError e = loginError;
 						Platform.runLater(() ->
 						{
 							serverPane.appendToOutput("Login Attempted, Username: " + loginPacket.enteredName);
-							serverPane.appendToOutput("Result: " + (code == ServerCodeConstants.LOGIN_SUCCESS_CODE ? "Successful" : "Not Successful"));
+							serverPane.appendToOutput("Result: " + (e != null ? e : "Sucess!" ));
 						});
 
 					}

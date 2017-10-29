@@ -93,8 +93,6 @@ public class UserDAO implements IUserDAO
 
 	@Override
 	public void createUser(String enteredUserName, String enteredPassword, String enteredPwConfirm) throws NewUserException
-	// public static void makeNewAccount) throws NewUserException,
-	// FileNotFoundException, IOException
 	{
 		// verifiy a legally formatted name is entered
 		ArrayList<UsernameError> usernameErrorList = Authenticator.checkUsernameLegality(enteredUserName);
