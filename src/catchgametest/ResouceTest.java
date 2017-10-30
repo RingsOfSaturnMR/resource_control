@@ -13,7 +13,7 @@ import resources.SimpleFishingItem;
 import resources.SimpleFishingItemType;
 import resources.Usage;
 
-public class ResourceTest
+public class ResouceTest
 {
 
 	public static void main(String[] args)

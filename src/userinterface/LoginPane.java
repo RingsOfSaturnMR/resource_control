@@ -1,5 +1,6 @@
 package userinterface;
 
+import catchgame.CatchServer;
 import catchgame.Constants;
 import catchgame.GameControl;
 import javafx.event.ActionEvent;
@@ -30,8 +31,8 @@ public class LoginPane extends VBox
 	private Label lblClientPort = new Label("Client Port: ");
 
 	// fields for entry, filled with default values for easy testing
-	private TextField tfName = new TextField("user");
-	private TextField pfPassword = new TextField("pass");
+	private TextField tfName = new TextField("testUser");
+	private TextField pfPassword = new TextField("testPass1!");
 	private TextField tfServerIp = new TextField("localhost");
 	private TextField tfClientPort = new TextField("8000");
 	
@@ -44,6 +45,9 @@ public class LoginPane extends VBox
 	private Button btnLogin = new Button("Login");
 	private Button btnNewUser = new Button("New User");
 	private Button btnNewServer = new Button("New Server");
+	
+	// text to display errors
+	private Text txtError = new Text();
 
 	public LoginPane(EventHandler<ActionEvent> loginAction, EventHandler<ActionEvent> newUserAction, EventHandler<ActionEvent> newServerAction)
 	{		
@@ -71,7 +75,7 @@ public class LoginPane extends VBox
 		// add everything to its appropriate node
 		titleStackPane.getChildren().add(txtTitle);
 		buttonHBox.getChildren().addAll(btnLogin, btnNewUser, btnNewServer);
-		this.getChildren().addAll(titleStackPane, loginGridPane, buttonHBox);
+		this.getChildren().addAll(titleStackPane, loginGridPane, txtError, buttonHBox);
 		
 		// set actions
 		btnLogin.setOnAction(loginAction);
@@ -94,8 +98,15 @@ public class LoginPane extends VBox
 		return tfServerIp.getText();
 	}
 	
+	public void setErrorText(String str)
+	{
+		this.txtError.setText(str);
+	}
+	
+	//NEED TO ADD check for exceptions!!!
 	public int getClientPort()
 	{
 		return Integer.parseInt((tfClientPort.getText()));
 	}
+	
 }

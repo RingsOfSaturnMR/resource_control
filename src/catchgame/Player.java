@@ -19,12 +19,22 @@ TODO
 */
 public class Player
 {
-	String name = "Player_Name";
-	double cashOnHand = 10.0;
+	String name;
+	String password;
+	double cashOnHand;
 	private ArrayList<SeaCreature> iceChest = new ArrayList<>();
+	// TODO, new name
 	private ArrayList<Equipment> toolChest = new ArrayList<>();
 	private int skillLevel;
 
+	public Player(String name, String password, double cashOnHand, ArrayList<SeaCreature> iceChest, ArrayList<Equipment> toolChest)
+	{
+		this.name = name;
+		this.password = password;
+		this.cashOnHand = cashOnHand;
+		this.iceChest = iceChest;
+		this.toolChest = toolChest;
+	}
 	public void addItemToIceChest(SeaCreature item)
 	{
 		iceChest.add(item);
