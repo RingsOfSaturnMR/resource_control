@@ -3,7 +3,11 @@ package catchgame;
 import javafx.scene.Scene;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import resources.Boat;
+import resources.BoatTypes;
+import resources.Equipment;
 import resources.Fish;
+import resources.FishSpecies;
 import resources.SeaCreature;
 import userinterface.GamePane;
 import userinterface.LoginPane;
@@ -18,92 +22,75 @@ import java.util.Date;
 import java.util.Random;
 
 import catchgame.Catch.LoginPacket;
+import catchgame.Catch.SeaCreaturePacket;
+import catchgame.Catch.SeaCreatureRequestPacket;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
+/**
+ * This class is a client that lets users extract resources, and drives the GUI
+ * for the gameplay.
+ * 
+ * @author Nils Johnson
+ * @author Matt Roberts
+ *
+ */
 public class GameControl
 {
-	Player player = new Player();
+	private Player player = null;
 	ClientSubOcean clientSubOcean;
-	
-	// constants
-	private static final int INITIAL_WIDTH = 500;
-	private static final int INITIAL_HEIGHT = 500;
-	
+
 	// GUI stuff
 	private GamePane gamePane;
 	private Stage gameStage = new Stage();
 	private Scene gameScene;
 
-	// server communication stuff;
+	// server communication stuff
+	private Socket socket;
 	private ObjectOutputStream toServer = null;
 	private ObjectInputStream fromServer = null;
-	
+
 	private Random rand = new Random();
 
-	//public GameControl(String serverIpAddress, int clientPort, String enteredName, String enteredPassword) throws Exception
-	public GameControl(ObjectOutputStream toServer, ObjectInputStream fromServer, Player loggedInPlayer)
+	/**
+	 * Starts a new game
+	 * 
+	 * @param toServer The ObjectOutputStream to the server.
+	 * @param fromServer The ObjectInputStream from the server.
+	 */
+	public GameControl(ObjectOutputStream toServer, ObjectInputStream fromServer)
 	{
+		setPlayer();
 		this.toServer=toServer;
 		this.fromServer=fromServer;
 		clientSubOcean=new ClientSubOcean(toServer, fromServer);
 		UpdateFishOnScreenTask updateFishOnScreenTask=new UpdateFishOnScreenTask();
 		new Thread(updateFishOnScreenTask).start();
-		//fishOnScreen.updateFishPopulationsFromServer();
-		/*
-		 could be nice to have a clientSubOcean//seaCreaturesOnScreen
-		 it could contain all the seaCreatures available to the user
-		 could be subclassed for different fishing activities if necessary
-		 */
-		//I commented this out because I think it belongs in catch,
-		//and the game should handle once the person is logged in
-		/*
-		// make a loginPacket to send to server
-		LoginPacket loginPacket = new LoginPacket(enteredName, enteredPassword);
-		Socket socket = new Socket(serverIpAddress, clientPort);
-		System.out.println("connected");
-		
-		try
-		{
-		toServer = new ObjectOutputStream(socket.getOutputStream());
-		fromServer = new DataInputStream(socket.getInputStream());
-		
-		toServer.writeObject(loginPacket);
-		}
-		catch (IOException e)
-		{
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-		}
-		
-		int response =  fromServer.readInt();
-		
-		
-		
-		if (response == 1)
-		{
-			throw new Exception("Invalid Login Credentials - Server Response: " + response);
-		}
-		else if (response == 0)
-		{
-			System.out.println("Server Response: " + response);
-			// set streams to null until they're needed again
-			ObjectOutputStream toServer = null;
-			DataInputStream fromServer = null;
-		}
-		*/
 		
 
 		// Display GUI
 		gamePane = new GamePane(new ExtractFishAction(), new SellFishAction(), player);
-		gameScene = new Scene(gamePane, INITIAL_WIDTH, INITIAL_HEIGHT);
+		gameScene = new Scene(gamePane, Constants.INITIAL_GAME_PANE_WIDTH, Constants.INITIAL_GAME_PANE_HEIGHT);
 		gameStage.setScene(gameScene);
 		gameStage.setTitle("Catch!");
 		gameStage.centerOnScreen();
 		gameStage.show();
 		gameStage.requestFocus();
 	
+	}
+
+	// TODO, get the actual player from a file, or fetch from server
+	private void setPlayer()
+	{
+		// STUB
+		ArrayList<SeaCreature> resources = new ArrayList<>();
+		resources.add(new Fish(FishSpecies.COD, 12));
+
+		ArrayList<Equipment> tools = new ArrayList<>();
+		tools.add(new Boat(BoatTypes.FISHING_SKIFF));
+
+		this.player = new Player("Fred", "pass", 12.0, resources, tools);
 	}
 
 	private class ExtractFishAction implements EventHandler<ActionEvent>
@@ -118,7 +105,7 @@ public class GameControl
 					@Override
 					public void run() {
 						System.out.println(gamePane.simpleFishingPane.getChildren().remove(clientSubOcean.codPopulation.get(
-								clientSubOcean.codPopulation.size()-1).GUICircle));
+								clientSubOcean.codPopulation.size()-1).getBody()));
 						try{
 						clientSubOcean.extractFish(clientSubOcean.codPopulation);
 						}
@@ -143,7 +130,7 @@ public class GameControl
 		public void handle(ActionEvent e)
 		{
 			System.out.println("Sell Fish action triggered(fish sold to market)");
-		};
+		}
 	}
 	
 	class UpdateFishOnScreenTask implements Runnable{
@@ -186,17 +173,17 @@ public class GameControl
 		}
 	}
 	public void makeSeaCreatureGUI(Fish fish){
-		fish.GUICircle=new Circle(5);
-		System.out.print(fish.GUICircle.toString());
+		fish.SetBodyByWeight();
+		System.out.print(fish.getBody().toString());
 		double width=gamePane.simpleFishingPane.getMinWidth();
 		double height=gamePane.simpleFishingPane.getMinHeight();
-		fish.GUICircle.setCenterX(getRandomDouble(0,width));
-		fish.GUICircle.setCenterY(getRandomDouble(100,height));
-		System.out.print(fish.GUICircle.toString());
+		fish.getBody().setCenterX(getRandomDouble(0,width));
+		fish.getBody().setCenterY(getRandomDouble(150,height));
+		System.out.print(fish.getBody().toString());
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				gamePane.simpleFishingPane.getChildren().add(fish.GUICircle);
+				gamePane.simpleFishingPane.getChildren().add(fish.getBody());
 				//gamePane.getChildren().addAll(fish.GUICircle);
 			}
 		});

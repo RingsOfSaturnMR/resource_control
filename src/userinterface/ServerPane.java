@@ -14,7 +14,7 @@ public class ServerPane extends Pane
 	
 	public void appendToOutput(String str)
 	{
-		taOutput.appendText(str);
+		taOutput.appendText(str + "\n");
 	}
 	
 }

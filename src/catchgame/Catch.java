@@ -6,7 +6,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
+import java.util.ArrayList;
 
+import authentication.NewUserException;
 import catchgame.Catch.LoginPacket;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -15,20 +17,25 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 
 import javafx.stage.Stage;
+import resources.SeaCreature;
 import userinterface.LoginPane;
+import userinterface.NewUserPane;
 
+/**
+ * This class is used to start a game of 'Catch!'. Primarily, it can instantiate a CatchServer,
+ * instantiate a GameControl and communicate with CatchServer to make new accounts. It is also used to define packets to transfer information from
+ * CatchServer to GameControl and vice versa.
+ * 
+ * @author Nils Johnson
+ * @author Matt Roberts
+ */
 public class Catch extends Application
 {
 	private LoginPane loginPane;
 	private Stage loginStage = new Stage();
 	private GameControl gameControl;
 	static CatchServer catchServer;
-	//initially unconnected
-	private boolean connected=false;
-	//initially not logged in
-	private boolean loggedIn=false;
-	//this may not need to be a class variable
-	Socket socket=null;
+	private Socket socket = null;
 
 	@Override
 	public void start(Stage primaryStage)
@@ -47,38 +54,97 @@ public class Catch extends Application
 		loginStage.requestFocus();
 	}
 
-	//static int numTries = 0;
-
+	
 	public class LoginHandler implements EventHandler<ActionEvent>
 	{
 		@Override
 		public void handle(ActionEvent e)
 		{
-			/*
-			try
-			{
-				GameControl gameControl = new GameControl(loginPane.getServerIpAddress(), loginPane.getClientPort(), loginPane.getPlayerName(), loginPane.getPlayerPassword());
-			}
-			catch (Exception ex )
-			{
-				System.out.println(ex.getMessage());
-				ex.printStackTrace();
-			}			
-			*/
-			LoginTask loginTask=new LoginTask(loginPane.getServerIpAddress(), 
-					loginPane.getClientPort(), loginPane.getPlayerName(), 
-					loginPane.getPlayerPassword());
-	        new Thread(loginTask).start();
-		};
-		
+			tryToLogin(loginPane.getServerIpAddress(), loginPane.getClientPort(), 
+					loginPane.getPlayerName(), loginPane.getPlayerPassword());
+			//launchGameControl(loginPane.getServerIpAddress(), loginPane.getClientPort(), loginPane.getPlayerName(), loginPane.getPlayerPassword());
+		}
 	}
+	
 
 	public class NewUserHandler implements EventHandler<ActionEvent>
 	{
+		private Stage newUserStage = new Stage();
+		private NewUserPane newUserPane = null;
+		private ObjectOutputStream toServer = null;
+		private ObjectInputStream fromServer = null;
+
 		@Override
 		public void handle(ActionEvent e)
 		{
-			System.out.println("New User Clicked");
+			// Action for clicking "Make new account"
+			class CreateNewUser implements EventHandler<ActionEvent>
+			{
+				@Override
+				public void handle(ActionEvent e)
+				{
+					// set sockets and streams
+					try
+					{
+						socket = new Socket(newUserPane.getServerIpAddress(), newUserPane.getClientPort());
+						ObjectOutputStream toServer = new ObjectOutputStream(socket.getOutputStream());
+						ObjectInputStream fromServer = new ObjectInputStream(socket.getInputStream());
+
+						// make a NewUserPacket and send to server
+						NewUserPacket newUserPacket = new NewUserPacket(newUserPane.getDesiredName(), newUserPane.getDesiredPassword(), newUserPane.getDesiredPasswordConfirm());
+
+						toServer.writeObject(newUserPacket);
+						Object data = fromServer.readObject();
+
+						if (data instanceof ServerCodePacket)
+						{
+							ServerCodePacket packet = (ServerCodePacket) data;
+							switch (packet.SERVER_CODE)
+							{
+							case ServerCodeConstants.NEW_USER_ERR_ILLEGAL_NAME_CODE:
+								newUserPane.setErrorText("Illegal Name");
+								break;
+							case ServerCodeConstants.NEW_USER_ERR_ILLEGAL_PW_CODE:
+								newUserPane.setErrorText("Illegal Password");
+								break;
+							case ServerCodeConstants.NEW_USER_ERR_NAME_TAKEN_CODE:
+								newUserPane.setErrorText("Name Unavailable");
+								break;
+							case ServerCodeConstants.NEW_USER_SUCESS_CODE:
+								newUserStage.close();
+								loginStage.close();
+								//tryToLogin(newUserPane.getServerIpAddress(), newUserPane.getClientPort(), newUserPane.getDesiredName(), newUserPane.getDesiredPassword());
+								Platform.runLater(() -> {
+									gameControl = new GameControl(toServer, fromServer);
+								});
+								break;
+							}
+						}
+
+					}
+					catch (IOException | ClassNotFoundException e1)
+					{
+						newUserPane.setErrorText(e1.getMessage());
+						e1.printStackTrace();
+					}
+				};
+			}
+
+			class CancelHandler implements EventHandler<ActionEvent>
+			{
+				@Override
+				public void handle(ActionEvent e)
+				{
+					newUserStage.close();
+				};
+			}
+
+			newUserPane = new NewUserPane(new CreateNewUser(), new CancelHandler());
+			Scene newUserScene = new Scene(newUserPane, Constants.NEW_USER_PANE_WIDTH, Constants.NEW_USER_PANE_HEIGHT);
+			newUserStage.setScene(newUserScene);
+			newUserStage.setTitle("Catch! New Account");
+			newUserStage.show();
+			newUserStage.requestFocus();
 		};
 	}
 
@@ -87,27 +153,33 @@ public class Catch extends Application
 		@Override
 		public void handle(ActionEvent e)
 		{
-			System.out.println("New Server Clicked");
 			catchServer = new CatchServer();
 		};
 	}
 
-	public static class LoginPacket implements Serializable
+	/*
+	public void launchGameControl(String serverIpAddress, int clientPort, String playerName, String playerPassword)
 	{
-		public LoginPacket(String name, String password)
+		try
 		{
-			this.enteredName = name;
-			this.enteredPassword = password;
+			new GameControl(serverIpAddress, clientPort, playerName, playerPassword);
 		}
-
-		public String enteredName;
-		public String enteredPassword;
+		catch (Exception e1)
+		{
+			loginPane.setErrorText(e1.getMessage());
+		}
 	}
+	*/
 
-	public static void main(String[] args) {
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			public void run() {
-				if (catchServer != null) {
+	// main method to launch program
+	public static void main(String[] args)
+	{
+		Runtime.getRuntime().addShutdownHook(new Thread()
+		{
+			public void run()
+			{
+				if (catchServer != null)
+				{
 					System.out.println("quit catchServer");
 				}
 			}
@@ -115,86 +187,124 @@ public class Catch extends Application
 		launch(args);
 	}
 
-	//I think with some changes this could be it's own file.
-	//it's too long for this file
-	private class LoginTask implements Runnable {
+	// Packets for server/client communication
+	public static class LoginPacket implements Serializable
+	{
+		public String enteredName;
+		public String enteredPassword;
 
-		String serverIPAdress;
-		int port;
-		String enteredName;
-		String enteredPassword;
-
-		private LoginTask(String serverIPAdress, int port, String enteredName, String enteredPassword) {
-			this.serverIPAdress = serverIPAdress;
-			this.port = port;
-			this.enteredName = enteredName;
-			this.enteredPassword = enteredPassword;
-		}
-
-		// in a thread
-		public void run() {
-			// while not connected, keep looping
-			while (!connected) {
-				try {
-					// exception will be thrown here if not connected
-					// then it would skip to the catch block
-					socket = new Socket(serverIPAdress, port);
-					connected = true; // now connected
-					System.out.println("In client connected is true.");
-
-				}
-				// control shifts to here if there is no connection
-				// catch any exception
-				catch (final IOException ex) {
-					System.out.println(ex.toString());
-				}
-			}
-			// once connected, it handles the login
-			if (connected && !loggedIn) {
-				try {
-					ObjectOutputStream toServer = new ObjectOutputStream(socket.getOutputStream());
-					ObjectInputStream fromServer = new ObjectInputStream(socket.getInputStream());
-
-					LoginPacket loginPacket = new LoginPacket(enteredName, enteredPassword);
-					toServer.writeObject(loginPacket);
-
-					System.out.println("In client waiting for server code.");
-					try{
-					ServerCodePacket serverCode = (ServerCodePacket)fromServer.readObject();
-					switch (serverCode.SERVER_CODE) {
-
-					case ServerCodeConstants.VALID_PLAYER_AND_PASSWOORD_CODE:
-						loggedIn = true; // now logged in
-						System.out.println("User logged in.");
-
-						// start gameControl
-
-						Platform.runLater(() -> {
-							gameControl = new GameControl(toServer, fromServer, new Player());
-						});
-						
-						break;
-
-					case ServerCodeConstants.INVALID_PASSWORD_CODE:
-						System.out.println("Invalid Password.");
-						
-						break;
-
-					case ServerCodeConstants.INVALID_PLAYER_CODE:
-						System.out.println("Not a registered user.");
-						
-						break;
-					}
-					}
-					catch(ClassNotFoundException ex){
-						System.out.println(ex.toString());
-					}
-					System.out.println("In client serverCode received.");
-				} catch (IOException ex) {
-					System.out.println(ex.toString());
-				}
-			}
-
+		public LoginPacket(String name, String password)
+		{
+			this.enteredName = name;
+			this.enteredPassword = password;
 		}
 	}
+
+	public static class NewUserPacket implements Serializable
+	{
+		public String enteredName;
+		public String enteredPassword;
+		public String enteredPasswordConfirm;
+
+		public NewUserPacket(String name, String password, String passwordConfirm)
+		{
+			this.enteredName = name;
+			this.enteredPassword = password;
+			this.enteredPasswordConfirm = passwordConfirm;
+		}
+	}
+
+	public static class SeaCreaturePacket implements Serializable
+	{
+		public SeaCreature creature;
+
+		public SeaCreaturePacket(SeaCreature creature)
+		{
+			this.creature = creature;
+		}
+	}
+
+	public static class SeaCreatureRequestPacket implements Serializable
+	{
+		int code;
+
+		public SeaCreatureRequestPacket(int code)
+		{
+			this.code = code;
+		}
+	}
+
+	// I think with some changes this could be it's own file.
+	// it's too long for this file
+
+	private void tryToLogin(String serverIPAdress, int port, String enteredName, String enteredPassword) {
+
+		boolean connected = false;
+
+		try {
+			// exception will be thrown here if not connected
+			// then it would skip to the catch block
+			socket = new Socket(serverIPAdress, port);
+			connected = true;
+			System.out.println("In client connected is true.");
+
+		}
+		// control shifts to here if there is no connection
+		// catch any exception
+		catch (final IOException ex) {
+			System.out.println(ex.toString());
+		}
+
+		// once connected, it handles the login
+		if (connected) {
+			try {
+				ObjectOutputStream toServer = new ObjectOutputStream(socket.getOutputStream());
+				ObjectInputStream fromServer = new ObjectInputStream(socket.getInputStream());
+
+				LoginPacket loginPacket = new LoginPacket(enteredName, enteredPassword);
+				toServer.writeObject(loginPacket);
+
+				System.out.println("In client waiting for server code.");
+				try {
+					ServerCodePacket serverCodePacket = (ServerCodePacket) fromServer.readObject();
+
+					if (serverCodePacket.SERVER_CODE != ServerCodeConstants.LOGIN_SUCCESS_CODE) {
+						String errorMessage;
+						switch (serverCodePacket.SERVER_CODE) {
+						case ServerCodeConstants.LOGIN_ERR_INVALID_PASSWORD_CODE:
+							errorMessage = "Invalid Password";
+							break;
+						case ServerCodeConstants.LOGIN_ERR_NO_USERS_FOUND_CODE:
+							errorMessage = "This Server Has No Users Yet!";
+							break;
+						case ServerCodeConstants.LOGIN_ERR_USER_NOT_FOUND_CODE:
+							errorMessage = "Invalid Username";
+							break;
+						case ServerCodeConstants.LOGIN_ERR_UNKNOWN_ERROR_CODE:
+							errorMessage = "The Server Doesnt Know Why You Cant Login :(";
+							break;
+						default:
+							errorMessage = "The server responded '" + serverCodePacket.SERVER_CODE
+									+ "', I dont know what that means :(";
+							break;
+						}
+						Platform.runLater(() -> {
+							loginPane.setErrorText(errorMessage);
+						});
+					} else {
+						Platform.runLater(() -> {
+							gameControl = new GameControl(toServer, fromServer);
+						});
+					}
+				} catch (ClassNotFoundException ex) {
+					System.out.println(ex.toString());
+				}
+				System.out.println("In client serverCode received.");
+			} catch (IOException ex) {
+				System.out.println(ex.toString());
+			}
+		}
+
+	}
+
 }

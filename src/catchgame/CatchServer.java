@@ -9,263 +9,288 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.lang.model.element.ElementKind;
+
+import authentication.BadLoginException;
+import authentication.BadPasswordException;
+import authentication.BadUsernameException;
+import authentication.LoginError;
+import authentication.NewUserException;
+import authentication.PasswordError;
+import authentication.UsernameError;
 import catchgame.Catch.LoginPacket;
+import catchgame.Catch.NewUserPacket;
+import catchgame.Catch.SeaCreatureRequestPacket;
+import catchgame.Catch.SeaCreaturePacket;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import userinterface.GamePane;
+import resources.SeaCreature;
 import userinterface.ServerPane;
+
+/**
+ * This class Handles requests from clients for logging in, making new accounts
+ * and extracting SeaCreatures from the Ocean.
+ * 
+ * @author Matt Roberts
+ * @author Nils Johnson
+ *
+ */
 
 public class CatchServer
 {
 	private Stage serverStage = new Stage();
 	private ServerPane serverPane = new ServerPane();
-	private ArrayList <ObjectOutputStream> ouputToClientStreamList=new ArrayList<ObjectOutputStream>();
-	//maybe useful later
-	boolean quit=false;
-	//a starting code (no meaning)
-	int serverCode=-1;
+	private ServerSocket serverSocket;
+	private UserDAO userDAO = new UserDAO();
 
 	public Ocean ocean = new Ocean();
-	
-	// server response codes, Thoughts?
-	// seems goods
-	public final static int VALID_PLAYER_AND_PASSWOORD_CODE = 0;
-	public final static int INVALID_PASSWORD_CODE = 1;
-	public final static int INVALID_PLAYER_CODE = 2;
-	// do one for each ocean method?
-	//Let's talk about this part
-	public static int EXTRACT_RANDOM_CODE = 20;
-	public static int EXTRACT_COD_CODE = 21;
-	public static int EXTRACT_CRAB_CODE = 22;
-	public static int EXTRACT_LOBSTER_CODE = 23;
 
-
-
-
+	/**
+	 * Loads the GUI and starts listening for requests to login or make a new account.
+	 */
 	public CatchServer()
 	{
 		loadServerPane();
-		
-		try{
-			
-		ServerSocket serverSocket= new ServerSocket(8030);
-		
-		serverPane.appendToOutput("Server Started at: " + new Date() + "\n");
-		serverPane.appendToOutput("Open to clients.\n");
-		
-		//start server
-		HandlesConnectionsTask handlesConnectionTask=new HandlesConnectionsTask(serverSocket);
-		new Thread(handlesConnectionTask).start();
-		
-		}
-		catch(IOException ex){
-			System.out.println(ex.toString());
-		}
-
+		new Thread(new HandleNewRequestsTask()).start();
 	}
 
-	class HandlesConnectionsTask implements Runnable {
-
-		ServerSocket serverSocket;
-		
-		HandlesConnectionsTask(ServerSocket serverSocket){
-			this.serverSocket=serverSocket;
-		}
-		
-		// in a thread
-		public void run() {
-			while (!quit) {
-				try {
-					// wait for the client
-					Socket socket = serverSocket.accept();
-					// tell connection was made
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							serverPane.appendToOutput("Client socket connected.\n");
-							new Thread(new HandleAClient(socket)).start();
-						}
-					});
-				}
-				// catch any exception
-				catch (final IOException ex) {
-					System.out.println(ex.toString());
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							serverPane.appendToOutput(ex.toString());
-						}
-					});
-				}
-
-			}
-		}
-	}
-
-	//get a client logged in,
-	class HandleAClient implements Runnable {
-		private Socket socket;
-
-		public HandleAClient(Socket socket) {
-			this.socket = socket;
-		}
-
-		@Override
-		public void run() {
-			try {
-				
-				ObjectOutputStream toClient=new ObjectOutputStream(socket.getOutputStream());
-				ouputToClientStreamList.add(toClient);
-				ObjectInputStream fromClient = new ObjectInputStream(socket.getInputStream());
-				
-				//loop each time a client's LoginPacket is received until logged in
-				boolean loggedIn=false;
-                while (!loggedIn) {
-
-                    try {
-                    	
-                        //await client data
-                        final Object userData = fromClient.readObject();
-                        
-                        //if it's a loginPacket, verify
-                        if (userData instanceof LoginPacket) {
-                        	//data will be read from file/database
-                        	//for now we will hard code a user
-                        	String user="user";
-                        	String password="pass";
-                        	
-                        	LoginPacket loginPacket=(LoginPacket)userData;
-                        	
-                        	if (user.equals(loginPacket.enteredName)){
-                        		if (password.equals(loginPacket.enteredPassword)){
-                        			
-                        			serverCode=VALID_PLAYER_AND_PASSWOORD_CODE;
-                        			loggedIn=true;//logged in
-                        			//I think we should have a member class here for 
-                        			//handling the actual interaction with game control
-                        			//ServerSideGameControl serverSideGameControl
-                        			//=new ServerSideGameControl(toClient, fromClient, ocean);
-                        			HandleServerSideGameControl handleServerSideGameControl=
-                        					new HandleServerSideGameControl(toClient, fromClient);
-                        			new Thread(handleServerSideGameControl).start();
-                        		}
-                        		else{
-                        			serverCode=INVALID_PASSWORD_CODE;
-                        		}
-                        	}
-                        	else{
-                        		serverCode=INVALID_PLAYER_CODE;
-                        	}
-                        	
-                        	//tell the outcome to client
-                        	toClient.writeObject(new ServerCodePacket(serverCode));
-                        	
-                        	System.out.println("In server serverCode wrote.");
-                        	
-                        	//update serverPane ui
-                        	Platform.runLater(() -> {
-        						switch(serverCode){
-        						case VALID_PLAYER_AND_PASSWOORD_CODE:
-        							serverPane.appendToOutput(loginPacket.enteredName + 
-        									" entered a valid password and is now logged in.\n");
-        							break;
-        						case INVALID_PASSWORD_CODE:
-        							serverPane.appendToOutput(loginPacket.enteredName + 
-        									" entered an invalid password.\n");
-        							break;
-        						case INVALID_PLAYER_CODE:
-        							serverPane.appendToOutput(loginPacket.enteredName + 
-        									" is not a registered user.\n");
-        							break;
-        						}
-        					});
-                        }
-                        
-                    }
-                    //otherwise tell it's garbage
-                    catch (ClassNotFoundException ex) {
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                serverPane.appendToOutput("Received garbage data from "
-                                		+ "client instead of LoginPacket.");
-                            }
-                        });
-                    }
-
-                }
-			} catch (IOException ex) {
-				Platform.runLater(new Runnable() {
-					@Override
-					public void run() {
-						serverPane.appendToOutput(ex.toString());
-					}
-				});
-			}
-		}
-	}
-
-	
-	//This is now subdivided into HandleConnectionsTask and HandleAClient
-	/*
-	class ValidationTask implements Runnable {
-		@Override
-		public void run() {
-			try {
-				serverPane.appendToOutput("Server Started: " + new Date() + "\n");
-
-				while (true) {
-					Socket socket = serverSocket.accept();
-					fromClient = new ObjectInputStream(socket.getInputStream());
-					toClient = new DataOutputStream(socket.getOutputStream());
-
-					boolean validUser;
-					LoginPacket loginPacket = (LoginPacket) fromClient.readObject();
-
-					if (loginPacket.enteredName.equals("user") && loginPacket.enteredPassword.equals("pass")) {
-						toClient.writeInt(0);
-						validUser = true;
-					} else {
-						toClient.writeInt(1);
-						validUser = false;
-					}
-
-					Platform.runLater(() -> {
-						if (validUser) {
-							serverPane.appendToOutput(
-									loginPacket.enteredName + ", " + loginPacket.enteredPassword + " Is Valid\n");
-						} else {
-							serverPane.appendToOutput(
-									loginPacket.enteredName + ", " + loginPacket.enteredPassword + " Is NOT Valid\n");
-						}
-					});
-
-				}
-			} catch (IOException | ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	*/
-
-	public void loadServerPane() {
-		// the height and width
-		int GAME_WIDTH = 400;
-		int GAME_HEIGHT = 400;
-
-		Scene gameScene = new Scene(serverPane, GAME_WIDTH, GAME_HEIGHT);
-
-		// show GamePane
-		serverStage.setScene(gameScene);
+	private void loadServerPane()
+	{
+		// makes a scene with a serverPane
+		Scene serverScene = new Scene(serverPane, Constants.INITIAL_SERVER_PANE_WIDTH, Constants.INITIAL_SERVER_PANE_HEIGHT);
+		// show serverPane
+		serverStage.setScene(serverScene);
 		serverStage.setTitle("Catch Server");
 		serverStage.centerOnScreen();
 		serverStage.show();
 		serverStage.requestFocus();
 	}
+
+	/**
+	 * Listens for initial requests to login or make new accounts.
+	 */
+	private class HandleNewRequestsTask implements Runnable
+	{
+		@Override
+		public void run()
+		{
+			try
+			{
+				serverSocket = new ServerSocket(8000);
+
+				Platform.runLater(() ->
+				{
+					serverPane.appendToOutput("Server Started at: " + new Date());
+					serverPane.appendToOutput("Open to clients.");
+				});
+				// listens for initial requests
+				while (true)
+				{
+					// set to -1 because needs requires initialization
+					int serverCode = -1;
+					Socket socket = new Socket();
+					socket = serverSocket.accept();
+
+					ObjectOutputStream toClient = new ObjectOutputStream(socket.getOutputStream());
+					ObjectInputStream fromClient = new ObjectInputStream(socket.getInputStream());
+
+					final Object userData = fromClient.readObject();
+
+					// if a user tries to login
+					if (userData instanceof LoginPacket)
+					{
+						LoginPacket loginPacket = (LoginPacket) userData;
+						LoginError loginError = null;
+
+						try
+						{
+							if (userDAO.isValidUser(loginPacket.enteredName, loginPacket.enteredPassword))
+							{
+								serverCode = ServerCodeConstants.LOGIN_SUCCESS_CODE;
+								HandleServerSideGameControl handleServerSideGameControl=
+	                					new HandleServerSideGameControl(toClient, fromClient);
+	                			new Thread(handleServerSideGameControl).start();
+								// start serving this client
+								//new Thread(new ServeOceanTask(socket, toClient, fromClient)).start();
+							}
+						}
+						catch (BadLoginException e)
+						{
+							loginError = e.getError();
+
+							switch (loginError)
+							{
+							case INVALID_PASSWORD:
+								serverCode = ServerCodeConstants.LOGIN_ERR_INVALID_PASSWORD_CODE;
+								break;
+							case USER_NOT_FOUND:
+								serverCode = ServerCodeConstants.LOGIN_ERR_USER_NOT_FOUND_CODE;
+								break;
+							case NO_USERS:
+								serverCode = ServerCodeConstants.LOGIN_ERR_NO_USERS_FOUND_CODE;
+								break;
+							default:
+								serverCode = ServerCodeConstants.LOGIN_ERR_UNKNOWN_ERROR_CODE;
+							}
+						}
+
+						toClient.writeObject(new ServerCodePacket(serverCode));
+
+						// reassign for scoping reasons
+						final int code = serverCode;
+						LoginError e = loginError;
+						Platform.runLater(() ->
+						{
+							serverPane.appendToOutput("Login Attempted, Username: " + loginPacket.enteredName);
+							//serverPane.appendToOutput("Result: " + (code == ServerCodeConstants.LOGIN_SUCCESS_CODE ? "Success" : "Not Success"));
+							serverPane.appendToOutput("Result: " + (e != null ? e : "Sucess!" ));
+						});
+
+					}
+
+					// if someone wants to make a new account
+					else if (userData instanceof NewUserPacket)
+					{
+						NewUserPacket newUserPacket = (NewUserPacket) userData;
+
+						Platform.runLater(() ->
+						{
+							serverPane.appendToOutput("New Account Attempt, Desired Username: " + newUserPacket.enteredName);
+						});
+
+						try
+						{
+							userDAO.createUser(newUserPacket.enteredName, newUserPacket.enteredPassword, newUserPacket.enteredPasswordConfirm);
+							serverCode = ServerCodeConstants.NEW_USER_SUCESS_CODE;
+							HandleServerSideGameControl handleServerSideGameControl=
+                					new HandleServerSideGameControl(toClient, fromClient);
+                			new Thread(handleServerSideGameControl).start();
+						}
+						catch (NewUserException e)
+						{
+							if (e instanceof BadPasswordException)
+							{
+								serverCode = ServerCodeConstants.NEW_USER_ERR_ILLEGAL_PW_CODE;
+							}
+							else if (e instanceof BadUsernameException)
+							{
+								BadUsernameException exception = (BadUsernameException) e;
+
+								for (int i = 0; i < exception.getErrorList().size(); i++)
+								{
+									if (exception.getErrorList().get(i) == UsernameError.UNAVAILABLE)
+									{
+										serverCode = ServerCodeConstants.NEW_USER_ERR_NAME_TAKEN_CODE;
+									}
+									else if (exception.getErrorList().get(i) == UsernameError.HAS_ILLEGAL_CHAR)
+									{
+										serverCode = ServerCodeConstants.NEW_USER_ERR_ILLEGAL_NAME_CODE;
+									}
+								}
+							}
+						}
+
+						toClient.writeObject(new ServerCodePacket(serverCode));
+
+						int code = serverCode;
+
+						Platform.runLater(() ->
+						{
+							String result;
+
+							switch (code)
+							{
+							case ServerCodeConstants.NEW_USER_SUCESS_CODE:
+								result = "Sucess!";
+								break;
+							case ServerCodeConstants.NEW_USER_ERR_ILLEGAL_NAME_CODE:
+								result = "Illegal Username";
+								break;
+							case ServerCodeConstants.NEW_USER_ERR_ILLEGAL_PW_CODE:
+								result = "Illegal Password";
+								break;
+							case ServerCodeConstants.NEW_USER_ERR_NAME_TAKEN_CODE:
+								result = "Name Taken";
+								break;
+							default:
+								result = "unknown error";
+								break;
+							}
+
+							serverPane.appendToOutput("Result: " + result);
+						});
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+
+	
+	/**
+	 * Listens for requests from logged in users to extract resources from Ocean
+	 */
+	/*
+	private class ServeOceanTask implements Runnable
+	{
+		private Socket socket;
+		private ObjectOutputStream toClient;
+		private ObjectInputStream fromClient;
+
+		ServeOceanTask(Socket socket, ObjectOutputStream toClient, ObjectInputStream fromClient)
+		{
+			this.socket = socket;
+			this.toClient = toClient;
+			this.fromClient = fromClient;
+		}
+
+		@Override
+		public void run()
+		{
+			System.out.println("Started spinning a new 'while true' loop to listen for request.");
+			try
+			{
+				while (true)
+				{
+					SeaCreature creature = null;
+					SeaCreatureRequestPacket packet = (SeaCreatureRequestPacket) fromClient.readObject();
+
+					switch (packet.code)
+					{
+					case ServerCodeConstants.REQUEST_RANDOM_SEACREATURE_CODE:
+						creature = ocean.extractRandomSeaCreature();
+						break;
+					case ServerCodeConstants.REQUEST_COD_CODE:
+						creature = ocean.extractCod();
+						break;
+					case ServerCodeConstants.REQUEST_SALMON_CODE:
+						creature = ocean.extractSalmon();
+						break;
+					case ServerCodeConstants.REQUEST_TUNA_CODE:
+						creature = ocean.extractTuna();
+						break;
+					default:
+						creature = null;
+						System.out.println("Request Code Not recognized.");
+					}
+					System.out.println("sending resouce packet with " + creature.getSpecies());
+					SeaCreaturePacket sendPacket = new SeaCreaturePacket(creature);
+					toClient.writeObject(sendPacket);
+				}
+			}
+			catch (IOException | ClassNotFoundException e)
+			{
+				e.printStackTrace();
+				System.out.println(e.getMessage());
+			}
+		}
+	}
+	*/
+	
 	class HandleServerSideGameControl implements Runnable{
 		ObjectOutputStream toClient;
 		ObjectInputStream fromClient;
