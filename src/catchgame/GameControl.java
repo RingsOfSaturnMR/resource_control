@@ -1,6 +1,9 @@
 package catchgame;
 
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import resources.Boat;
@@ -20,6 +23,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
+
 
 import catchgame.Catch.LoginPacket;
 import catchgame.Catch.SeaCreaturePacket;
@@ -70,7 +74,7 @@ public class GameControl
 		
 
 		// Display GUI
-		gamePane = new GamePane(new ExtractFishAction(), new SellFishAction(), player);
+		gamePane = new GamePane(new SellFishAction(), player);
 		gameScene = new Scene(gamePane, Constants.INITIAL_GAME_PANE_WIDTH, Constants.INITIAL_GAME_PANE_HEIGHT);
 		gameStage.setScene(gameScene);
 		gameStage.setTitle("Catch!");
@@ -93,36 +97,6 @@ public class GameControl
 		this.player = new Player("Fred", "pass", 12.0, resources, tools);
 	}
 
-	private class ExtractFishAction implements EventHandler<ActionEvent>
-	{
-		@Override
-		public void handle(ActionEvent e)
-		{
-			System.out.println("Extract fish action "
-					+ "triggered(fish caught)");
-			try{
-				Platform.runLater(new Runnable() {
-					@Override
-					public void run() {
-						System.out.println(gamePane.simpleFishingPane.getChildren().remove(clientSubOcean.codPopulation.get(
-								clientSubOcean.codPopulation.size()-1).getBody()));
-						try{
-						clientSubOcean.extractFish(clientSubOcean.codPopulation);
-						}
-						catch (Exception ex){
-							System.out.println(ex.toString());
-						}
-						
-						UpdateFishOnScreenTask updateFishOnScreenTask=new UpdateFishOnScreenTask();
-						new Thread(updateFishOnScreenTask).start();
-					}
-				});
-			}
-			catch (Exception ex){
-				System.out.println(ex.toString());
-			}
-		};
-	}
 
 	private class SellFishAction implements EventHandler<ActionEvent>
 	{
@@ -140,20 +114,24 @@ public class GameControl
 			ArrayList<Fish> codUpdate;
 			//System.out.println("get from server");
 			codUpdate=getUpdateSeaCreaturesPacketFromServer();
+			
+			clientSubOcean.currentPopulationCod+=codUpdate.size();
 			//System.out.println("got from server");
-			clientSubOcean.addPacketOfCod(codUpdate);
-			givePacketGUI(codUpdate);
+			//clientSubOcean.addPacketOfCod(codUpdate);
+			addFishPacketToScreen(codUpdate,0,0, Color.BLUE);
+			//givePacketGUI(codUpdate);
 			//System.out.println("added cod");
 		}
 	}
 	
 	public ArrayList<Fish> getUpdateSeaCreaturesPacketFromServer(){
 		 //System.out.println("before getting size");
-		 SubOceanFishStatePacket codStatePacket=new SubOceanFishStatePacket(clientSubOcean.codPopulation.size(), 100);
+		ClientSubOceanSeaCreatureStatePacket codStatePacket=new ClientSubOceanSeaCreatureStatePacket(
+				clientSubOcean.currentPopulationCod, clientSubOcean.maxPopulationCod);
 		 //System.out.println("after getting size");
 		 try{
 		 toServer.writeObject(codStatePacket);
-		 System.out.println("Sent codStatePacket");
+		 //System.out.println("Sent codStatePacket");
 		 //System.out.println("before getting fish packet");
 		 FishPacketsPacket fishPacketPacket=(FishPacketsPacket)fromServer.readObject();
 		 //System.out.println("after getting fish packet");
@@ -162,33 +140,70 @@ public class GameControl
 			 System.out.println(ex.toString());
 		 }catch(ClassNotFoundException ex){
 			 System.out.println(ex.toString());
-			 System.out.println("Over here");
+			 //System.out.println("Over here");
 		 }
 		 return new ArrayList<Fish>();
 	 }
 	
-	public void givePacketGUI(ArrayList<Fish> fishUpdate){
+	//should be put in SimpleFishingPane
+	public void addFishPacketToScreen(ArrayList<Fish> fishUpdate, int topOffset, 
+			int bottomOffset, Color color){
 		for (int i=0; i<=fishUpdate.size()-1; i++){
-			makeSeaCreatureGUI(fishUpdate.get(i));
+			addFishToScreen(fishUpdate.get(i),topOffset,bottomOffset, color);
 		}
 	}
-	public void makeSeaCreatureGUI(Fish fish){
+	//should be put in SimpleFishingPane
+	public void addFishToScreen(Fish fish, int topOffset, int bottomOffset, Color color){
 		fish.SetBodyByWeight();
-		System.out.print(fish.getBody().toString());
+		fish.setBodyColor(color);
+		//System.out.print(fish.getBody().toString());
 		double width=gamePane.simpleFishingPane.getMinWidth();
 		double height=gamePane.simpleFishingPane.getMinHeight();
 		fish.getBody().setCenterX(getRandomDouble(0,width));
-		fish.getBody().setCenterY(getRandomDouble(150,height));
-		System.out.print(fish.getBody().toString());
+		fish.getBody().setCenterY(getRandomDouble(150+topOffset,height-bottomOffset));
+		//System.out.print(fish.getBody().toString());
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
 				gamePane.simpleFishingPane.getChildren().add(fish.getBody());
-				//gamePane.getChildren().addAll(fish.GUICircle);
+				fish.getBody().setOnMouseClicked(new ExtractFishAction(fish));
 			}
 		});
-		//gamePane.getChildren().addAll(fish.GUICircle);
 	}
+	
+	private class ExtractFishAction implements EventHandler<MouseEvent>
+	{
+		Fish fish;
+		
+		ExtractFishAction(Fish fish){
+			this.fish=fish;
+		}
+		
+		@Override
+		public void handle(MouseEvent e)
+		{
+			//System.out.println("Extract fish action "
+					//+ "triggered(fish caught)");
+			try{
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+					
+						gamePane.simpleFishingPane.getChildren().remove(fish.getBody());
+						
+						clientSubOcean.currentPopulationCod--;
+						
+						UpdateFishOnScreenTask updateFishOnScreenTask=new UpdateFishOnScreenTask();
+						new Thread(updateFishOnScreenTask).start();
+					}
+				});
+			}
+			catch (Exception ex){
+				System.out.println(ex.toString());
+			}
+		};
+	}
+	
 	private int getRandomInt(int min, int max)
 	{
 		int randomInt = rand.nextInt(max) + min;

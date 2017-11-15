@@ -14,16 +14,16 @@ public class ServerSideGameControl {
 			ObjectInputStream fromClient, Ocean ocean){
 		while(true){
 			try{
-			SubOceanFishStatePacket subOceanFishStatePacket=
-					(SubOceanFishStatePacket)fromClient.readObject();
+				ClientSubOceanSeaCreatureStatePacket subOceanFishStatePacket=
+					(ClientSubOceanSeaCreatureStatePacket)fromClient.readObject();
 			ArrayList<Fish> codPacket=ocean.givePacketOfFish(FishSpecies.COD,
-					subOceanFishStatePacket.currentPopulation, 
-					subOceanFishStatePacket.maxPopulation);
-			System.out.println("cod cuurent population: "
-					+subOceanFishStatePacket.currentPopulation);
-			System.out.println("cod max population: "
-					+subOceanFishStatePacket.maxPopulation);
-			System.out.println("Num cod in packet:"+codPacket.size());
+					subOceanFishStatePacket.currentPopulationCod, 
+					subOceanFishStatePacket.maxPopulationCod);
+			//System.out.println("cod cuurent population: "
+					//+subOceanFishStatePacket.currentPopulationCod);
+			//System.out.println("cod max population: "
+					//+subOceanFishStatePacket.maxPopulationCod);
+			//System.out.println("Num cod in packet:"+codPacket.size());
 			toClient.writeObject(new FishPacketsPacket(codPacket));
 			}catch(ClassNotFoundException ex){
 				

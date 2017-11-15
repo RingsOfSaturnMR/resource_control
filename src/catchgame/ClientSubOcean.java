@@ -13,17 +13,22 @@ public class ClientSubOcean extends AbstractOcean{
 	ObjectOutputStream toServer;
 	ObjectInputStream fromServer;
 	
+	int currentPopulationCod=0;
+	int maxPopulationCod=100;
+	
 	ClientSubOcean(ObjectOutputStream toServer, ObjectInputStream fromServer){
 		this.toServer=toServer;
 		this.fromServer=fromServer;
 	}
 	
-	 public Fish extractFish(ArrayList<Fish>fishPopulation) throws Exception{
+	public Fish extractFish(ArrayList<Fish>fishPopulation) throws Exception{
 		 Fish fish=fishPopulation.get(fishPopulation.size()-1);
 			fishPopulation.remove(fishPopulation.size()-1);
 			
 			return fish;
 	}
+	
+	
 	
 	 /*
 	 public void updateFishPopulationsFromServer(){
@@ -42,7 +47,9 @@ public class ClientSubOcean extends AbstractOcean{
 	 }
 	 */
 	 
+	 /*
 	 public void addPacketOfCod(ArrayList<Fish> codPopulation){
 		 super.codPopulation.addAll(codPopulation);
 	 }
+	 */
 }

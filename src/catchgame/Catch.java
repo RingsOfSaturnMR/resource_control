@@ -246,7 +246,7 @@ public class Catch extends Application
 			// then it would skip to the catch block
 			socket = new Socket(serverIPAdress, port);
 			connected = true;
-			System.out.println("In client connected is true.");
+			//System.out.println("In client connected is true.");
 
 		}
 		// control shifts to here if there is no connection
@@ -264,7 +264,7 @@ public class Catch extends Application
 				LoginPacket loginPacket = new LoginPacket(enteredName, enteredPassword);
 				toServer.writeObject(loginPacket);
 
-				System.out.println("In client waiting for server code.");
+				//System.out.println("In client waiting for server code.");
 				try {
 					ServerCodePacket serverCodePacket = (ServerCodePacket) fromServer.readObject();
 
@@ -299,7 +299,7 @@ public class Catch extends Application
 				} catch (ClassNotFoundException ex) {
 					System.out.println(ex.toString());
 				}
-				System.out.println("In client serverCode received.");
+				//System.out.println("In client serverCode received.");
 			} catch (IOException ex) {
 				System.out.println(ex.toString());
 			}
