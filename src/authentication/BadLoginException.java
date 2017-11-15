@@ -1,8 +1,8 @@
 package authentication;
 
 /**
- * This Exception class describes is thrown when a user cannot login.
- * It describes why providing an enum value corresponding to the problem,
+ * This Exception class is thrown when a user cannot login.
+ * It describes why providing by an enum value corresponding to the problem,
  * or a String based on that value.
  *  
  * @author Nils
