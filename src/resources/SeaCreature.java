@@ -2,6 +2,10 @@ package resources;
 
 import java.io.Serializable;
 
+
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+
 import javafx.scene.shape.Circle;
 
 /**
@@ -60,6 +64,10 @@ public abstract class SeaCreature <T> implements Serializable
 	public void SetBodyByWeight()
 	{
 		this.GUICircle = new Circle(weight);
+	}
+	
+	public void setBodyColor(Color color){
+		this.GUICircle.setFill(color);
 	}
 	
 	// for serializing

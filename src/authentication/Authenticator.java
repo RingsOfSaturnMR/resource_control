@@ -2,6 +2,7 @@ package authentication;
 
 import java.util.ArrayList;
 
+
 /**
  * This class contains defines the parameters required for user names and
  * passwords It also contains methods for validation for conforming to these

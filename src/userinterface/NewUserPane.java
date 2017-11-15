@@ -51,7 +51,7 @@ public class NewUserPane extends VBox
 	// textfields
 	private TextField tfServerIp = new TextField("localhost");
 	private TextField tfClientPort = new TextField("8000");
-	public TextField tfName = new TextField();
+	public TextField tfName = new TextField("testUser");
 	public TextField pfPassword = new PasswordField();
 	public TextField pfPasswordConfirm = new PasswordField();
 	private Text txtMessageArea = new Text();

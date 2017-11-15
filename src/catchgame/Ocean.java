@@ -107,7 +107,7 @@ public class Ocean implements Serializable
 		double denominator = 1 + A * Math.exp(-relativeGrowthRate * elapsedTime);
 		double rawPopulation = (double) carryingCapacityPopulation / denominator;
 		int updatedPopulation = (int) rawPopulation;
-		//System.out.println(updatedPopulation);
+		System.out.println(updatedPopulation);
 		return updatedPopulation - tunaPopulation.size();
 
 	}
@@ -120,7 +120,9 @@ public class Ocean implements Serializable
 		double denominator = 1 + A * Math.exp(-relativeGrowthRate * elapsedTime);
 		double rawPopulation = (double) carryingCapacityPopulation / denominator;
 		int updatedPopulation = (int) rawPopulation;
-		//System.out.println(updatedPopulation);
+
+		System.out.println(updatedPopulation);
+
 		return updatedPopulation - oysterPopulation.size();
 	}
 
@@ -132,7 +134,8 @@ public class Ocean implements Serializable
 		double denominator = 1 + A * Math.exp(-relativeGrowthRate * elapsedTime);
 		double rawPopulation = (double) carryingCapacityPopulation / denominator;
 		int updatedPopulation = (int) rawPopulation;
-		//System.out.println(updatedPopulation);
+
+		System.out.println(updatedPopulation);
 		return updatedPopulation - lobsterPopulation.size();
 	}
 
@@ -144,7 +147,9 @@ public class Ocean implements Serializable
 		double denominator = 1 + A * Math.exp(-relativeGrowthRate * elapsedTime);
 		double rawPopulation = (double) carryingCapacityPopulation / denominator;
 		int updatedPopulation = (int) rawPopulation;
-		//System.out.println(updatedPopulation);
+
+		System.out.println(updatedPopulation);
+
 		return updatedPopulation - crabPopulation.size();
 	}
 
@@ -190,7 +195,9 @@ public class Ocean implements Serializable
 
 	public ArrayList<Fish> givePacketOfFish(FishSpecies fish, int currentPopulation, int maxPopulation) throws Exception
 	{
-		System.out.println("in giving packet");
+
+		//System.out.println("in giving packet");
+
 		double clientPlentifullness = (double) currentPopulation / (double) maxPopulation;
 		ArrayList<Fish> fishPacket = new ArrayList<>();
 		switch (fish)
@@ -235,12 +242,12 @@ public class Ocean implements Serializable
 
 	public ArrayList<Fish> getPacketOfFish(ArrayList<Fish> fishPopulation, double oceanPlentifullness, double clientPlentifullness, int maxPopulation, int currentPopulation) throws Exception
 	{
-		System.out.println("Ocean p: " + oceanPlentifullness);
-		System.out.println("Client p:" + clientPlentifullness);
+		//System.out.println("Ocean p: " + oceanPlentifullness);
+		//System.out.println("Client p:" + clientPlentifullness);
 		if (oceanPlentifullness > clientPlentifullness)
 		{
 			int numFish = (int) (oceanPlentifullness * maxPopulation) - currentPopulation;
-			System.out.println("Number of fish for packet" + numFish);
+			//System.out.println("Number of fish for packet" + numFish);
 			return extractABunchOfFish(fishPopulation, numFish);
 		}
 		else
@@ -252,12 +259,12 @@ public class Ocean implements Serializable
 
 	public ArrayList<Shellfish> getPacketOfShellfish(ArrayList<Shellfish> shellfishPopulation, double oceanPlentifullness, double clientPlentifullness, int maxPopulation, int currentPopulation)
 	{
-		System.out.println("Ocean p: " + oceanPlentifullness);
-		System.out.println("Client p:" + clientPlentifullness);
+		//System.out.println("Ocean p: " + oceanPlentifullness);
+		//System.out.println("Client p:" + clientPlentifullness);
 		if (oceanPlentifullness > clientPlentifullness)
 		{
 			int numShellfish = (int) (oceanPlentifullness * maxPopulation) - currentPopulation;
-			System.out.println("Number of shellfish for packet" + numShellfish);
+			//System.out.println("Number of shellfish for packet" + numShellfish);
 			return extractABunchOfShellfish(shellfishPopulation, numShellfish);
 		}
 		else

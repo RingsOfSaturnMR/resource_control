@@ -1,5 +1,6 @@
 package userinterface;
 
+import catchgame.CatchServer;
 import catchgame.Constants;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -26,8 +27,9 @@ public class LoginPane extends VBox
 	private Label lblClientPort = new Label("Client Port: ");
 
 	// fields for entry, filled with default values for easy testing
-	private TextField tfName = new TextField("");
-	private TextField pfPassword = new TextField("");
+
+	private TextField tfName = new TextField("testUser");
+	private TextField pfPassword = new TextField("testPass1!");
 	private TextField tfServerIp = new TextField("localhost");
 	private TextField tfClientPort = new TextField("8000");
 	

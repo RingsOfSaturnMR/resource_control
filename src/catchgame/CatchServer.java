@@ -5,7 +5,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Date;
+
+import javax.lang.model.element.ElementKind;
 
 import authentication.BadLoginException;
 import authentication.BadPasswordException;
@@ -13,10 +16,19 @@ import authentication.BadUsernameException;
 import authentication.LoginError;
 import authentication.NewUserException;
 import authentication.UsernameError;
+
 import catchgame.Catch.LoginPacket;
 import catchgame.Catch.NewUserPacket;
 import catchgame.Catch.SeaCreaturePacket;
 import catchgame.Catch.SeaCreatureRequestPacket;
+
+import authentication.PasswordError;
+import authentication.UsernameError;
+import catchgame.Catch.LoginPacket;
+import catchgame.Catch.NewUserPacket;
+import catchgame.Catch.SeaCreatureRequestPacket;
+import catchgame.Catch.SeaCreaturePacket;
+
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -75,6 +87,7 @@ public class CatchServer
 				serverSocket = new ServerSocket(8000);
 
 				Platform.runLater(() ->
+
 				{
 					serverPane.appendToOutput("Server Started at: " + new Date());
 					serverPane.appendToOutput("Open to clients.");
@@ -82,7 +95,7 @@ public class CatchServer
 				// listens for initial requests
 				while (true)
 				{
-					// set to -1 because int requires initialization
+					// set to -1 because needs requires initialization
 					int serverCode = -1;
 					Socket socket = new Socket();
 					socket = serverSocket.accept();
@@ -103,8 +116,12 @@ public class CatchServer
 							if (userDAO.isValidUser(loginPacket.enteredName, loginPacket.enteredPassword))
 							{
 								serverCode = ServerCodeConstants.LOGIN_SUCCESS_CODE;
+
+								HandleServerSideGameControl handleServerSideGameControl=
+	                					new HandleServerSideGameControl(toClient, fromClient);
+	                			new Thread(handleServerSideGameControl).start();
 								// start serving this client
-								new Thread(new ServeOceanTask(socket, toClient, fromClient)).start();
+								//new Thread(new ServeOceanTask(socket, toClient, fromClient)).start();
 							}
 						}
 						catch (BadLoginException e)
@@ -135,6 +152,7 @@ public class CatchServer
 						Platform.runLater(() ->
 						{
 							serverPane.appendToOutput("Login Attempted, Username: " + loginPacket.enteredName);
+							//serverPane.appendToOutput("Result: " + (code == ServerCodeConstants.LOGIN_SUCCESS_CODE ? "Success" : "Not Success"));
 							serverPane.appendToOutput("Result: " + (e != null ? e : "Sucess!" ));
 						});
 
@@ -146,6 +164,7 @@ public class CatchServer
 						NewUserPacket newUserPacket = (NewUserPacket) userData;
 
 						Platform.runLater(() ->
+
 						{
 							serverPane.appendToOutput("New Account Attempt, Desired Username: " + newUserPacket.enteredName);
 						});
@@ -154,6 +173,10 @@ public class CatchServer
 						{
 							userDAO.createUser(newUserPacket.enteredName, newUserPacket.enteredPassword, newUserPacket.enteredPasswordConfirm);
 							serverCode = ServerCodeConstants.NEW_USER_SUCESS_CODE;
+							HandleServerSideGameControl handleServerSideGameControl=
+                					new HandleServerSideGameControl(toClient, fromClient);
+                			new Thread(handleServerSideGameControl).start();
+
 						}
 						catch (NewUserException e)
 						{
@@ -218,9 +241,11 @@ public class CatchServer
 		}
 	}
 
+	
 	/**
 	 * Listens for requests from logged in users to extract resources from Ocean
 	 */
+	/*
 	private class ServeOceanTask implements Runnable
 	{
 		private Socket socket;
@@ -273,6 +298,23 @@ public class CatchServer
 				e.printStackTrace();
 				System.out.println(e.getMessage());
 			}
+		}
+	}
+	*/
+	
+	class HandleServerSideGameControl implements Runnable{
+		ObjectOutputStream toClient;
+		ObjectInputStream fromClient;
+		
+		HandleServerSideGameControl(ObjectOutputStream toClient, 
+				ObjectInputStream fromClient){
+			this.toClient=toClient;
+			this.fromClient=fromClient;
+		}
+		
+		public void run(){
+			ServerSideGameControl serverSideGameControl
+			=new ServerSideGameControl(toClient, fromClient, ocean);
 		}
 	}
 }

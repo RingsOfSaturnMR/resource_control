@@ -14,7 +14,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+
+import resources.Boat;
+import resources.BoatTypes;
+import resources.Equipment;
+import resources.Fish;
+import resources.FishSpecies;
+
 import resources.SeaCreature;
 
 public class GamePane extends VBox
@@ -28,12 +36,15 @@ public class GamePane extends VBox
 	public SimpleFishingPane simpleFishingPane;
 	private MarketsPane marketsPane;
 
-	public GamePane(EventHandler<ActionEvent> extractFishAction, EventHandler<ActionEvent> sellFishAction, Player player)
+
+	public GamePane(EventHandler<ActionEvent> sellFishAction, Player player)
+
 	{
 		this.player = player;
 		myStatsPane = new MyStatsPane();
 		
-		simpleFishingPane = new SimpleFishingPane(extractFishAction);
+
+		simpleFishingPane = new SimpleFishingPane();
 		marketsPane = new MarketsPane(sellFishAction);
 
 		primaryPane.getChildren().add(myStatsPane);
@@ -121,34 +132,36 @@ public class GamePane extends VBox
 		}
 	}
 
-	public class SimpleFishingPane extends VBox
+
+	public class SimpleFishingPane extends Pane
 	{
 		// temp for now to show professor miller where we are going with this.
-		Pane explainPane = new Pane();
-		Pane fishPane = new Pane();
+		//Pane explainPane = new Pane();
+		//Pane fishPane = new Pane();
 
 		private Random rand = new Random();
-		private int numCreaturesOnScreen = 0;
-		private Button btnExtractFishAction = new Button("Extract Fish");
-		private ArrayList<SeaCreature> creaturesOnScreen = new ArrayList<>();
+		//private int numCreaturesOnScreen = 0;
+		//private Button btnExtractFishAction = new Button("Extract Fish");
+		//private ArrayList<SeaCreature> creaturesOnScreen = new ArrayList<>();
 		private Label labelExplanation = new Label("Right now the fish are shown as dots. These dots are from SeaCreature objects, extracted " 
 				+ "from an Ocean object belonging the server and sent to this client. We plan to animate them, and make it so that when they are "
 				+ "clicked (or however else caught), they are added (By calling the function attatched to the button) to the players resouces array, "
 				+ "which they can sell, to get better fishing equipment");
 
-		public SimpleFishingPane(EventHandler<ActionEvent> extractFishAction)
+		public SimpleFishingPane()
 		{
-			//this.setMinWidth(300);
-			//this.setMinHeight(400);
 
+			this.setMinWidth(500);
+			this.setMinHeight(400);
+			labelExplanation.setMaxWidth(500);
 			labelExplanation.setWrapText(true);
-			
-			btnExtractFishAction.setOnAction(extractFishAction);
-			btnExtractFishAction.setAlignment(Pos.CENTER);
-			this.getChildren().addAll(btnExtractFishAction, labelExplanation);
+			//labelExplanation.setTranslateY(50);
+			//btnExtractFishAction.setOnAction(extractFishAction);
+			this.getChildren().addAll(labelExplanation);
 			
 		}
 
+		/*
 		public void addCreature(SeaCreature creature)
 		{
 			numCreaturesOnScreen++;
@@ -162,6 +175,8 @@ public class GamePane extends VBox
 			creaturesOnScreen.get(numCreaturesOnScreen - 1).getBody().setCenterX(27);
 			creaturesOnScreen.get(numCreaturesOnScreen - 1).getBody().setCenterY(50);
 		}
+
+		*/
 
 		private double getRandomDouble(double max, double min)
 		{
