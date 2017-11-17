@@ -53,5 +53,10 @@ public class Player extends authentication.User implements Serializable
 	{
 		cashOnHand -= amount;
 	}
+	
+	public ArrayList<SeaCreature> getIceChest()
+	{
+		return this.iceChest;
+	}
 
 }

@@ -36,7 +36,7 @@ public class BadPasswordException extends NewUserException
 			case NEEDS_NUMBER:
 				temp.append("Needs Number");
 				break;
-			case NEEDS_SPECIAL:
+			case NEEDS_SPECIAL_CHAR:
 				temp.append("Needs Special Character");
 				break;
 			default:
@@ -63,5 +63,10 @@ public class BadPasswordException extends NewUserException
 	public void setErrorList(ArrayList<PasswordError> errorList)
 	{
 		this.errorList = errorList;
+	}
+	
+	public ArrayList<PasswordError> getErrorList()
+	{
+		return errorList;
 	}
 }

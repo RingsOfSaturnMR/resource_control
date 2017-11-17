@@ -16,7 +16,7 @@ public abstract class SeaCreature <T> implements Serializable
 	
 	private double weight;
 	private T species;
-	private Circle GUICircle = null;
+	private transient Circle GUICircle = null;
 
 	SeaCreature(){
 		

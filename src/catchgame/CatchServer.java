@@ -1,7 +1,6 @@
 package catchgame;
 
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -10,8 +9,6 @@ import java.net.Socket;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
-
-import javax.lang.model.element.ElementKind;
 
 import authentication.BadLoginException;
 import authentication.BadPasswordException;
@@ -27,12 +24,7 @@ import catchgame.Packets.RequestPacket;
 import catchgame.Packets.ClientSubOceanSeaCreatureStatePacket;
 import catchgame.Packets.FishPacketsPacket;
 
-import authentication.PasswordError;
-import authentication.User;
-import authentication.UsernameError;
-
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -40,7 +32,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import resources.Fish;
 import resources.FishSpecies;
-import resources.SeaCreature;
 import userinterface.ServerPane;
 
 /**
@@ -58,7 +49,7 @@ public class CatchServer
 	private ServerPane serverPane = null;
 	private UserDAO userDAO = null;
 	private int serverSocketPort;
-	private SimpleBooleanProperty listeningForClients = new SimpleBooleanProperty(false);
+	private SimpleBooleanProperty listeningForNewClients = new SimpleBooleanProperty(false);
 
 	public Ocean ocean = new Ocean();
 
@@ -81,10 +72,20 @@ public class CatchServer
 		new Thread(new HandleNewRequestsTask()).start();
 	}
 
+	
+	public class Launch_FH_PaneHandler implements EventHandler<ActionEvent>
+	{
+		@Override
+		public void handle(ActionEvent e)
+		{
+			FrequencyHistogram fh=new FrequencyHistogram(ocean);
+		}
+}
+	
 	private void loadServerPane()
 	{
 		// makes a scene with a serverPane
-		serverPane = new ServerPane(new LaunchDbManipulatorHandler(), new ShutdownServerHandler());
+		serverPane = new ServerPane(new LaunchDbManipulatorHandler(), new ShutdownServerHandler(), new Launch_FH_PaneHandler());
 		Scene serverScene = new Scene(serverPane, Constants.INITIAL_SERVER_PANE_WIDTH, Constants.INITIAL_SERVER_PANE_HEIGHT);
 		// show serverPane
 		serverStage.setScene(serverScene);
@@ -116,10 +117,10 @@ public class CatchServer
 				});
 				
 				// set server to listen
-				listeningForClients.set(true);
+				listeningForNewClients.set(true);
 				
 				// start listening
-				while (listeningForClients.get())
+				while (listeningForNewClients.get())
 				{
 					// set to -1 because needs requires initialization
 					int serverCode = -1;
@@ -373,12 +374,12 @@ public class CatchServer
 	
 	public SimpleBooleanProperty isListeningForClients()
 	{
-		return listeningForClients;
+		return listeningForNewClients;
 	}
 
 	public void setListeningForClients(boolean val)
 	{
-		this.listeningForClients.set(val);
+		this.listeningForNewClients.set(val);
 	}
 	
 	private class ShutdownServerHandler implements EventHandler<ActionEvent>

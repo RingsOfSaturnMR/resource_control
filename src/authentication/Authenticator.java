@@ -103,7 +103,7 @@ public class Authenticator
 		}
 		if (numSpecial == 0)
 		{
-			errorList.add(PasswordError.NEEDS_SPECIAL);
+			errorList.add(PasswordError.NEEDS_SPECIAL_CHAR);
 			isValidPassword = false;
 		}
 		if (isValidPassword)

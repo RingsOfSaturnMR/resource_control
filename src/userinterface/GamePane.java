@@ -75,6 +75,9 @@ public class GamePane extends VBox
 
 			btnCheckMyResources.setOnAction(e -> {
 				primaryPane.getChildren().clear();
+				// TODO use observables or something, so that it automatically changes.
+				// this forces a refresh, dont leave this way...
+				myStatsPane = new MyStatsPane();
 				primaryPane.getChildren().add(myStatsPane);
 			});
 
@@ -107,12 +110,14 @@ public class GamePane extends VBox
 		// Labels
 		Label lblName = new Label("Name: ");
 		Label lblCashOnHand = new Label("Available $: ");
-		Label lblSkillLevel = new Label("Skill Level");
-
+		Label lblSkillLevel = new Label("Skill Level: ");
+		Label lblNumSeaCreatures = new Label("Number SeaCreatures: ");
+		
 		// Text Fields
 		Text txtName = new Text("");
 		Text txtCashOnHand = new Text(Double.toString(player.getCashOnHand()));
 		Text txtSkillLevel = new Text(Integer.toString(player.getSkillLevel()));
+		Text textNumSeaCreatures = new Text(Integer.toString(player.getIceChest().size()));
 
 		GridPane statsGridPane = new GridPane();
 
@@ -127,6 +132,8 @@ public class GamePane extends VBox
 			statsGridPane.add(txtCashOnHand, 1, 1);
 			statsGridPane.add(lblSkillLevel, 0, 2);
 			statsGridPane.add(txtSkillLevel, 1, 2);
+			statsGridPane.add(lblNumSeaCreatures, 0, 3);
+			statsGridPane.add(textNumSeaCreatures, 1, 3);
 
 			this.getChildren().addAll(statsGridPane);
 		}

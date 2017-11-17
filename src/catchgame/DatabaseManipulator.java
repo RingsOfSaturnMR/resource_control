@@ -1,8 +1,11 @@
 package catchgame;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import authentication.BadPasswordException;
+import authentication.BadUsernameException;
 import authentication.NewUserException;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -26,7 +29,6 @@ public class DatabaseManipulator
 	public DatabaseManipulator()
 	{
 		// define actions
-		
 		class MakeUserAction implements EventHandler
 		{
 
@@ -39,13 +41,37 @@ public class DatabaseManipulator
 					Player player = new Player(dataEntryVBox.getTfUsername());
 					player.addMoney(Integer.parseInt(dataEntryVBox.getTfCashOnHand()));
 					userDAO.savePlayer(player);
-					
 				}
-				catch (NewUserException | IOException e1)
+				catch(NewUserException e1)
+				{
+					if (e1 instanceof BadPasswordException)
+					{
+						BadPasswordException exception = (BadPasswordException)e1;
+						for(int i = 0; i < exception.getErrorList().size(); i++)
+						{
+							System.out.println(exception.getErrorList().get(i));
+						}
+					}
+					if (e1 instanceof BadUsernameException)
+					{
+						BadUsernameException exception = (BadUsernameException)e1;
+						for(int i = 0; i < exception.getErrorList().size(); i++)
+						{
+							System.out.println(exception.getErrorList().get(i));
+						}
+					}
+				}
+				catch (FileNotFoundException e1)
 				{
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				catch (IOException e1)
+				{
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 			}
 			
 		}

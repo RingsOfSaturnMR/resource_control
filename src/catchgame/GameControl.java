@@ -91,13 +91,21 @@ public class GameControl
 		// authenticate player
 		logPlayerIn(enteredName, enteredPassword);
 
-		player.addMoney(1);
-
+		
+		// sequence for closing down
 		gameStage.setOnCloseRequest(e ->
 		{
 			saveGame();
 			logOut();
 		});
+		
+		// update fish stuff - put this elsewhere? like, when you actually start fishing, call this.
+		// also, I dont think we need any new threads for this
+		clientSubOcean=new ClientSubOcean(toServer, fromServer);
+		UpdateFishOnScreenTask updateFishOnScreenTask=new UpdateFishOnScreenTask();
+		new Thread(updateFishOnScreenTask).start();
+		
+		
 
 		// Display GUI
 		gamePane = new GamePane(new SellFishAction(), player);
@@ -262,6 +270,9 @@ public class GameControl
 			// + "triggered(fish caught)");
 			try
 			{
+				// Something like this here?
+				player.addSeaCreatureToIceChest(fish);
+				
 				Platform.runLater(new Runnable()
 				{
 					@Override

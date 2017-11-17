@@ -247,7 +247,7 @@ public class NewUserPane extends VBox
 			txtNumber.setFill(Color.GREEN);
 		}
 
-		if (errorList != null && errorList.contains(PasswordError.NEEDS_SPECIAL))
+		if (errorList != null && errorList.contains(PasswordError.NEEDS_SPECIAL_CHAR))
 		{
 			txtSpecial.setFill(Color.BLACK);
 		}
