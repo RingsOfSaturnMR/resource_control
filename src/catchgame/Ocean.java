@@ -372,38 +372,34 @@ public class Ocean implements Serializable
 
 	public int getCurrentCodPopulation()
 	{
-		int random = getRandomInt(0, Constants.COD_INITIAL_POPULATION);
-		return random;
+		return codPopulation.size();
 	}
 
 	public int getCurrentSalmonPopulation()
 	{
-		int random = getRandomInt(0, Constants.SALMON_INITIAL_POPULATION);
-		return random;
+		return salmonPopulation.size();
 	}
 
 	public int getCurrentTunaPopulation()
 	{
-		int random = getRandomInt(0, Constants.TUNA_INITIAL_POPULATION);
-		return random;
+		return tunaPopulation.size();
 	}
 
 	public int getCurrentCrabPopulation()
 	{
-		int random = getRandomInt(0, Constants.CRAB_INITIAL_POPULATION);
-		return random;
+		return crabPopulation.size();
 	}
 
 	public int getCurrentLobsterPopulation()
 	{
-		int random = getRandomInt(0, Constants.LOBSTER_INITIAL_POPULATION);
-		return random;
+		return lobsterPopulation.size();
 	}
 
 	public int getCurrentOysterPopulation()
 	{
-		int random = getRandomInt(0, Constants.OYSTER_INITIAL_POPULATION);
-		return random;
+		return oysterPopulation.size();
+		//int random = getRandomInt(0, Constants.OYSTER_INITIAL_POPULATION);
+		//return random;
 	}
 
 	// get random weight of each species

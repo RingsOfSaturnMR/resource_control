@@ -18,6 +18,8 @@ public class Constants
 	public final static int INITIAL_SERVER_PANE_HEIGHT = 400;
 	public final static int INITIAL_GAME_PANE_WIDTH = 500;
 	public final static int INITIAL_GAME_PANE_HEIGHT = 500;
+	public final static int FREQUENCY_HISTOGRAM_PANE_WIDTH=500;
+	public final static int FREQUENCY_HISTOGRAM_PANE_HEIGHT=500;
 	
 	// initial Market values of resources
 	public final static double TUNA_INITIAL_PRICE_PER_POUND = 6.40;
@@ -27,7 +29,7 @@ public class Constants
 	// initial population sizes
 	public final static int COD_INITIAL_POPULATION = 1000;
 	public final static int SALMON_INITIAL_POPULATION = 1000;
-	public final static int TUNA_INITIAL_POPULATION = 100;
+	public final static int TUNA_INITIAL_POPULATION = 1000;
 	
 	public final static int CRAB_INITIAL_POPULATION = 1000;
 	public final static int LOBSTER_INITIAL_POPULATION = 1000;

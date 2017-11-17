@@ -23,6 +23,8 @@ import catchgame.Catch.NewUserPacket;
 import catchgame.Catch.SeaCreatureRequestPacket;
 import catchgame.Catch.SeaCreaturePacket;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import resources.SeaCreature;
@@ -40,7 +42,7 @@ import userinterface.ServerPane;
 public class CatchServer
 {
 	private Stage serverStage = new Stage();
-	private ServerPane serverPane = new ServerPane();
+	private ServerPane serverPane = new ServerPane(new Launch_FH_PaneHandler());
 	private ServerSocket serverSocket;
 	private UserDAO userDAO = new UserDAO();
 
@@ -53,6 +55,15 @@ public class CatchServer
 	{
 		loadServerPane();
 		new Thread(new HandleNewRequestsTask()).start();
+	}
+	
+	public class Launch_FH_PaneHandler implements EventHandler<ActionEvent>
+	{
+		@Override
+		public void handle(ActionEvent e)
+		{
+			FrequencyHistogram fh=new FrequencyHistogram(ocean);
+		}
 	}
 
 	private void loadServerPane()
