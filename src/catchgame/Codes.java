@@ -1,17 +1,17 @@
 package catchgame;
 /**
- * Constant values that represent different results that get sent back and forth from the server to the client. 
+ * Constant values that represent requests and responses
  */
-public class ServerCodeConstants
+public class Codes
 {
 	// login response codes
 	public final static int LOGIN_SUCCESS_CODE = 0;
 	public final static int LOGIN_ERR_INVALID_PASSWORD_CODE = 1;
 	public final static int LOGIN_ERR_USER_NOT_FOUND_CODE = 2;
 	public final static int LOGIN_ERR_NO_USERS_FOUND_CODE = 3;
-	public final static int LOGIN_ERR_UNKNOWN_ERROR_CODE = 4;
+	public final static int LOGIN_ERR_INVALID_ATTEMPT_CODE = 4;
+	public final static int LOGIN_ERR_UNKNOWN_ERROR_CODE = 5;
 	
-
 	// new user response codes
 	public final static int NEW_USER_SUCESS_CODE = 10;
 	public final static int NEW_USER_ERR_NAME_TAKEN_CODE = 11;
@@ -20,11 +20,8 @@ public class ServerCodeConstants
 	public final static int NEW_USER_ERR_UNKNOWN_CODE = 13; 
 
 	
-	// request codes
-	public static final int REQUEST_RANDOM_SEACREATURE_CODE = 20;
-	public static final int REQUEST_COD_CODE = 21;
-	public static final int REQUEST_SALMON_CODE = 22;
-	public static final int REQUEST_TUNA_CODE = 23;
+	// client request codes
+	public static final int LOGOUT_REQUEST_CODE = 20;
 	
 	
 }

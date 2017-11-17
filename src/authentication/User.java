@@ -12,33 +12,19 @@ import java.io.Serializable;
  */
 public class User implements Serializable
 {
-
-	private static final long serialVersionUID = 1L;
-	protected String userName;
+	protected String username;
 	private String pwCipherText;
+	// IMPORTANT - do not serialize
 	private transient String pwPlainText;
 
-	public User(String userName, String pwCipherText)
+	public User(String username)
 	{
-		this.userName = userName;
-		this.pwCipherText = pwCipherText;
-
-	}
-
-	public User(User u)
-	{
-		this(u.userName, u.pwCipherText);
-	}
-
-	public User()
-	{
-		this.userName = null;
-		this.pwCipherText = null;
+		this.username = username;
 	}
 
 	public String getUsername()
 	{
-		return this.userName;
+		return this.username;
 	}
 
 	public String getPwCipherText()
@@ -46,13 +32,4 @@ public class User implements Serializable
 		return pwCipherText;
 	}
 
-	public void setPwPlainText(String pwPlainText)
-	{
-		this.pwPlainText = pwPlainText;
-	}
-
-	public String getPwPlainText()
-	{
-		return pwPlainText;
-	}
 }

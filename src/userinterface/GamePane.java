@@ -110,7 +110,7 @@ public class GamePane extends VBox
 		Label lblSkillLevel = new Label("Skill Level");
 
 		// Text Fields
-		Text txtName = new Text(player.getName());
+		Text txtName = new Text("");
 		Text txtCashOnHand = new Text(Double.toString(player.getCashOnHand()));
 		Text txtSkillLevel = new Text(Integer.toString(player.getSkillLevel()));
 

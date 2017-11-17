@@ -106,4 +106,9 @@ public class LoginPane extends VBox
 		return Integer.parseInt((tfClientPort.getText()));
 	}
 	
+	public void setTfClientPort(int portNum)
+	{
+		tfClientPort.setText(Integer.toString(portNum));
+	}
+	
 }
