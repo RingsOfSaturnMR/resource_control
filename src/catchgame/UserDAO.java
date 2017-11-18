@@ -19,97 +19,79 @@ import authentication.NewUserException;
 import authentication.PasswordError;
 import authentication.User;
 import authentication.UsernameError;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * 
- * @author Nils
- * This DAO is intended as a stub. It currently uses a serialized array list, written to a file to store user information.
- * It needs to be updated to a database.
- * The rest of the program shouldnt break as long as this class implements IUserDAO
+ * @author Nils Johnson
  */
+// TODO - Try with resources for each call, instead of try-catch-finally
 public class UserDAO implements IUserDAO
 {
-	// file for to store users
-	private static final String FILE_NAME = "users.dat";
-	private static File userListFile = new File(FILE_NAME);
+	// Max allowed length of path to user file
+	private static final String FILE_PATH_LENGTH = "50";
 
-	// structure to hold users
-	private static ArrayList<User> usersList = null;
+	// allows monitoring or online users
+	private ObservableList<String> onlineUserList = FXCollections.observableArrayList();
 
-	@Override
-	public boolean isValidUser(String enteredUserName, String enteredPassword) throws BadLoginException
+	private static String url = "jdbc:sqlite:users.db";
+	private static Connection connection = null;
+
+	/**
+	 * This constructor will make a table of Users if it does not exist.
+	 * 
+	 * @throws SQLException
+	 */
+	public UserDAO() throws SQLException
 	{
+		String createQuery = "CREATE TABLE IF NOT EXISTS Users (\n" + "userName varchar(" +
+				Authenticator.MAX_NAME_LENGTH +
+				") not null, \n" +
+				"passwordCipher varchar(" +
+				Authenticator.MAX_PW_LENGTH +
+				") not null, \n" +
+				"filePath varchar(" +
+				FILE_PATH_LENGTH +
+				") not null, \n" +
+				"isOnline bit not null," +
+				"PRIMARY KEY (userName)" +
+				");";
 
-		// temp user and index variable to go through array list of users
-		User temp = new User();
-		String nameInFile, pwCipher;
-		String decryptedPw = null;
-		int i = 0;
-
-		// load the user list to memory for indexing
-		loadUserList();
-
-		// if there are no users in the file, throw exception
-		if (usersList.size() == 0)
+		try (Connection conn = DriverManager.getConnection(url); Statement stmt = conn.createStatement())
 		{
-			BadLoginException e = new BadLoginException(LoginError.NO_USERS);
-			throw (e);
+			stmt.execute(createQuery);
 		}
-		// otherwise, start comparing users
-		else
-		{
-			do
-			{
-				temp = usersList.get(i);
-				nameInFile = temp.getUsername();
-				pwCipher = temp.getPwCipherText();
-				decryptedPw = EncryptionFilter.decrypt(pwCipher, enteredPassword);
-				i++;
-			} while (i < usersList.size() && !nameInFile.equals(enteredUserName));
-		}
-
-		// there is a match between the username and the password decrypted with the
-		// password, return true
-		if (temp.getUsername().equals(enteredUserName) && decryptedPw.equals(enteredPassword))
-		{
-			return true;
-		}
-		// otherwise, depending on the mismatch, throw an exception
-		else
-		{
-			if (!temp.getUsername().equals(enteredUserName))
-			{
-				BadLoginException e = new BadLoginException(LoginError.USER_NOT_FOUND);
-				throw (e);
-			}
-			else if (temp.getUsername().equals(enteredUserName) && !decryptedPw.equals(enteredPassword))
-			{
-				BadLoginException e = new BadLoginException(LoginError.INVALID_PASSWORD);
-				throw (e);
-			}
-		}
-		return false;
 	}
 
+	/**
+	 * This method inserts a user into the SQLite database
+	 * 
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 */
 	@Override
-	public void createUser(String enteredUserName, String enteredPassword, String enteredPwConfirm) throws NewUserException
+	public void createUser(String enteredUsername, String enteredPassword, String enteredPwConfirm) throws NewUserException, FileNotFoundException, IOException
 	{
 		// verifiy a legally formatted name is entered
-		ArrayList<UsernameError> usernameErrorList = Authenticator.checkUsernameLegality(enteredUserName);
+		ArrayList<UsernameError> usernameErrorList = Authenticator.checkUsernameLegality(enteredUsername);
 
+		// if there is an error list, throw an exception with that list
 		if (usernameErrorList != null)
 		{
 			BadUsernameException e = new BadUsernameException(usernameErrorList);
 			throw (e);
 		}
 
-		// if list hasnt been loaded, loads it.
-		if (usersList == null)
-		{
-			loadUserList();
-		}
-
-		if (!usernameIsAvailable(enteredUserName))
+		// check to see if name is available
+		if (!usernameIsAvailable(enteredUsername))
 		{
 			ArrayList<UsernameError> errors = new ArrayList<>();
 			errors.add(UsernameError.UNAVAILABLE);
@@ -141,134 +123,314 @@ public class UserDAO implements IUserDAO
 			throw (e);
 		}
 
-		// puts user in array list of existing users
-		usersList.add(new User(enteredUserName, EncryptionFilter.encrypt(enteredPassword, enteredPassword)));
-		// writes the new list to the file
-		writeUsersToFile();
-
-		// TOOD put this not in accounttools
-		// make a new file for that user
-		File pwListFile = new File(enteredUserName + ".dat");
+		// if everything checks out, then put in the database
 		try
 		{
-			pwListFile.createNewFile();
+			openConnection();
+			String statement = "insert into Users (userName, passwordCipher , filePath, isOnline) " + "values (?, ?, ?, ?)";
+			PreparedStatement preparedInsertStatement = connection.prepareStatement(statement);
+
+			preparedInsertStatement.setString(1, enteredUsername);
+			preparedInsertStatement.setString(2, EncryptionFilter.encrypt(enteredPassword, enteredPassword));
+			preparedInsertStatement.setString(3, enteredUsername + ".dat");
+			preparedInsertStatement.setString(4, "0");
+
+			preparedInsertStatement.executeUpdate();
 		}
-		catch (IOException e)
+		catch (SQLException e)
 		{
-			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
 			e.printStackTrace();
+		}
+		finally
+		{
+			closeConnection();
+		}
+
+		// make that user a file and serialize an empty player
+		// File pwListFile = new File();
+		Player player = new Player(enteredUsername);
+
+		try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(enteredUsername + ".dat"));)
+		{
+			output.writeObject(player);
 		}
 	}
 
 	@Override
-	public User getUser(String enteredUserName, String enteredPassword) throws BadLoginException
+	public Player getUser(String enteredUsername, String enteredPassword) throws BadLoginException, FileNotFoundException, IOException
 	{
-		if (usersList == null)
+		// If the input is blatantly not valid, throw exception before making database
+		// call.
+		if (enteredUsername.length() < Authenticator.MIN_NAME_LENGTH || enteredPassword.length() < Authenticator.MIN_PW_LENGTH)
 		{
-			loadUserList();
+			throw new BadLoginException(LoginError.INVALID_ATTEMPT);
 		}
 
-		boolean foundUser = false;
-		int i = 0;
-		if (isValidUser(enteredUserName, enteredPassword))
-		{
-			// this block gets the index of the user
-			do
-			{
-				if (usersList.get(i).getUsername().equals(enteredUserName))
-				{
-					foundUser = true;
-				}
-				else
-				{
-					i++;
-				}
-			} while (foundUser == false);
-			return usersList.get(i);
-		}
-		else
-		{
-			return null;
-		}
-	}
+		// variables used within method to determine the result of the login attempt
+		Player player = null;
+		String returnedUsername = null;
+		String returnedPasswordCipher = null;
+		String returnedFilePath = null;
 
-	private static void loadUserList()
-	{
-		if (userListFile.length() > 0)
+		try
 		{
-			try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(userListFile)))
+			openConnection();
+
+			String userNameStatement = "SELECT userName, passwordCipher, filePath  FROM Users WHERE userName = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(userNameStatement);
+			preparedStatement.setString(1, enteredUsername);
+
+			ResultSet rSet = preparedStatement.executeQuery();
+
+			// if the query returns, the user exists
+			if (rSet.next())
 			{
-				try
-				{
-					usersList = new ArrayList<User>((ArrayList<User>) (input.readObject()));
-				}
-				catch (ClassNotFoundException e1)
-				{
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				returnedUsername = rSet.getString(1);
+				returnedPasswordCipher = rSet.getString(2);
+				returnedFilePath = rSet.getString(3);
 
 			}
-			catch (FileNotFoundException e)
+			// otherwise the user does not exist. - TODO consider just doing a null check
+			// here.
+			else if (returnedUsername == null || !enteredUsername.equals(returnedUsername))
 			{
+				throw new BadLoginException(LoginError.USER_NOT_FOUND);
+			}
+
+			// see if the entered password matches the passwordChipher when decrypted with
+			// the provided password
+			if (!enteredPassword.equals(EncryptionFilter.decrypt(returnedPasswordCipher, enteredPassword)))
+			{
+				throw new BadLoginException(LoginError.INVALID_PASSWORD);
+			}
+
+			//   String sql = "UPDATE Registration " +
+            //"SET age = 30 WHERE id in (100, 101)";
+			
+			
+			// mark user as online and put them in the arrayList of online users
+			String setUserOnline = "UPDATE Users SET isOnline = ? WHERE userName = ?";
+			PreparedStatement setIsOnlineStatement = connection.prepareStatement(setUserOnline);
+			setIsOnlineStatement.setString(2, "1");
+			setIsOnlineStatement.setString(1, enteredUsername);
+			setIsOnlineStatement.executeUpdate();
+			onlineUserList.add(enteredUsername);
+
+			// Deserialize the object found at the path
+			// this can throw FileNotFoundException, IOException back to wherever getUser
+			// was called from.
+			try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(returnedFilePath));)
+			{
+				player = (Player) input.readObject();
+			}
+			catch (ClassNotFoundException e)
+			{
+				System.out.println(e.getMessage());
 				e.printStackTrace();
 			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
+
 		}
-		else if (usersList == null)
+		catch (SQLException e)
 		{
-			usersList = new ArrayList<User>();
+			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
+		finally
+		{
+			closeConnection();
+		}
+
+		return player;
 	}
 
 	@Override
 	public boolean usernameIsAvailable(String enteredUserName)
 	{
-		String nameInFile;
-		int i = 0;
-		while (i < usersList.size())
+		boolean result = true;
+		try
 		{
-			nameInFile = usersList.get(i).getUsername();
-			if (nameInFile.equals(enteredUserName))
-			{
-				return false;
-			}
-			i++;
-		}
-		return true;
+			openConnection();
 
+			String statement = "select userName from Users where userName = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(statement);
+			preparedStatement.setString(1, enteredUserName);
+
+			ResultSet rSet = preparedStatement.executeQuery();
+
+			if (rSet.next())
+			{
+				String returnedName = rSet.getString(1);
+				if (returnedName.equals(enteredUserName))
+				{
+					result = false;
+				}
+			}
+			else
+			{
+				result = true;
+			}
+
+		}
+		catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return result;
 	}
-	
+
+	@Override
+	public void deleteUser(String username)
+	{
+		try
+		{
+			openConnection();
+
+			String statement = "DELETE from Users where userName = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(statement);
+			preparedStatement.setString(1, username);
+
+			preparedStatement.executeUpdate();
+
+		}
+		catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally
+		{
+			closeConnection();
+		}
+
+		File userFile = new File(username + ".dat");
+
+		if (userFile.delete())
+		{
+			System.out.println("File Deleted");
+		}
+		else
+		{
+			System.out.println("File Delete Fail");
+		}
+	}
+
 	@Override
 	public int getNumberOfUsers()
 	{
-		if (usersList == null)
+		int numUsers = 0;
+		try
 		{
-			loadUserList();
+			openConnection();
+
+			String statement = "SELECT COUNT(*) from Users";
+			PreparedStatement preparedStatement = connection.prepareStatement(statement);
+			ResultSet rSet = preparedStatement.executeQuery();
+
+			if (rSet.next())
+			{
+				numUsers = rSet.getInt(1);
+			}
 		}
-		return usersList.size();
+		catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return numUsers;
 	}
+
 	
-	private static void writeUsersToFile()
+
+	public void savePlayer(Player player) throws FileNotFoundException, IOException
 	{
-		try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(userListFile, false));)
+		try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream((player.getUsername() + ".dat")));)
 		{
-			output.writeObject(usersList);
+			output.writeObject(player);
 		}
-		catch (FileNotFoundException e)
+
+	}
+
+	public void logPlayerOut(String username)
+	{
+		try
+		{
+			openConnection();
+
+			// mark user as offline in the database
+			String setUserOnline = "UPDATE Users SET isOnline = ? WHERE userName = ?";
+			PreparedStatement setIsOnlineStatement = connection.prepareStatement(setUserOnline);
+			setIsOnlineStatement.setString(2, "1");
+			setIsOnlineStatement.setString(1, username);
+			setIsOnlineStatement.executeUpdate();
+			
+			// remove them from list of online users
+			onlineUserList.remove(username);
+
+		}
+		catch (SQLException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		catch (IOException e)
+		finally
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println(e.getMessage());
+			closeConnection();
 		}
 	}
 
+
+	public ObservableList<String> getOnlinePlayerList()
+	{
+		return this.onlineUserList;
+	}
+	
+	
+	/**
+	 * use to open connection prior to accessing database
+	 */
+	private static void openConnection()
+	{
+		try
+		{
+			if (connection == null || connection.isClosed())
+			{
+				connection = DriverManager.getConnection(url);
+			}
+		}
+		catch (SQLException e)
+		{
+			System.out.print(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * use to close connection after accessing database
+	 */
+	private static void closeConnection()
+	{
+		try
+		{
+			if (connection != null)
+			{
+				connection.close();
+			}
+		}
+		catch (SQLException e)
+		{
+			System.out.print(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
 }

@@ -1,5 +1,8 @@
 package catchgame;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import authentication.BadLoginException;
 import authentication.NewUserException;
 import authentication.User;
@@ -14,15 +17,14 @@ import authentication.User;
  */
 public interface IUserDAO
 {
-	// TODO this method will never return false, because it throws an exception. Consider refactoring to be void. 
-	boolean isValidUser(String userName, String password) throws BadLoginException;
-
-	void createUser(String userName, String enteredPassword, String enteredPasswordConfirm) throws NewUserException;
-
-	User getUser(String enteredUserName, String enteredPassword) throws BadLoginException;
-
+	void createUser(String userName, String enteredPassword, String enteredPasswordConfirm) throws NewUserException, FileNotFoundException, IOException;
+	
+	void deleteUser(String username);
+	
+	User getUser(String enteredUserName, String enteredPassword) throws BadLoginException, FileNotFoundException, IOException;
+	
 	boolean usernameIsAvailable(String enteredUserName);
-
+	
 	int getNumberOfUsers();
 }
 

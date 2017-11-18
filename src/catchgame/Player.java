@@ -1,63 +1,62 @@
 package catchgame;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import resources.SeaCreature;
+
 import resources.Equipment;
-import resources.Fish;
-/*
-TODO
+import resources.SeaCreature;
 
-1.) getters/setters for the following
-	String - name
-	double - cashOnHand
-	int - skillLevel
-	ArrayList<SeaCreature> IceChest
-	ArrayList<Equipment> EquipList
-	
-2.) constructor that sets all the values	
-
-*/
-public class Player
+public class Player extends authentication.User implements Serializable
 {
-	String name;
-	String password;
+	// stats
 	double cashOnHand;
-	private ArrayList<SeaCreature> iceChest = new ArrayList<>();
-	// TODO, new name
-	private ArrayList<Equipment> toolChest = new ArrayList<>();
 	private int skillLevel;
+	
+	// resources
+	private ArrayList<SeaCreature> iceChest = new ArrayList<>();
+	private ArrayList<Equipment> toolChest = new ArrayList<>();
 
-	public Player(String name, String password, double cashOnHand, ArrayList<SeaCreature> iceChest, ArrayList<Equipment> toolChest)
+	
+	public Player(String username)
 	{
-		this.name = name;
-		this.password = password;
-		this.cashOnHand = cashOnHand;
-		this.iceChest = iceChest;
-		this.toolChest = toolChest;
+		super(username);
+		this.cashOnHand = 0;
+		this.skillLevel = 0;
 	}
-	public void addItemToIceChest(SeaCreature item)
+
+	public void addSeaCreatureToIceChest(SeaCreature item)
 	{
 		iceChest.add(item);
 	}
 	
-	public void setCashOnHand(double val)
+	public void addItemToToolChest(Equipment item)
 	{
-		this.cashOnHand = val;
-	}
-
-	public double getCashOnHand()
-	{
-		return 12.3;
+		toolChest.add(item);
 	}
 	
-	public String getName()
+	public double getCashOnHand()
 	{
-		return this.name;
+		return this.cashOnHand;
 	}
 
 	public int getSkillLevel()
 	{
-		return this.skillLevel;
+		return skillLevel;
 	}
 	
+	public void addMoney(int amount)
+	{
+		cashOnHand += amount;
+	}
+	
+	public void subtractMoney(int amount)
+	{
+		cashOnHand -= amount;
+	}
+	
+	public ArrayList<SeaCreature> getIceChest()
+	{
+		return this.iceChest;
+	}
+
 }

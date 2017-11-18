@@ -3,11 +3,7 @@ package market;
 import java.util.ArrayList;
 import java.util.Date;
 
-import catchgame.Catch;
-import resources.Fish;
-import resources.FishSpecies;
 import resources.SeaCreature;
-import catchgame.Constants;
 
 
 /*

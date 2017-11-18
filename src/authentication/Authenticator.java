@@ -1,7 +1,6 @@
 package authentication;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * This class contains defines the parameters required for user names and
@@ -13,18 +12,29 @@ import java.util.Random;
  */
 public class Authenticator
 {
-	// for passwords
 	public static final char[] LEGAL_PW_SPECIAL_CHARACTER =
 	{ '!', '@', '#', '$', '^', '&', '*' };
+	// if setting MIN_PW_LENGTH higher, verify that current users will not be
+	// refused login - see UserDAO.getUser
 	public static final int MIN_PW_LENGTH = 4;
 	public static final int MAX_PW_LENGTH = 20;
 
-	// for usernames
+	// if setting the MIN_NAME_LENGTH higher, verify that current users will not be
+	// refused login - see UserDAO.getUser
 	public static final int MIN_NAME_LENGTH = 4;
 	public static final int MAX_NAME_LENGTH = 15;
 	public static final char[] ILLEGAL_NAME_CHARACTER =
 	{ ' ', '!', '#', '%', '^', '&', '*' };
 
+	/**
+	 * 
+	 * @param enteredPassword
+	 * @return errorList
+	 * 
+	 *         This method takes a String and returns null if it is a legally
+	 *         formatted password, otherwise it returns a list of the problems it
+	 *         has.
+	 */
 	public static ArrayList<PasswordError> checkPasswordLegality(String enteredPassword)
 	{
 		// new array list with space for 6 elements
@@ -63,7 +73,9 @@ public class Authenticator
 			{
 				numSpecial++;
 			}
-			if (numUpper + numLower + numDigits + numSpecial != i + 1)
+			if (numUpper + numLower +
+					numDigits +
+					numSpecial != i + 1)
 			{
 				numIllegalChar++;
 			}
@@ -91,7 +103,7 @@ public class Authenticator
 		}
 		if (numSpecial == 0)
 		{
-			errorList.add(PasswordError.NEEDS_SPECIAL);
+			errorList.add(PasswordError.NEEDS_SPECIAL_CHAR);
 			isValidPassword = false;
 		}
 		if (isValidPassword)
@@ -116,6 +128,13 @@ public class Authenticator
 		return false;
 	}
 
+	/**
+	 * This method checks to see if a username is legally formatted. If it is, it
+	 * returns null, otherwise it returns a list with the problems.
+	 * 
+	 * @param username
+	 * @return errorList or null
+	 */
 	public static ArrayList<UsernameError> checkUsernameLegality(String username)
 	{
 		ArrayList<UsernameError> errorList = new ArrayList<UsernameError>(4);

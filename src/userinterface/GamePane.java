@@ -9,7 +9,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -17,11 +16,13 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+
 import resources.Boat;
 import resources.BoatTypes;
 import resources.Equipment;
 import resources.Fish;
 import resources.FishSpecies;
+
 import resources.SeaCreature;
 
 public class GamePane extends VBox
@@ -35,11 +36,14 @@ public class GamePane extends VBox
 	public SimpleFishingPane simpleFishingPane;
 	private MarketsPane marketsPane;
 
+
 	public GamePane(EventHandler<ActionEvent> sellFishAction, Player player)
+
 	{
 		this.player = player;
 		myStatsPane = new MyStatsPane();
 		
+
 		simpleFishingPane = new SimpleFishingPane();
 		marketsPane = new MarketsPane(sellFishAction);
 
@@ -71,6 +75,9 @@ public class GamePane extends VBox
 
 			btnCheckMyResources.setOnAction(e -> {
 				primaryPane.getChildren().clear();
+				// TODO use observables or something, so that it automatically changes.
+				// this forces a refresh, dont leave this way...
+				myStatsPane = new MyStatsPane();
 				primaryPane.getChildren().add(myStatsPane);
 			});
 
@@ -103,12 +110,14 @@ public class GamePane extends VBox
 		// Labels
 		Label lblName = new Label("Name: ");
 		Label lblCashOnHand = new Label("Available $: ");
-		Label lblSkillLevel = new Label("Skill Level");
-
+		Label lblSkillLevel = new Label("Skill Level: ");
+		Label lblNumSeaCreatures = new Label("Number SeaCreatures: ");
+		
 		// Text Fields
-		Text txtName = new Text(player.getName());
+		Text txtName = new Text("");
 		Text txtCashOnHand = new Text(Double.toString(player.getCashOnHand()));
 		Text txtSkillLevel = new Text(Integer.toString(player.getSkillLevel()));
+		Text textNumSeaCreatures = new Text(Integer.toString(player.getIceChest().size()));
 
 		GridPane statsGridPane = new GridPane();
 
@@ -123,10 +132,13 @@ public class GamePane extends VBox
 			statsGridPane.add(txtCashOnHand, 1, 1);
 			statsGridPane.add(lblSkillLevel, 0, 2);
 			statsGridPane.add(txtSkillLevel, 1, 2);
+			statsGridPane.add(lblNumSeaCreatures, 0, 3);
+			statsGridPane.add(textNumSeaCreatures, 1, 3);
 
 			this.getChildren().addAll(statsGridPane);
 		}
 	}
+
 
 	public class SimpleFishingPane extends Pane
 	{
@@ -145,6 +157,7 @@ public class GamePane extends VBox
 
 		public SimpleFishingPane()
 		{
+
 			this.setMinWidth(500);
 			this.setMinHeight(400);
 			labelExplanation.setMaxWidth(500);
@@ -169,6 +182,7 @@ public class GamePane extends VBox
 			creaturesOnScreen.get(numCreaturesOnScreen - 1).getBody().setCenterX(27);
 			creaturesOnScreen.get(numCreaturesOnScreen - 1).getBody().setCenterY(50);
 		}
+
 		*/
 
 		private double getRandomDouble(double max, double min)
