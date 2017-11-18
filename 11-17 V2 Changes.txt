@@ -1,6 +1,8 @@
 Part A—By Nils
 Part B—By Matt
 
+All currently in master
+
 Part A
 
 Hey Guys, I just pushed a bunch of stuff to my branch. It uses SQLite now. Here are changes you should know about:
@@ -25,3 +27,4 @@ Here are my changes ( 1.) and 2.) were stuff that got lost in the merge):
 2) Changed the get populations functions in ocean to return the size of the array list, instead of a random number
 3) Added some JavaDoc comments to Ocean (status: incomplete)
 4) Generated a JavaDoc that can be found in the doc folder (double click on index.html to view it)
+5) Refined Ocean
