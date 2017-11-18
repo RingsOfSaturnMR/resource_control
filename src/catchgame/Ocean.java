@@ -13,12 +13,13 @@ import resources.Shellfish;
 import resources.ShellfishSpecies;
 
 /**
- * This class is a wrapper for SeaCreatures. It has methods to pull creatures
- * from the population, and will regenerate itself to its max 'carrying
- * capacity' based on how many resouces have been extracted.
+ * This class generates, "gives away", and regenerates SeaCreatures. 
+ * It has methods to create SeaCreatures, "give away" sea creatures,
+ * and regenerate SeaCreature populations until they each reach their
+ * max or "carrying capacity" population.
  * 
  * @author Thanh Lam
- *
+ * @author Matt Roberts
  */
 public class Ocean implements Serializable
 {
@@ -37,6 +38,12 @@ public class Ocean implements Serializable
 	private Random rand = new Random();
 	private double relativeGrowthRate = 0.02;
 
+	/**
+	 * If it is a new game, fills the Ocean to max population;
+	 * otherwise it loads the saved ocean;
+	 * regardless, it then starts regenerateOcean to populate Ocean
+	 * with SeaCreatures (up to max population).
+	 */
 	public Ocean()
 	{
 		//System.out.println("In the Ocean Constructor");
@@ -53,6 +60,10 @@ public class Ocean implements Serializable
 
 	}
 
+	/**
+	 * Adds SeaCreatures to Ocean updateSeaCreaturePopulation
+	 * growth formula every 5 seconds.
+	 */
 	public void regenerateOcean()
 	{
 		Timer timer = new Timer();
@@ -72,6 +83,17 @@ public class Ocean implements Serializable
 		timer.schedule(task, 0, 5_000);
 	}
 
+	/**
+	 * Determines how many more SeaCreatures a given population
+	 * should have added based on the elapsedTime, relativeGrowthRate, 
+	 * and carryingCapacityPopulation according to the general 
+	 * population growth formula found on Wikipedia.
+	 * 
+	 * @param elapsedTime a real or virtual time interval
+	 * 
+	 * @return the appropriate growth in the specified SeaCreature
+	 * population, as a number of organisms.
+	 */
 	private int updateCodPopulation(long elapsedTime)
 	{
 		int carryingCapacityPopulation = Constants.COD_MAX_POPULATION;
@@ -379,38 +401,34 @@ public class Ocean implements Serializable
 
 	public int getCurrentCodPopulation()
 	{
-		int random = getRandomInt(0, Constants.COD_INITIAL_POPULATION);
-		return random;
+		return codPopulation.size();
 	}
 
 	public int getCurrentSalmonPopulation()
 	{
-		int random = getRandomInt(0, Constants.SALMON_INITIAL_POPULATION);
-		return random;
+		return salmonPopulation.size();
 	}
 
 	public int getCurrentTunaPopulation()
 	{
-		int random = getRandomInt(0, Constants.TUNA_INITIAL_POPULATION);
-		return random;
+		return tunaPopulation.size();
 	}
 
 	public int getCurrentCrabPopulation()
 	{
-		int random = getRandomInt(0, Constants.CRAB_INITIAL_POPULATION);
-		return random;
+		return crabPopulation.size();
 	}
 
 	public int getCurrentLobsterPopulation()
 	{
-		int random = getRandomInt(0, Constants.LOBSTER_INITIAL_POPULATION);
-		return random;
+		return lobsterPopulation.size();
 	}
 
 	public int getCurrentOysterPopulation()
 	{
-		int random = getRandomInt(0, Constants.OYSTER_INITIAL_POPULATION);
-		return random;
+		return oysterPopulation.size();
+		//int random = getRandomInt(0, Constants.OYSTER_INITIAL_POPULATION);
+		//return random;
 	}
 
 	// get random weight of each species

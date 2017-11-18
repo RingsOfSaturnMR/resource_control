@@ -29,7 +29,7 @@ public class Constants
 	// initial population sizes
 	public final static int COD_INITIAL_POPULATION = 1000;
 	public final static int SALMON_INITIAL_POPULATION = 1000;
-	public final static int TUNA_INITIAL_POPULATION = 100;
+	public final static int TUNA_INITIAL_POPULATION = 1000;
 	
 	public final static int CRAB_INITIAL_POPULATION = 1000;
 	public final static int LOBSTER_INITIAL_POPULATION = 1000;
