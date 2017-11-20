@@ -2,7 +2,7 @@ package catchgame;
 
 import catchgame.Catch.LoginHandler;
 import catchgame.Catch.NewUserHandler;
-import catchgame.Catch.NewUserServerHandler;
+import catchgame.Catch.NewServerHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import userinterface.FrequencyHistogramPane;
