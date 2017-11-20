@@ -16,13 +16,12 @@ import authentication.BadUsernameException;
 import authentication.LoginError;
 import authentication.NewUserException;
 import authentication.UsernameError;
-
+import catchgame.Packets.ClientSubOceanSeaCreatureStatePacket;
 import catchgame.Packets.LoginPacket;
 import catchgame.Packets.NewUserPacket;
 import catchgame.Packets.ResultPacket;
 import catchgame.Packets.RequestPacket;
-import catchgame.Packets.ClientSubOceanSeaCreatureStatePacket;
-import catchgame.Packets.FishPacketsPacket;
+import catchgame.Packets.SeaCreaturesPacket;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -32,6 +31,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import resources.Fish;
 import resources.FishSpecies;
+import resources.Shellfish;
+import resources.ShellfishSpecies;
 import userinterface.ServerPane;
 
 /**
@@ -333,17 +334,35 @@ public class CatchServer
 					// if is a ClientSubOceanSeaCreaturePacket, send a FishPacket back
 					if (recievedObject instanceof ClientSubOceanSeaCreatureStatePacket)
 					{
-						ClientSubOceanSeaCreatureStatePacket subOceanFishStatePacket = (ClientSubOceanSeaCreatureStatePacket) recievedObject;
+						ClientSubOceanSeaCreatureStatePacket clientSubOceanSeaCreatureStatePacket = (ClientSubOceanSeaCreatureStatePacket) recievedObject;
+						//System.out.println("clientSubOcean.currentPopulationCod: "+clientSubOcean.currentPopulationCod);
+						//System.out.println("clientSubOcean.maxPopulationCod: "+clientSubOcean.maxPopulationCod);
 
 						ArrayList<Fish> codPacket = ocean.extractAndReturnABunchOfFish(FishSpecies.COD, 
-								subOceanFishStatePacket.currentPopulationCod, 
-								subOceanFishStatePacket.maxPopulationCod);
-						// System.out.println("cod cuurent population: "
-						// +subOceanFishStatePacket.currentPopulationCod);
-						// System.out.println("cod max population: "
-						// +subOceanFishStatePacket.maxPopulationCod);
+								clientSubOceanSeaCreatureStatePacket.currentPopulationCod, 
+								clientSubOceanSeaCreatureStatePacket.maxPopulationCod);
+						ArrayList<Fish> salmonPacket = ocean.extractAndReturnABunchOfFish(FishSpecies.SALMON, 
+								clientSubOceanSeaCreatureStatePacket.currentPopulationSalmon, 
+								clientSubOceanSeaCreatureStatePacket.maxPopulationSalmon);
+						ArrayList<Fish> tunaPacket = ocean.extractAndReturnABunchOfFish(FishSpecies.TUNA, 
+								clientSubOceanSeaCreatureStatePacket.currentPopulationTuna, 
+								clientSubOceanSeaCreatureStatePacket.maxPopulationTuna);
+						ArrayList<Shellfish> oysterPacket = ocean.ecxtractAndReturnABunchOfShellfish(ShellfishSpecies.OYSTER, 
+								clientSubOceanSeaCreatureStatePacket.currentPopulationOyster, 
+								clientSubOceanSeaCreatureStatePacket.maxPopulationOyster);
+						ArrayList<Shellfish> lobsterPacket = ocean.ecxtractAndReturnABunchOfShellfish(ShellfishSpecies.LOBSTER, 
+								clientSubOceanSeaCreatureStatePacket.currentPopulationLobster, 
+								clientSubOceanSeaCreatureStatePacket.maxPopulationLobster);
+						ArrayList<Shellfish> crabPacket = ocean.ecxtractAndReturnABunchOfShellfish(ShellfishSpecies.CRAB, 
+								clientSubOceanSeaCreatureStatePacket.currentPopulationCrab, 
+								clientSubOceanSeaCreatureStatePacket.maxPopulationCrab);
+						 //System.out.println("cod cuurent population: "
+						 //+clientSubOceanSeaCreatureStatePacket.currentPopulationCod);
+						 //System.out.println("cod max population: "
+						 //+clientSubOceanSeaCreatureStatePacket.maxPopulationCod);
 						// System.out.println("Num cod in packet:"+codPacket.size());
-						toClient.writeObject(new FishPacketsPacket(codPacket));
+						toClient.writeObject(new SeaCreaturesPacket(codPacket, salmonPacket, tunaPacket,
+								oysterPacket,lobsterPacket,crabPacket));
 					}
 				}
 				// TODO Consider refactor this into fewer catch blocks
