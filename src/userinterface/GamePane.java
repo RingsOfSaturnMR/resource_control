@@ -3,6 +3,7 @@ package userinterface;
 import java.util.ArrayList;
 import java.util.Random;
 
+import catchgame.GameControl;
 import catchgame.Player;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -35,14 +36,17 @@ public class GamePane extends VBox
 
 	public SimpleFishingPane simpleFishingPane;
 	private MarketsPane marketsPane;
+	private GameControl.FishingActivityActions fishingActivityActions;
+	private boolean fishingStarted=false;
 
 
-	public GamePane(EventHandler<ActionEvent> sellFishAction, Player player)
+	public GamePane(EventHandler<ActionEvent> sellFishAction, 
+			Player player, GameControl.FishingActivityActions fishingActivityActions)
 
 	{
 		this.player = player;
 		myStatsPane = new MyStatsPane();
-		
+		this.fishingActivityActions=fishingActivityActions;
 
 		simpleFishingPane = new SimpleFishingPane();
 		marketsPane = new MarketsPane(sellFishAction);
@@ -71,6 +75,12 @@ public class GamePane extends VBox
 			btnGoFishing.setOnAction(e -> {
 				primaryPane.getChildren().clear();
 				primaryPane.getChildren().add(simpleFishingPane);
+				if(fishingStarted){
+					//do nothing
+				}else{
+				fishingActivityActions.startFishingActivity();
+				fishingStarted=true;
+				}
 			});
 
 			btnCheckMyResources.setOnAction(e -> {

@@ -38,8 +38,8 @@ import userinterface.ServerPane;
  * This class Handles requests from clients for logging in, making new accounts
  * and extracting SeaCreatures from the Ocean. 
  * 
- * @author Matt Roberts
  * @author Nils Johnson
+ * @author Matt Roberts
  */
 public class CatchServer
 {

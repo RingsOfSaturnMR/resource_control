@@ -1,25 +1,13 @@
-package catchgame;
+package save_for_later_code;
 
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import resources.Fish;
 
 public class ClientSubOcean extends AbstractOcean{
 	
-	ObjectOutputStream toServer;
-	ObjectInputStream fromServer;
-	
 	int currentPopulationCod=0;
 	int maxPopulationCod=100;
-	
-	ClientSubOcean(ObjectOutputStream toServer, ObjectInputStream fromServer){
-		this.toServer=toServer;
-		this.fromServer=fromServer;
-	}
 	
 	public Fish extractFish(ArrayList<Fish>fishPopulation) throws Exception{
 		 Fish fish=fishPopulation.get(fishPopulation.size()-1);

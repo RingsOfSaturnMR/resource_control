@@ -1,8 +1,9 @@
-package catchgame;
+package save_for_later_code;
 
 import java.util.ArrayList;
 import java.util.Random;
 
+import catchgame.Constants;
 import resources.Fish;
 import resources.FishSpecies;
 import resources.SeaCreature;

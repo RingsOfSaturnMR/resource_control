@@ -7,7 +7,12 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import userinterface.FrequencyHistogramPane;
 import userinterface.LoginPane;
-
+/**
+ * 
+ * @author Matt Roberts
+ * @author Thanh Lam
+ *
+ */
 public class FrequencyHistogram {
 
 	Ocean ocean;

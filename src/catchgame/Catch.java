@@ -3,21 +3,14 @@ package catchgame;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.net.Socket;
-
 import catchgame.Packets.NewUserPacket;
 import catchgame.Packets.ResultPacket;
 import javafx.application.Application;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import resources.SeaCreature;
 import userinterface.LoginPane;
 import userinterface.NewUserPane;
 
@@ -35,7 +28,6 @@ public class Catch extends Application
 {
 	private LoginPane loginPane=null;
 	private Stage loginStage = new Stage();
-	private GameControl gameControl=null;
 	static CatchServer catchServer=null;
 	private Socket socket = null;
 
