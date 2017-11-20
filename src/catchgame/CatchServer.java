@@ -36,13 +36,11 @@ import userinterface.ServerPane;
 
 /**
  * This class Handles requests from clients for logging in, making new accounts
- * and extracting SeaCreatures from the Ocean.
+ * and extracting SeaCreatures from the Ocean. 
  * 
  * @author Matt Roberts
  * @author Nils Johnson
- *
  */
-
 public class CatchServer
 {
 	private Stage serverStage = new Stage();
@@ -72,20 +70,28 @@ public class CatchServer
 		new Thread(new HandleNewRequestsTask()).start();
 	}
 
-	
-	public class Launch_FH_PaneHandler implements EventHandler<ActionEvent>
+	/**
+	 * Action event that creates a new Frequency Histogram object 
+	 * and associated GUI.
+	 */
+	private class MakeFrequencyHistogramAction implements EventHandler<ActionEvent>
 	{
 		@Override
 		public void handle(ActionEvent e)
 		{
 			FrequencyHistogram fh=new FrequencyHistogram(ocean);
 		}
-}
+	}
 	
+	/**
+	 * Loads the Server Pane with a LaunchDbManipulatorHandler,
+	 * ShutdownServerHandler, MakeFrequencyHistogramAction given 
+	 * to the pane
+	 */
 	private void loadServerPane()
 	{
 		// makes a scene with a serverPane
-		serverPane = new ServerPane(new LaunchDbManipulatorHandler(), new ShutdownServerHandler(), new Launch_FH_PaneHandler());
+		serverPane = new ServerPane(new LaunchDbManipulatorHandler(), new ShutdownServerHandler(), new MakeFrequencyHistogramAction());
 		Scene serverScene = new Scene(serverPane, Constants.INITIAL_SERVER_PANE_WIDTH, Constants.INITIAL_SERVER_PANE_HEIGHT);
 		// show serverPane
 		serverStage.setScene(serverScene);
@@ -271,8 +277,9 @@ public class CatchServer
 	}
 
 	/**
-	 * An instance of this object is given to a thread, whose job is to handle the
-	 * communication between CatchServer and GameControl during a game.
+	 * Communicates between CatchServer and GameControl during a game,
+	 * and is designed to be given to a thread so that this communication
+	 * can occur freely while the rest of the program runs.
 	 */
 	class HandleServerSideGameControl implements Runnable
 	{
@@ -369,6 +376,10 @@ public class CatchServer
 		}
 	}
 	
+	/**
+	 * Simple getter for the server socket port
+	 * @return the server socket port
+	 */
 	public int getServerSocketPort()
 	{
 		return this.serverSocketPort;
@@ -384,6 +395,10 @@ public class CatchServer
 		this.listeningForNewClients.set(val);
 	}
 	
+	/**
+	 * Right now this action is a stub that just says the user has tried to 
+	 * shut down the server
+	 */
 	private class ShutdownServerHandler implements EventHandler<ActionEvent>
 	{
 		@Override
@@ -394,6 +409,9 @@ public class CatchServer
 		
 	}
 	
+	/**
+	 * Action for creating anew DatabaseManipulator object.
+	 */
 	private class LaunchDbManipulatorHandler implements EventHandler<ActionEvent>
 	{
 		@Override

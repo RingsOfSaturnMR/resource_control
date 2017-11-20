@@ -33,21 +33,28 @@ import userinterface.NewUserPane;
  */
 public class Catch extends Application
 {
-	private LoginPane loginPane;
+	private LoginPane loginPane=null;
 	private Stage loginStage = new Stage();
-	private GameControl gameControl;
-	static CatchServer catchServer;
+	private GameControl gameControl=null;
+	static CatchServer catchServer=null;
 	private Socket socket = null;
 
+	/**
+	 * Loads the initial login pane, which also is passed 
+	 * actions for making a new user and creating a server
+	 */
 	@Override
 	public void start(Stage primaryStage)
 	{
-		launchLoginPane();
+		loadLoginPane();
 	}
 
-	public void launchLoginPane()
+	/**
+	 * Loads a LoginPane.
+	 */
+	public void loadLoginPane()
 	{
-		loginPane = new LoginPane(new LoginHandler(), new NewUserHandler(), new NewUserServerHandler());
+		loginPane = new LoginPane(new LoginHandler(), new NewUserHandler(), new NewServerHandler());
 		Scene loginScene = new Scene(loginPane, Constants.LOGIN_PANE_WIDTH, Constants.LOGIN_PANE_HEIGHT);
 		loginStage.setScene(loginScene);
 		loginStage.setTitle("Catch! Log-in");
@@ -56,6 +63,10 @@ public class Catch extends Application
 		loginStage.requestFocus();
 	}
 
+	/**
+	 * Launches GameControl, where login is actually handled with info
+	 * from the loginPane used for logging in.
+	 */
 	public class LoginHandler implements EventHandler<ActionEvent>
 	{
 		@Override
@@ -65,6 +76,10 @@ public class Catch extends Application
 		}
 	}
 
+	/**
+	 * Loads a NewUserPane where a new user can be created, and if 
+	 * successful, loads GameControl
+	 */
 	public class NewUserHandler implements EventHandler<ActionEvent>
 	{
 		Stage newUserStage = new Stage();
@@ -150,7 +165,10 @@ public class Catch extends Application
 		};
 	}
 
-	public class NewUserServerHandler implements EventHandler<ActionEvent>
+	/**
+	 *	Launches a new CtachServer
+	 */
+	public class NewServerHandler implements EventHandler<ActionEvent>
 	{
 		@Override
 		public void handle(ActionEvent e)
@@ -165,6 +183,13 @@ public class Catch extends Application
 		}
 	}
 	
+	/**
+	 * Launches a new instance of GameControl with the user's login info
+	 * @param serverIpAddress the address of the server to log into
+	 * @param clientPort the port the client is to use
+	 * @param playerName the player's username for logging in
+	 * @param playerPassword the player's password for logging in
+	 */
 	private void launchGameControl(String serverIpAddress, int clientPort, String playerName, String playerPassword)
 	{
 		try
@@ -179,6 +204,10 @@ public class Catch extends Application
 	
 
 	// main method to launch program
+	/**
+	 * Main method for launching application
+	 * @param args command line array of String arguments
+	 */
 	public static void main(String[] args)
 	{
 		Runtime.getRuntime().addShutdownHook(new Thread()

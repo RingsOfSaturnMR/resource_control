@@ -1,54 +1,28 @@
 package catchgame;
 
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
-import resources.Boat;
-import resources.BoatTypes;
-import resources.Equipment;
 import resources.Fish;
-import resources.FishSpecies;
-import resources.SeaCreature;
 import userinterface.GamePane;
-import userinterface.LoginPane;
-
-import java.io.DataInputStream;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-
 import java.util.Random;
-
-import java.util.Date;
-import java.util.Random;
-
 import catchgame.Packets.ClientSubOceanSeaCreatureStatePacket;
 import catchgame.Packets.FishPacketsPacket;
 import catchgame.Packets.LoginPacket;
 import catchgame.Packets.ResultPacket;
-import javafx.application.Platform;
-
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import resources.Boat;
-import resources.BoatTypes;
-import resources.Equipment;
-import resources.Fish;
-import resources.FishSpecies;
-import resources.SeaCreature;
-import userinterface.GamePane;
 
 /**
  * This class is a client that lets users extract resources, and drives the GUI
- * for the gameplay.
+ * the gameplay.
  * 
  * @author Nils Johnson
  * @author Matt Roberts
@@ -78,7 +52,6 @@ public class GameControl
 	 * @param toServer The ObjectOutputStream to the server.
 	 * @param fromServer The ObjectInputStream from the server.
 	 */
-
 	public GameControl(String serverIpAddress, int clientPort, String enteredName, String enteredPassword) throws Exception
 	{
 		// set the socket
@@ -118,6 +91,14 @@ public class GameControl
 
 	}
 
+	/**
+	 * Takes user's name and password and logs them in, or throws an 
+	 * exception that will make GameControl pass out of scope and get 
+	 * propagated back to where it was instantiated.
+	 * @param enteredName
+	 * @param enteredPassword
+	 * @throws Exception
+	 */
 	private void logPlayerIn(String enteredName, String enteredPassword) throws Exception
 	{
 		// send login info to server
@@ -169,6 +150,9 @@ public class GameControl
 
 	}
 
+	/**
+	 * Action that occurs when a fish is sold.
+	 */
 	private class SellFishAction implements EventHandler<ActionEvent>
 	{
 		@Override
@@ -178,6 +162,10 @@ public class GameControl
 		}
 	}
 
+	/**
+	 * Requests new SeaCreatures from Server, and adds them to the screen
+	 * if any or sent
+	 */
 	class UpdateFishOnScreenTask implements Runnable
 	{
 
@@ -197,6 +185,14 @@ public class GameControl
 		}
 	}
 
+	/**
+	 * Actually makes the request for new SeaCreatures from the server
+	 * and sends a new ClientSubOceanSeaCreatureStatePacket so that
+	 * the server can no what to send, listens for SeaCreatures sent 
+	 * from server and returns any
+	 * 
+	 * @return The SeaCreatures sent by the server
+	 */
 	public ArrayList<Fish> getUpdateSeaCreaturesPacketFromServer()
 	{
 		// System.out.println("before getting size");
@@ -224,6 +220,14 @@ public class GameControl
 	}
 
 	// should be put in SimpleFishingPane
+	/**
+	 * Adds fish to the screen between the topOffset and
+	 * bottomOffset and of the given color
+	 * @param fishUpdate the fish to add to the screen
+	 * @param topOffset the highest the fish can be on the screen
+	 * @param bottomOffset the lowest the fish can be on the screen
+	 * @param color the color the fish should be given
+	 */
 	public void addFishPacketToScreen(ArrayList<Fish> fishUpdate, int topOffset, int bottomOffset, Color color)
 	{
 		for (int i = 0; i <= fishUpdate.size() - 1; i++)
@@ -233,6 +237,14 @@ public class GameControl
 	}
 
 	// should be put in SimpleFishingPane
+	/**
+	 * Adds an individual fish to the screen between the topOffset and
+	 * bottomOffset and of the given color
+	 * @param fish the fish to add to the screen
+	 * @param topOffset the highest the fish can be on the screen
+	 * @param bottomOffset the lowest the fish can be on the screen
+	 * @param color the color the fish should be given
+	 */
 	public void addFishToScreen(Fish fish, int topOffset, int bottomOffset, Color color)
 	{
 		fish.SetBodyByWeight();
@@ -254,6 +266,9 @@ public class GameControl
 		});
 	}
 
+	/**
+	* Action that occurs when a fish is caught.
+	 */
 	private class ExtractFishAction implements EventHandler<MouseEvent>
 	{
 		Fish fish;
@@ -295,12 +310,24 @@ public class GameControl
 		};
 	}
 
+	/**
+	 * Returns random int in the specified range.
+	 * @param min the minimum value for the range
+	 * @param max the maximum value for the range
+	 * @return A random int in the specified range
+	 */
 	private int getRandomInt(int min, int max)
 	{
 		int randomInt = rand.nextInt(max) + min;
 		return randomInt;
 	}
 
+	/**
+	 * Returns random double in the specified range.
+	 * @param min min the minimum value for the range
+	 * @param max the minimum value for the range
+	 * @return A random double in the specified range
+	 */
 	private double getRandomDouble(double max, double min)
 	{
 		double randomDouble = (max - min) * rand.nextDouble() + min;
