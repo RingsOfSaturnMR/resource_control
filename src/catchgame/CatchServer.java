@@ -29,6 +29,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import resources.Fish;
 import resources.FishSpecies;
 import resources.Shellfish;
@@ -49,6 +50,7 @@ public class CatchServer
 	private UserDAO userDAO = null;
 	private int serverSocketPort;
 	private SimpleBooleanProperty listeningForNewClients = new SimpleBooleanProperty(false);
+	private Thread newClientThread = null;
 
 	public Ocean ocean = new Ocean();
 
@@ -62,13 +64,23 @@ public class CatchServer
 		try
 		{
 			userDAO = new UserDAO();
+			newClientThread = new Thread(new HandleNewRequestsTask());
+			newClientThread.start();
+			
+			serverStage.setOnCloseRequest(e ->
+			{
+				// TODO logic for shutdown of server goes here
+				System.out.println("Server Shutdown action fired");
+				// tell server to stop listening, maybe flush the streams somehow
+				listeningForNewClients.set(false);
+				// get all the streams that are open to close somehow?
+			});
 		}
 		catch (SQLException e)
 		{
 			Platform.runLater(() -> serverPane.appendToOutput(e.getMessage()));
 			e.printStackTrace();
 		}
-		new Thread(new HandleNewRequestsTask()).start();
 	}
 
 	/**
@@ -274,6 +286,8 @@ public class CatchServer
 				serverPane.appendToOutput(e.getMessage());
 				e.printStackTrace();
 			}
+			System.out.println("Server Is No Longer Listening For New Clients. Thread Stopped.");
+			return;
 		}
 	}
 
@@ -327,7 +341,7 @@ public class CatchServer
 							loggedIn = false;
 							continue;
 						default:
-
+							Platform.runLater(() -> serverPane.appendToOutput("Unknown Request from " + username + " recieved"));
 						}
 					}
 
@@ -423,7 +437,7 @@ public class CatchServer
 		@Override
 		public void handle(ActionEvent arg0)
 		{
-			System.out.println("Server Shutdown action fired");
+			serverStage.fireEvent(new WindowEvent(serverStage, WindowEvent.WINDOW_CLOSE_REQUEST));	
 		}
 		
 	}
