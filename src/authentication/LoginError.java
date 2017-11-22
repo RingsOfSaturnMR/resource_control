@@ -14,7 +14,7 @@ public enum LoginError
 	INVALID_PASSWORD,
 
 	/**
-	 * Username entered does not match a found username
+	 * Username match not found
 	 */
 	USER_NOT_FOUND,
 
@@ -24,8 +24,8 @@ public enum LoginError
 	NO_USERS,
 
 	/**
-	 * Input for name or password is too short. Flags condition in which a database
-	 * call should not be made
+	 * User input for name or password is too short. Flags condition in which a database
+	 * call should not be made, due to obvious login issue. Example Useage: User simply didnt enter a password.
 	 */
 	INVALID_ATTEMPT
 }

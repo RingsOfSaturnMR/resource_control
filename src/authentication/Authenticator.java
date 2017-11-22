@@ -27,13 +27,12 @@ public class Authenticator
 	{ ' ', '!', '#', '%', '^', '&', '*' };
 
 	/**
+	 * This method takes a String and returns null if it is a legally formatted
+	 * password, otherwise it returns a list of the problems it has.
 	 * 
-	 * @param enteredPassword
-	 * @return errorList
-	 * 
-	 *         This method takes a String and returns null if it is a legally
-	 *         formatted password, otherwise it returns a list of the problems it
-	 *         has.
+	 * @param enteredPassword The password being checked.
+	 * @return errorList or null List of problems with the password. Null if no
+	 *         errors.
 	 */
 	public static ArrayList<PasswordError> checkPasswordLegality(String enteredPassword)
 	{
@@ -129,10 +128,9 @@ public class Authenticator
 	}
 
 	/**
-	 * This method checks to see if a username is legally formatted. If it is, it
-	 * returns null, otherwise it returns a list with the problems.
+	 * This method checks to see if a username is legally formatted. 
 	 * 
-	 * @param username
+	 * @param username The name being checked.
 	 * @return errorList or null
 	 */
 	public static ArrayList<UsernameError> checkUsernameLegality(String username)

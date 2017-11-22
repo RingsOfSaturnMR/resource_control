@@ -16,7 +16,7 @@ public class EncryptionFilter
 	public static int MAX = 255;
 
 	/**
-	 * 
+	 * Encrypts a String
 	 * @param plainText The String to encrypt.
 	 * @param key The String being used to encrypt.
 	 * @return An encrypted String. 
@@ -33,7 +33,7 @@ public class EncryptionFilter
 	}
 
 	/**
-	 * 
+	 * Decrypts a String
 	 * @param cipherText The encrypted String.
 	 * @param key The String that will decrypt the cipherText
 	 * @return A decrypted String.
@@ -55,7 +55,7 @@ public class EncryptionFilter
 	}
 
 	/**
-	 * 
+	 * Generates random keys for encrypting. 
 	 * @return A randomly generated String to be used as a key.
 	 */
 	public static String getRandomKey()

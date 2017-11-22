@@ -41,7 +41,7 @@ public class EquipmentMarket extends Market<Equipment>
 		return 0;
 	}
 	
-	// ammount of money you recieve when you sell old equip
+	// amount of money you recieve when you sell old equip
 	public double getItemValue(Equipment item)
 	{
 		// TODO Auto-generated method stub
