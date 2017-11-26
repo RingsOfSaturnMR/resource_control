@@ -98,6 +98,7 @@ public class FishingActivity {
 				seaCreaturesPacket.lobsterPopulation.size();
 		addShellfishPacketToScreen(seaCreaturesPacket.lobsterPopulation, 0, 0, Color.RED);
 		
+		System.out.println("Adding crab to subocean: "+seaCreaturesPacket.crabPopulation.size());
 		clientSubOcean.currentPopulationCrab+=
 				seaCreaturesPacket.crabPopulation.size();
 		addShellfishPacketToScreen(seaCreaturesPacket.crabPopulation, 0, 0, Color.BLACK);
@@ -115,7 +116,7 @@ public class FishingActivity {
 	{
 		try
 		{
-			System.out.println("in client clientSubOcean.currentPopulationCod: "+clientSubOcean.currentPopulationCod);
+			//System.out.println("in client clientSubOcean.currentPopulationCod: "+clientSubOcean.currentPopulationCod);
 			ClientSubOceanSeaCreatureStatePacket clientSubOceanSeaCreatureStatePacket=
 					new ClientSubOceanSeaCreatureStatePacket(clientSubOcean.currentPopulationCod, 
 							clientSubOcean.maxPopulationCod, 
@@ -124,11 +125,17 @@ public class FishingActivity {
 							clientSubOcean.currentPopulationOyster, clientSubOcean.maxPopulationOyster,
 							clientSubOcean.currentPopulationLobster, clientSubOcean.maxPopulationLobster,
 							clientSubOcean.currentPopulationCrab, clientSubOcean.maxPopulationCrab);
+			System.out.println("in client clientSubOcean.currentPopulationCod: "+clientSubOcean.currentPopulationCod);
+			System.out.println("in client clientSubOcean.currentPopulationSalmon: "+clientSubOcean.currentPopulationSalmon);
+			System.out.println("in client clientSubOcean.currentPopulationTuna: "+clientSubOcean.currentPopulationTuna);
+			System.out.println("in client clientSubOcean.currentPopulationOyster: "+clientSubOcean.currentPopulationOyster);
+			System.out.println("in client clientSubOcean.currentPopulationLobster: "+clientSubOcean.currentPopulationLobster);
+			System.out.println("in client clientSubOcean.currentPopulationCrab: "+clientSubOcean.currentPopulationCrab);
 			toServer.writeObject(clientSubOceanSeaCreatureStatePacket);
-			 System.out.println("Sent codStatePacket");
-			 System.out.println("before getting fish packet");
+			 //System.out.println("Sent codStatePacket");
+			 //System.out.println("before getting fish packet");
 			SeaCreaturesPacket seaCreaturesPacket = (SeaCreaturesPacket) fromServer.readObject();
-			 System.out.println("after getting fish packet");
+			 //System.out.println("after getting fish packet");
 			return seaCreaturesPacket;
 		}
 		catch (IOException ex)
@@ -262,12 +269,18 @@ public class FishingActivity {
 					{
 
 						gamePane.simpleFishingPane.getChildren().remove(fish.getBody());
-						if (fish.getSpecies()==FishSpecies.COD);
+						if (fish.getSpecies()==FishSpecies.COD){
+							System.out.println("It's a cod");
 							clientSubOcean.currentPopulationCod--;
-						if (fish.getSpecies()==FishSpecies.SALMON);
+						}
+						if (fish.getSpecies()==FishSpecies.SALMON){
+							System.out.println("It's a salmon");
 							clientSubOcean.currentPopulationSalmon--;
-						if (fish.getSpecies()==FishSpecies.TUNA);
+						}
+						if (fish.getSpecies()==FishSpecies.TUNA){
+							System.out.println("");
 							clientSubOcean.currentPopulationTuna--;
+						}
 
 							updateSeaCreaturesOnScreen();
 					}
@@ -309,11 +322,11 @@ public class FishingActivity {
 					{
 
 						gamePane.simpleFishingPane.getChildren().remove(shellfish.getBody());
-						if (shellfish.getSpecies()==ShellfishSpecies.CRAB);
+						if (shellfish.getSpecies()==ShellfishSpecies.CRAB)
 							clientSubOcean.currentPopulationCrab--;
-						if (shellfish.getSpecies()==ShellfishSpecies.LOBSTER);
+						if (shellfish.getSpecies()==ShellfishSpecies.LOBSTER)
 							clientSubOcean.currentPopulationLobster--;
-						if (shellfish.getSpecies()==ShellfishSpecies.OYSTER);
+						if (shellfish.getSpecies()==ShellfishSpecies.OYSTER)
 							clientSubOcean.currentPopulationOyster--;
 
 						updateSeaCreaturesOnScreen();

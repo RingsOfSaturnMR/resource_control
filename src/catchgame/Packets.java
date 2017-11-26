@@ -121,6 +121,7 @@ public class Packets
 			this.currentPopulationLobster=currentPopulationLobster;
 			this.maxPopulationLobster=maxPopulationLobster;
 			this.currentPopulationCrab=currentPopulationCrab;
+			this.maxPopulationCrab=maxPopulationCrab;
 			
 		}
 
