@@ -50,7 +50,6 @@ public class Catch extends Application
 		Scene loginScene = new Scene(loginPane, Constants.LOGIN_PANE_WIDTH, Constants.LOGIN_PANE_HEIGHT);
 		loginStage.setScene(loginScene);
 		loginStage.setTitle("Catch! Log-in");
-		loginStage.centerOnScreen();
 		loginStage.show();
 		loginStage.requestFocus();
 	}
@@ -191,11 +190,12 @@ public class Catch extends Application
 		catch (Exception e1)
 		{
 			loginPane.setErrorText(e1.getMessage());
+			System.out.println(e1.getMessage());
+			e1.printStackTrace();
 		}
 	}
 	
 
-	// main method to launch program
 	/**
 	 * Main method for launching application
 	 * @param args command line array of String arguments

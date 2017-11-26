@@ -28,10 +28,10 @@ public class LoginPane extends VBox
 
 	// fields for entry, filled with default values for easy testing
 
-	private TextField tfName = new TextField("testUser");
-	private TextField pfPassword = new TextField("testPass1!");
+	private TextField tfName = new TextField();
+	private TextField pfPassword = new TextField();
 	private TextField tfServerIp = new TextField("localhost");
-	private TextField tfClientPort = new TextField("8000");
+	private TextField tfClientPort = new TextField();
 	
 	// containers
 	private GridPane loginGridPane = new GridPane();

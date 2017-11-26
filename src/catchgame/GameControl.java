@@ -4,6 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import market.SeafoodMarket;
+import resources.FishSpecies;
 import userinterface.GamePane;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -24,18 +26,20 @@ public class GameControl
 {
 	private Player player = null;
 
-	// GUI stuff
+	// for user interface
 	private GamePane gamePane;
 	FishingActivity fishingActivity;
 	private Stage gameStage = new Stage();
 	private Scene gameScene;
 
-	// server communication stuff
+	// for server
 	private Socket socket;
 	private ObjectOutputStream toServer = null;
 	private ObjectInputStream fromServer = null;
 
-	private Random rand = new Random();
+	// for exchanginng resources for money
+	
+	SeafoodMarket market = new SeafoodMarket("The Fish Market");
 
 	/**
 	 * Starts a new game
@@ -78,9 +82,9 @@ public class GameControl
 	 * Takes user's name and password and logs them in, or throws an 
 	 * exception that will make GameControl pass out of scope and get 
 	 * propagated back to where it was instantiated.
-	 * @param enteredName
-	 * @param enteredPassword
-	 * @throws Exception
+	 * @param enteredName username
+	 * @param enteredPassword	password
+	 * @throws Exception LoginException or network related exception
 	 */
 	private void logPlayerIn(String enteredName, String enteredPassword) throws Exception
 	{
@@ -153,6 +157,7 @@ public class GameControl
 	{
 		try
 		{
+			player.prepareToSerialze();
 			toServer.writeObject(player);
 		}
 		catch (IOException e1)
@@ -170,12 +175,11 @@ public class GameControl
 	{
 		try
 		{
-			// TODO
 			toServer.writeObject(new Packets.RequestPacket(Codes.LOGOUT_REQUEST_CODE));
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
+			// TODO consider adding a client side log to write theses things to
 			e.printStackTrace();
 		}
 

@@ -3,7 +3,9 @@ package market;
 import java.util.ArrayList;
 import java.util.Date;
 
+import resources.FishSpecies;
 import resources.SeaCreature;
+import resources.ShellfishSpecies;
 
 
 /*
@@ -13,7 +15,7 @@ import resources.SeaCreature;
  - Use the Constants class to get the market fluctuation value, and how long before prices expire.
  
  */
-public class SeafoodMarket extends Market<SeaCreature>
+public class SeafoodMarket extends Market<SeaCreature, Enum>
 {
 
 	public SeafoodMarket(String name)
@@ -23,10 +25,20 @@ public class SeafoodMarket extends Market<SeaCreature>
 	}
 
 	@Override
-	public double getCurrentPrice(SeaCreature item)
+	public double getCurrentPricePerPound(Enum species)
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		if(species instanceof ShellfishSpecies)
+		{
+			return 2;
+		}
+		if(species instanceof FishSpecies)
+		{
+			return 3;
+		}
+		else
+		{
+			return 0;
+		}
 	}
 
 	@Override

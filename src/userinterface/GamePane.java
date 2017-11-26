@@ -3,6 +3,7 @@ package userinterface;
 import java.util.ArrayList;
 import java.util.Random;
 
+import catchgame.Constants;
 import catchgame.GameControl;
 import catchgame.Player;
 import javafx.event.ActionEvent;
@@ -10,6 +11,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -17,7 +19,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-
+import market.SeafoodMarket;
 import resources.Boat;
 import resources.BoatTypes;
 import resources.Equipment;
@@ -37,16 +39,14 @@ public class GamePane extends VBox
 	public SimpleFishingPane simpleFishingPane;
 	private MarketsPane marketsPane;
 	private GameControl.FishingActivityActions fishingActivityActions;
-	private boolean fishingStarted=false;
+	private boolean fishingStarted = false;
 
-
-	public GamePane(EventHandler<ActionEvent> sellFishAction, 
-			Player player, GameControl.FishingActivityActions fishingActivityActions)
+	public GamePane(EventHandler<ActionEvent> sellFishAction, Player player, GameControl.FishingActivityActions fishingActivityActions)
 
 	{
 		this.player = player;
 		myStatsPane = new MyStatsPane();
-		this.fishingActivityActions=fishingActivityActions;
+		this.fishingActivityActions = fishingActivityActions;
 
 		simpleFishingPane = new SimpleFishingPane();
 		marketsPane = new MarketsPane(sellFishAction);
@@ -72,18 +72,23 @@ public class GamePane extends VBox
 		public ActionVBox()
 		{
 			// set button actions
-			btnGoFishing.setOnAction(e -> {
+			btnGoFishing.setOnAction(e ->
+			{
 				primaryPane.getChildren().clear();
 				primaryPane.getChildren().add(simpleFishingPane);
-				if(fishingStarted){
-					//do nothing
-				}else{
-				fishingActivityActions.startFishingActivity();
-				fishingStarted=true;
+				if (fishingStarted)
+				{
+					// do nothing
+				}
+				else
+				{
+					fishingActivityActions.startFishingActivity();
+					fishingStarted = true;
 				}
 			});
 
-			btnCheckMyResources.setOnAction(e -> {
+			btnCheckMyResources.setOnAction(e ->
+			{
 				primaryPane.getChildren().clear();
 				// TODO use observables or something, so that it automatically changes.
 				// this forces a refresh, dont leave this way...
@@ -91,7 +96,8 @@ public class GamePane extends VBox
 				primaryPane.getChildren().add(myStatsPane);
 			});
 
-			btnGoToMarket.setOnAction(e -> {
+			btnGoToMarket.setOnAction(e ->
+			{
 				primaryPane.getChildren().clear();
 				primaryPane.getChildren().add(marketsPane);
 			});
@@ -122,12 +128,12 @@ public class GamePane extends VBox
 		Label lblCashOnHand = new Label("Available $: ");
 		Label lblSkillLevel = new Label("Skill Level: ");
 		Label lblNumSeaCreatures = new Label("Number SeaCreatures: ");
-		
+
 		// Text Fields
-		Text txtName = new Text("");
+		Text txtName = new Text(player.getUsername());
 		Text txtCashOnHand = new Text(Double.toString(player.getCashOnHand()));
 		Text txtSkillLevel = new Text(Integer.toString(player.getSkillLevel()));
-		Text textNumSeaCreatures = new Text(Integer.toString(player.getIceChest().size()));
+		Text textNumSeaCreatures = new Text(player.getIceChest() == null ? "0" : Integer.toString(player.getIceChest().size()));
 
 		GridPane statsGridPane = new GridPane();
 
@@ -149,21 +155,20 @@ public class GamePane extends VBox
 		}
 	}
 
-
 	public class SimpleFishingPane extends Pane
 	{
 		// temp for now to show professor miller where we are going with this.
-		//Pane explainPane = new Pane();
-		//Pane fishPane = new Pane();
+		// Pane explainPane = new Pane();
+		// Pane fishPane = new Pane();
 
 		private Random rand = new Random();
-		//private int numCreaturesOnScreen = 0;
-		//private Button btnExtractFishAction = new Button("Extract Fish");
-		//private ArrayList<SeaCreature> creaturesOnScreen = new ArrayList<>();
-		private Label labelExplanation = new Label("Right now the fish are shown as dots. These dots are from SeaCreature objects, extracted " 
-				+ "from an Ocean object belonging the server and sent to this client. We plan to animate them, and make it so that when they are "
-				+ "clicked (or however else caught), they are added (By calling the function attatched to the button) to the players resouces array, "
-				+ "which they can sell, to get better fishing equipment");
+		// private int numCreaturesOnScreen = 0;
+		// private Button btnExtractFishAction = new Button("Extract Fish");
+		// private ArrayList<SeaCreature> creaturesOnScreen = new ArrayList<>();
+		private Label labelExplanation = new Label(
+				"Right now the fish are shown as dots. These dots are from SeaCreature objects, extracted " + "from an Ocean object belonging the server and sent to this client. We plan to animate them, and make it so that when they are " +
+						"clicked (or however else caught), they are added (By calling the function attatched to the button) to the players resouces array, " +
+						"which they can sell, to get better fishing equipment");
 
 		public SimpleFishingPane()
 		{
@@ -172,34 +177,12 @@ public class GamePane extends VBox
 			this.setMinHeight(400);
 			labelExplanation.setMaxWidth(500);
 			labelExplanation.setWrapText(true);
-			//labelExplanation.setTranslateY(50);
-			//btnExtractFishAction.setOnAction(extractFishAction);
+			// labelExplanation.setTranslateY(50);
+			// btnExtractFishAction.setOnAction(extractFishAction);
 			this.getChildren().addAll(labelExplanation);
-			
+
 		}
 
-		/*
-		public void addCreature(SeaCreature creature)
-		{
-			numCreaturesOnScreen++;
-			creaturesOnScreen.add(creature);
-
-//			creaturesOnScreen.get(numCreaturesOnScreen - 1).getBody().setCenterX(getRandomDouble(0, getMinWidth()));
-//			creaturesOnScreen.get(numCreaturesOnScreen - 1).getBody().setCenterY(getRandomDouble(100, getMinHeight()));
-			
-			this.getChildren().add(creaturesOnScreen.get(numCreaturesOnScreen - 1).getBody());
-			
-			creaturesOnScreen.get(numCreaturesOnScreen - 1).getBody().setCenterX(27);
-			creaturesOnScreen.get(numCreaturesOnScreen - 1).getBody().setCenterY(50);
-		}
-
-		*/
-
-		private double getRandomDouble(double max, double min)
-		{
-			double randomDouble = (max - min) * rand.nextDouble() + min;
-			return randomDouble;
-		}
 	}
 
 	private class BoatFishingPane extends Pane
@@ -218,17 +201,44 @@ public class GamePane extends VBox
 
 	}
 
-	private class MarketsPane extends StackPane
+	private class MarketsPane extends VBox
 	{
 		private Button btnSellFishAction = new Button("Sell Fish");
+		private Label lblPrices = new Label("Current Prices");
+		private GridPane priceGridPane = new GridPane();
+		private SeafoodMarket market = new SeafoodMarket("Market");
+		private Text txtMarketName;
+		private ListView<SeaCreature> seaCreatureListView = null;
 
 		public MarketsPane(EventHandler<ActionEvent> sellFishAction)
 		{
-			this.setWidth(200);
-			this.setHeight(200);
+			txtMarketName = new Text(market.getName());
+			seaCreatureListView = new ListView(player.getIceChest());
+
+			int i = 0;
+			while (i < Constants.supportedSpecies.size())
+			{
+				// node, col, row
+				priceGridPane.add(new Label(Constants.supportedSpecies.get(i).toString()), 0, i);
+				double price = market.getCurrentPricePerPound(Constants.supportedSpecies.get(i));
+				priceGridPane.add(new Text(Double.toString(price)), 1, i);
+
+				i++;
+			}
+
+			/*seaCreatureListView.getSelectionModel().selectedItemProperty().addListener(ov ->
+			{
+				pwViewGridPane.getChildren();
+
+				for (Integer i : seaCreatureList.getSelectionModel().getSelectedIndices())
+				{
+
+				}
+				;
+			});*/
 
 			btnSellFishAction.setOnAction(sellFishAction);
-			this.getChildren().addAll(btnSellFishAction);
+			this.getChildren().addAll(priceGridPane, seaCreatureListView, btnSellFishAction);
 		}
 	}
 

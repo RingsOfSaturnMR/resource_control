@@ -3,6 +3,8 @@ package catchgame;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import resources.Equipment;
 import resources.SeaCreature;
 
@@ -13,9 +15,11 @@ public class Player extends authentication.User implements Serializable
 	private int skillLevel;
 	
 	// resources
-	private ArrayList<SeaCreature> iceChest = new ArrayList<>();
+	// to be serialized
+	private SeaCreature[] iceChestArray = null;
 	private ArrayList<Equipment> toolChest = new ArrayList<>();
-
+	
+	private transient ObservableList<SeaCreature> iceChest = FXCollections.observableArrayList();
 	
 	public Player(String username)
 	{
@@ -26,6 +30,10 @@ public class Player extends authentication.User implements Serializable
 
 	public void addSeaCreatureToIceChest(SeaCreature item)
 	{
+		if(iceChest == null)
+		{
+			iceChest = FXCollections.observableArrayList(iceChestArray);
+		}
 		iceChest.add(item);
 	}
 	
@@ -54,9 +62,23 @@ public class Player extends authentication.User implements Serializable
 		cashOnHand -= amount;
 	}
 	
-	public ArrayList<SeaCreature> getIceChest()
+	public ObservableList<SeaCreature> getIceChest()
 	{
 		return this.iceChest;
+	}
+	
+	/**
+	 * Must be called prior to serialization.
+	 * Converts Observable Lists to primitive arrays. 
+	 */
+	public void prepareToSerialze()
+	{
+		iceChestArray = new SeaCreature[iceChest.size()];
+		
+		for(int i = 0; i < iceChestArray.length; i++)
+		{
+			iceChestArray[i] = iceChest.get(i);
+		}
 	}
 
 }

@@ -153,6 +153,7 @@ public class UserDAO implements IUserDAO
 
 		try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(enteredUsername + ".dat"));)
 		{
+			player.prepareToSerialze();
 			output.writeObject(player);
 		}
 	}
