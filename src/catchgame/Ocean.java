@@ -251,12 +251,12 @@ public class Ocean implements Serializable
 	 */
 	private void fillOceanInitially()
 	{
+		addABunchOfCrab(Constants.CRAB_INITIAL_POPULATION);
 		addABunchOfCod(Constants.COD_INITIAL_POPULATION);
 		addABunchOfSalmon(Constants.SALMON_INITIAL_POPULATION);
 		addABunchOfTuna(Constants.TUNA_INITIAL_POPULATION);
 		addABunchOfOyster(Constants.OYSTER_INITIAL_POPULATION);
 		addABunchOfLobster(Constants.LOBSTER_INITIAL_POPULATION);
-		addABunchOfCrab(Constants.CRAB_INITIAL_POPULATION);
 	}
 
 	/**
@@ -350,7 +350,7 @@ public class Ocean implements Serializable
 	 */
 	private void updateCrabPopulation(){
 		updateShellfishPopulation(regenerationTimeInterval, 
-				crabPopulation, Constants.COD_MAX_POPULATION, 
+				crabPopulation, Constants.CRAB_MAX_POPULATION, 
 				ShellfishSpecies.CRAB);
 	}
 	
@@ -490,6 +490,7 @@ public class Ocean implements Serializable
 	 * @param numCrabToAdd the number of crab to instantiate and add
 	 */
 	private void addABunchOfCrab(int numCrabToAdd){
+		System.out.println("adding "+numCrabToAdd);
 		addABunchOfShellfish(crabPopulation, ShellfishSpecies.CRAB, 
 				numCrabToAdd);
 	}
