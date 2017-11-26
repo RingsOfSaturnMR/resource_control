@@ -197,7 +197,6 @@ public class Catch extends Application
 	}
 	
 
-	// main method to launch program
 	/**
 	 * Main method for launching application
 	 * @param args command line array of String arguments

@@ -3,8 +3,8 @@ package userinterface;
 import java.util.ArrayList;
 
 import authentication.Authenticator;
-import authentication.PasswordError;
-import authentication.UsernameError;
+import authentication.NewUserException.UsernameError;
+import authentication.NewUserException.PasswordError;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;

@@ -14,11 +14,12 @@ import authentication.BadLoginException;
 import authentication.BadPasswordException;
 import authentication.BadUsernameException;
 import authentication.EncryptionFilter;
-import authentication.LoginError;
+
 import authentication.NewUserException;
-import authentication.PasswordError;
+import authentication.NewUserException.PasswordError;
+import authentication.NewUserException.UsernameError;
 import authentication.User;
-import authentication.UsernameError;
+import authentication.BadLoginException.LoginError;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

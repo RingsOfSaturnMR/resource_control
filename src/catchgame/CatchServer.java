@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import authentication.BadLoginException;
+import authentication.BadLoginException.LoginError;
 import authentication.BadPasswordException;
 import authentication.BadUsernameException;
-import authentication.LoginError;
 import authentication.NewUserException;
-import authentication.UsernameError;
+import authentication.NewUserException.UsernameError;
 import catchgame.Packets.ClientSubOceanSeaCreatureStatePacket;
 import catchgame.Packets.LoginPacket;
 import catchgame.Packets.NewUserPacket;
