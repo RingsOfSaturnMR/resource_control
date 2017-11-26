@@ -187,6 +187,8 @@ public class Catch extends Application
 		try
 		{
 			new GameControl(serverIpAddress, clientPort, playerName, playerPassword);
+			loginStage.close();
+			
 		}
 		catch (Exception e1)
 		{
