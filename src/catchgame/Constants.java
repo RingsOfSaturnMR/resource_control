@@ -70,9 +70,6 @@ public class Constants
 	// Basics
 	public final static String APPLICATION_NAME = "Catch! - By Caileigh, Matt, Nils, Thanh";
 	
-	// to use throughout program to make sure every species works
-	// thoughts?
-	public final static ArrayList<FishSpecies> supportedFishSpecies = new ArrayList<>(Arrays.asList(FishSpecies.COD, FishSpecies.SALMON, FishSpecies.TUNA));
-	public final static ArrayList<ShellfishSpecies> supportedShellfishSpecies = new ArrayList<>(Arrays.asList(ShellfishSpecies.CRAB, ShellfishSpecies.LOBSTER, ShellfishSpecies.OYSTER));
+	// to use throughout program to make sure every species gets accounted for in gameplay
 	public final static ArrayList<Enum> supportedSpecies = new ArrayList<>(Arrays.asList(FishSpecies.COD, FishSpecies.SALMON, FishSpecies.TUNA, ShellfishSpecies.CRAB, ShellfishSpecies.LOBSTER, ShellfishSpecies.OYSTER));
 }

@@ -6,6 +6,8 @@ import java.util.Random;
 import catchgame.Constants;
 import catchgame.GameControl;
 import catchgame.Player;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -24,6 +26,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.WindowEvent;
+import market.Market;
 import market.SeafoodMarket;
 import resources.Boat;
 import resources.BoatTypes;
@@ -63,14 +66,14 @@ public class GamePane extends VBox
 	private MenuItem saveMenuItem = new MenuItem("Save");
 	private MenuItem exitMenuItem = new MenuItem("Exit");
 
-	public GamePane(EventHandler<ActionEvent> sellFishAction, Player player, FishingActivityActions fishingActivityActions, EventHandler<ActionEvent> deleteAccountAction, EventHandler<ActionEvent> saveAction, EventHandler<ActionEvent> exitAction)
+	public GamePane(EventHandler<ActionEvent> sellFishAction, Player player, FishingActivityActions fishingActivityActions, EventHandler<ActionEvent> deleteAccountAction, EventHandler<ActionEvent> saveAction, EventHandler<ActionEvent> exitAction, SeafoodMarket seafoodMarket)
 	{
 		this.player = player;
 		myStatsPane = new MyStatsPane();
 		this.fishingActivityActions = fishingActivityActions;
 
 		simpleFishingPane = new SimpleFishingPane();
-		marketsPane = new MarketsPane(sellFishAction);
+		marketsPane = new MarketsPane(sellFishAction, seafoodMarket);
 
 		// set up menu
 		fileMenu.getItems().addAll(accountDeleteMenuItem, saveMenuItem, exitMenuItem);
@@ -231,42 +234,86 @@ public class GamePane extends VBox
 
 	}
 
+	/**
+	 * This pane is the GUI for selling SeaCreatures, and buying Equipment
+	 * @author Nils
+	 *
+	 */
 	private class MarketsPane extends VBox
 	{
-		private Button btnSellFishAction = new Button("Sell Fish");
+		// the market that is doing the transaction
+		private SeafoodMarket seafoodMarket;
+		
+		// for titles
 		private Label lblPrices = new Label("Current Prices");
-		private GridPane priceGridPane = new GridPane();
-		private SeafoodMarket market = new SeafoodMarket("Market");
+		private Label lblMyResources = new Label("My Sea Creatures");
+		private Label lblToSell = new Label("Resources To Sell");
+		
+		// for the name of the market
 		private Text txtMarketName;
-		private ListView<SeaCreature> seaCreatureListView = null;
+		
+		// to display current prices
+		private GridPane priceGridPane = new GridPane();
+		// to display the players resources
+		private ListView<SeaCreature> myCreatureListView = null;
+		// to display the resources the player wants to sell
+		private ListView<SeaCreature> toSellListView = null;
+		// to hold the resources the player wants to sell
+		private ObservableList<SeaCreature> toSellList = FXCollections.observableArrayList();
+		
+		// Containers
+		private HBox transactionContainer = new HBox();
+		private VBox priceBox = new VBox();
+		private VBox usersResourcesBox = new VBox();
+		private VBox itemsToSellBox = new VBox();
+		
+		// to fire event to do the transaction
+		private Button btnDoTransaction = new Button("Do Transaction");
 
-		public MarketsPane(EventHandler<ActionEvent> sellFishAction)
+		public MarketsPane(EventHandler<ActionEvent> sellFishAction, SeafoodMarket seafoodMarket)
 		{
-			txtMarketName = new Text(market.getName());
-			seaCreatureListView = new ListView(player.getIceChest());
+			// set the market
+			setSeafoodMarket(seafoodMarket);
+			
+			// set the title
+			txtMarketName = new Text(seafoodMarket.getName());
+			
+			// set the middle listview to show my resources
+			myCreatureListView = new ListView(player.getIceChest());
+			
+			// set the right listview to hold the resrouces I want to sell
+			toSellListView = new ListView(toSellList);
 
-			int i = 0;
-			while (i < Constants.supportedSpecies.size())
+			// set the gridpane to show current prices
+			for (int i = 0; i < Constants.supportedSpecies.size(); i++)
 			{
 				// node, col, row
 				priceGridPane.add(new Label(Constants.supportedSpecies.get(i).toString()), 0, i);
-				double price = market.getCurrentPricePerPound(Constants.supportedSpecies.get(i));
+				double price = seafoodMarket.getCurrentPricePerPound(Constants.supportedSpecies.get(i));
 				priceGridPane.add(new Text(Double.toString(price)), 1, i);
-
-				i++;
 			}
+			
+			// set up the left box to show prices
+			priceBox.getChildren().addAll(lblPrices, priceGridPane);
+			
+			// set the middle box to show what resources I have
+			usersResourcesBox.getChildren().addAll(lblMyResources, myCreatureListView);
+			
+			// set the right box to show what resources I want to sell
+			itemsToSellBox.getChildren().addAll(lblToSell, toSellListView);
+			
+			// set the main container to show the three boxes from above
+			transactionContainer.getChildren().addAll(priceBox, usersResourcesBox, itemsToSellBox);
+			transactionContainer.setAlignment(Pos.CENTER);
+			transactionContainer.setSpacing(5);
 
-			/*
-			 * seaCreatureListView.getSelectionModel().selectedItemProperty().addListener(ov
-			 * -> { pwViewGridPane.getChildren();
-			 * 
-			 * for (Integer i : seaCreatureList.getSelectionModel().getSelectedIndices()) {
-			 * 
-			 * } ; });
-			 */
-
-			btnSellFishAction.setOnAction(sellFishAction);
-			this.getChildren().addAll(priceGridPane, seaCreatureListView, btnSellFishAction);
+			btnDoTransaction.setOnAction(sellFishAction);
+			this.getChildren().addAll(txtMarketName, transactionContainer, btnDoTransaction);
+		}
+		
+		public void setSeafoodMarket(SeafoodMarket market)
+		{
+			this.seafoodMarket = market;
 		}
 	}
 

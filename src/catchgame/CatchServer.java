@@ -338,12 +338,12 @@ public class CatchServer
 						switch (code)
 						{
 						case Codes.LOGOUT_REQUEST_CODE:
-							Platform.runLater(() -> serverPane.appendToOutput(username + "sent a logout request."));
+							Platform.runLater(() -> serverPane.appendToOutput(username + " sent a logout request."));
 							loggedIn = false;
 							continue;
 							
 						case Codes.DELETE_ACCOUNT_CODE:
-							Platform.runLater(() -> serverPane.appendToOutput(username + "sent an account delete request."));
+							Platform.runLater(() -> serverPane.appendToOutput(username + " sent an account delete request."));
 							loggedIn = false;
 							userDAO.deleteUser(username);
 							continue;

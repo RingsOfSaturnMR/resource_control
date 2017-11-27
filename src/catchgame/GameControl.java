@@ -116,11 +116,15 @@ public class GameControl
 			}
 		});
 
+		
+		// get markets
+		SeafoodMarket seafoodMarket = new SeafoodMarket("Caileigh's Market");
+		
 		// set game to running
 		gameRunning.set(true);
-
+		
 		// Display GUI
-		gamePane = new GamePane(new SellFishAction(), player, new FishingActivityActions(), new DeleteAccountAction(), new SaveGameAction(), new ExitAction());
+		gamePane = new GamePane(new SellFishAction(), player, new FishingActivityActions(), new DeleteAccountAction(), new SaveGameAction(), new ExitAction(), seafoodMarket);
 		gameScene = new Scene(gamePane, Constants.INITIAL_GAME_PANE_WIDTH, Constants.INITIAL_GAME_PANE_HEIGHT);
 		gameStage.setScene(gameScene);
 		gameStage.setTitle("Catch!");
@@ -220,6 +224,7 @@ public class GameControl
 	 */
 	public void saveGame() throws Exception
 	{
+		player.prepareToSerialze();
 		toServer.writeObject(player);
 	}
 
