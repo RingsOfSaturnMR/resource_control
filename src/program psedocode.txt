@@ -71,8 +71,8 @@ A fish is caught by clicking on it (There is a event handler ExtractFishAction t
 When this action is fired, the fish’s graphic (right now just a circle)
 Is removed from the screen and the fish object is added to the player’s ice chest.
 See Pseudocode for FishingActivity for how fish are added and “caught”, and
-see Pseudocode for HandleServerSideGameControl for how fish are sent on the server’s side, and Pseudocode for Ocean, for all the details 
-of how it is determined what gets sent and what SeaCreatures are created and replenished
+see Pseudocode for HandleServerSideGameControl for how fish are sent on the server’s side, 
+and Pseudocode for Ocean, for all the details of how it is determined what gets sent and what SeaCreatures are created and replenished
 in Ocean.
 
     -Close GameControl-
