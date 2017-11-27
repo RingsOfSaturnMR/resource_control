@@ -3,7 +3,7 @@ package catchgame;
 /*
 Class by Dr. Java and the JavaDocs
 Nils Johnson, Caileigh Fitzgerald, Thanh Lam, and Matt Roberts
-11-27-2017
+Date: 11-27-2017
 */
 /*
 Purpose: to generate, "gives away", and regenerate SeaCreatures. 
