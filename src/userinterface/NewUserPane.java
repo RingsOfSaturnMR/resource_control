@@ -383,9 +383,14 @@ public class NewUserPane extends VBox
 		return tfServerIp.getText().trim();
 	}
 	
-	public void setTfClientPort(int portNum)
+	public void setClientPortNum(int portNum)
 	{
 		tfClientPort.setText(Integer.toString(portNum));
+	}
+	
+	public void setServerIpAddress(String address)
+	{
+		tfServerIp.setText(address);
 	}
 }
 

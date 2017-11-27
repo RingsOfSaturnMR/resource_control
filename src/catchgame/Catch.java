@@ -58,6 +58,7 @@ public class Catch extends Application
 		loginStage.show();
 		loginStage.requestFocus();
 		
+		// makes it so that user doesnt have to re-enter information if connecting to same server
 		if(lastPort != null && lastIp != null)
 		{
 			loginPane.setClientPortNum(lastPort);
@@ -105,7 +106,14 @@ public class Catch extends Application
 
 						// make a NewUserPacket and send to server
 						NewUserPacket newUserPacket = new NewUserPacket(newUserPane.getDesiredName(), newUserPane.getDesiredPassword(), newUserPane.getDesiredPasswordConfirm());
-
+						
+						// makes it so that user doesnt have to re-enter information if connecting to same server again
+						if(lastPort != null && lastIp != null)
+						{
+							newUserPane.setClientPortNum(lastPort);
+							newUserPane.setServerIpAddress(lastIp);
+						}
+						
 						toServer.writeObject(newUserPacket);
 						Object data = fromServer.readObject();
 
@@ -157,7 +165,7 @@ public class Catch extends Application
 			newUserPane = new NewUserPane(new CreateNewUser(), new CancelHandler());
 			if (catchServer != null)
 			{
-				newUserPane.setTfClientPort(catchServer.getServerSocketPort());
+				newUserPane.setClientPortNum(catchServer.getServerSocketPort());
 			}
 			Scene newUserScene = new Scene(newUserPane, Constants.NEW_USER_PANE_WIDTH, Constants.NEW_USER_PANE_HEIGHT);
 			newUserStage.setScene(newUserScene);
