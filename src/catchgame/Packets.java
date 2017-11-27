@@ -1,5 +1,29 @@
 package catchgame;
 
+/*
+Class by Dr. Java and the JavaDocs
+Nils Johnson, Caileigh Fitzgerald, Thanh Lam, and Matt Roberts
+Date: 11-27-2017
+*/
+/*
+Purpose:
+the purpose of RequestPacket is to hold a code from the client
+the purpose of the ResultPacket is to hold a code from the server
+the purpose of the LoginPacket is to hold the info username
+and password necessary for logging in
+the purpose of the NewUserPacket is to hold the info username,
+password, and confirmed password necessary for creating a new account
+the purpose of the SeaCreaturePacket is to sent ArrayLists of all species 
+of the SeaCreatures to the client
+the purpose of the ClientSubOceanSeaCreatureStatePacket is to send
+info on the current population and max population for each species
+in the client's subOcean
+
+Modification info: 
+both SeaCreaturePacket and ClientSubOceanSeaCreatureStatePacket 
+have been updated to work for (and require info of) all the SeaCreatures 
+species
+*/
 import java.io.Serializable;
 import java.util.ArrayList;
 
