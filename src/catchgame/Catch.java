@@ -186,6 +186,8 @@ public class Catch extends Application
 		try
 		{
 			new GameControl(serverIpAddress, clientPort, playerName, playerPassword);
+			loginStage.close();
+			
 		}
 		catch (Exception e1)
 		{
@@ -202,16 +204,6 @@ public class Catch extends Application
 	 */
 	public static void main(String[] args)
 	{
-		Runtime.getRuntime().addShutdownHook(new Thread()
-		{
-			public void run()
-			{
-				if (catchServer != null)
-				{
-					System.out.println("quit catchServer");
-				}
-			}
-		});
 		launch(args);
 	}	
 }

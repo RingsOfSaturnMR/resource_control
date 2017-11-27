@@ -16,8 +16,8 @@ import catchgame.Packets.LoginPacket;
 import catchgame.Packets.ResultPacket;
 
 /**
- * This class is a client that lets users start FishingActivities,
- * and controls the flow of the game.
+ * This class is a client that lets users start FishingActivities, and controls
+ * the flow of the game.
  * 
  * @author Nils Johnson
  *
@@ -62,13 +62,28 @@ public class GameControl
 		// sequence for closing down
 		gameStage.setOnCloseRequest(e ->
 		{
-			saveGame();
-			logOut();
+			try
+			{
+				saveGame();
+				logOut();
+				toServer.close();
+				fromServer.close();
+			}
+			catch (Exception e1)
+			{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			finally
+			{
+				toServer = null;
+				fromServer = null;
+			}
+
 		});
-		
+
 		// Display GUI
-		gamePane = new GamePane(new SellFishAction(), player, 
-				new FishingActivityActions());
+		gamePane = new GamePane(new SellFishAction(), player, new FishingActivityActions());
 		gameScene = new Scene(gamePane, Constants.INITIAL_GAME_PANE_WIDTH, Constants.INITIAL_GAME_PANE_HEIGHT);
 		gameStage.setScene(gameScene);
 		gameStage.setTitle("Catch!");
@@ -79,12 +94,12 @@ public class GameControl
 	}
 
 	/**
-	 * Takes user's name and password and logs them in, or throws an 
-	 * exception that will make GameControl pass out of scope and get 
-	 * propagated back to where it was instantiated.
-	 * @param enteredName username
-	 * @param enteredPassword	password
-	 * @throws Exception LoginException or network related exception
+	 * Takes user's name and password and logs them in, or throws an exception that
+	 * will make GameControl pass out of scope and get propagated back to where it
+	 * was instantiated.
+	 * @param enteredName
+	 * @param enteredPassword
+	 * @throws Exception
 	 */
 	private void logPlayerIn(String enteredName, String enteredPassword) throws Exception
 	{
@@ -153,43 +168,26 @@ public class GameControl
 	 * This method sends the player object back to the server, where it is saved as
 	 * a file.
 	 */
-	public void saveGame()
+	public void saveGame() throws Exception
 	{
-		try
-		{
-			player.prepareToSerialze();
-			toServer.writeObject(player);
-		}
-		catch (IOException e1)
-		{
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		toServer.writeObject(player);
 	}
 
 	/**
 	 * this method sends a request to the server to remove the player from the list
 	 * of active users, and set the DB to have him as offline.
 	 */
-	private void logOut()
+	private void logOut() throws Exception
 	{
-		try
-		{
-			toServer.writeObject(new Packets.RequestPacket(Codes.LOGOUT_REQUEST_CODE));
-		}
-		catch (IOException e)
-		{
-			// TODO consider adding a client side log to write theses things to
-			e.printStackTrace();
-		}
-
+		toServer.writeObject(new Packets.RequestPacket(Codes.LOGOUT_REQUEST_CODE));
 	}
-	
-	public class FishingActivityActions{
-		
-		public void startFishingActivity(){
-			fishingActivity=new 
-					FishingActivity(gamePane, toServer, fromServer, player);
+
+	public class FishingActivityActions
+	{
+
+		public void startFishingActivity()
+		{
+			fishingActivity = new FishingActivity(gamePane, toServer, fromServer, player);
 		}
 	}
 

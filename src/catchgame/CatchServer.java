@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import authentication.BadLoginException;
+import authentication.BadLoginException.LoginError;
 import authentication.BadPasswordException;
 import authentication.BadUsernameException;
-import authentication.LoginError;
 import authentication.NewUserException;
-import authentication.UsernameError;
+import authentication.NewUserException.UsernameError;
 import catchgame.Packets.ClientSubOceanSeaCreatureStatePacket;
 import catchgame.Packets.LoginPacket;
 import catchgame.Packets.NewUserPacket;
@@ -351,7 +351,8 @@ public class CatchServer
 						ClientSubOceanSeaCreatureStatePacket clientSubOceanSeaCreatureStatePacket = (ClientSubOceanSeaCreatureStatePacket) recievedObject;
 						//System.out.println("clientSubOcean.currentPopulationCod: "+clientSubOcean.currentPopulationCod);
 						//System.out.println("clientSubOcean.maxPopulationCod: "+clientSubOcean.maxPopulationCod);
-
+						System.out.println("subocean crab: "+clientSubOceanSeaCreatureStatePacket.currentPopulationCrab);
+						System.out.println("subocean crab: "+clientSubOceanSeaCreatureStatePacket.maxPopulationCrab);
 						ArrayList<Fish> codPacket = ocean.extractAndReturnABunchOfFish(FishSpecies.COD, 
 								clientSubOceanSeaCreatureStatePacket.currentPopulationCod, 
 								clientSubOceanSeaCreatureStatePacket.maxPopulationCod);
@@ -370,6 +371,7 @@ public class CatchServer
 						ArrayList<Shellfish> crabPacket = ocean.ecxtractAndReturnABunchOfShellfish(ShellfishSpecies.CRAB, 
 								clientSubOceanSeaCreatureStatePacket.currentPopulationCrab, 
 								clientSubOceanSeaCreatureStatePacket.maxPopulationCrab);
+						System.out.println("crabPacket size: "+crabPacket.size());
 						 //System.out.println("cod cuurent population: "
 						 //+clientSubOceanSeaCreatureStatePacket.currentPopulationCod);
 						 //System.out.println("cod max population: "
@@ -379,7 +381,7 @@ public class CatchServer
 								oysterPacket,lobsterPacket,crabPacket));
 					}
 				}
-				// TODO Consider refactor this into fewer catch blocks
+				// TODO Consider refactoring this into fewer catch blocks
 				catch (FileNotFoundException e)
 				{
 					e.printStackTrace();
@@ -418,19 +420,17 @@ public class CatchServer
 		return this.serverSocketPort;
 	}
 	
+	/**
+	 * @return True or False for if the server is listening for new clients
+	 */
 	public SimpleBooleanProperty isListeningForClients()
 	{
 		return listeningForNewClients;
 	}
 
-	public void setListeningForClients(boolean val)
-	{
-		this.listeningForNewClients.set(val);
-	}
 	
 	/**
-	 * Right now this action is a stub that just says the user has tried to 
-	 * shut down the server
+	 * Action to trigger a WINDOW_CLOSE_REQUEST
 	 */
 	private class ShutdownServerHandler implements EventHandler<ActionEvent>
 	{
@@ -443,7 +443,7 @@ public class CatchServer
 	}
 	
 	/**
-	 * Action for creating anew DatabaseManipulator object.
+	 * Action for creating a new DatabaseManipulator object.
 	 */
 	private class LaunchDbManipulatorHandler implements EventHandler<ActionEvent>
 	{

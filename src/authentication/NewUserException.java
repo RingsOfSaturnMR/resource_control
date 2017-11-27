@@ -17,4 +17,39 @@ public abstract class NewUserException extends Exception
 		return this.message;
 	}
 
+	/**
+	 * These are the possible errors that can be describe an incorrectly formatted
+	 * password.
+	 * 
+	 * @author Nils Johnson
+	 */
+	public enum PasswordError
+	{
+		TOO_SHORT,
+		NEEDS_UPPER,
+		NEEDS_LOWER,
+		NEEDS_NUMBER,
+		NEEDS_SPECIAL_CHAR,
+		HAS_ILLEGAL_CHAR,
+		TOO_LONG,
+		MIS_MATCH;
+	}
+	
+	/**
+	 * These are used to represent the possible errors that can occur when creating
+	 * a user name.
+	 * 
+	 * @author Nils
+	 *
+	 */
+	public enum UsernameError
+	{
+		TOO_SHORT,
+		TOO_LONG,
+		UNAVAILABLE,
+		HAS_ILLEGAL_CHAR;
+	}
+
 }
+
+

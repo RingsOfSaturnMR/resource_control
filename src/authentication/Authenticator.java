@@ -2,9 +2,12 @@ package authentication;
 
 import java.util.ArrayList;
 
+import authentication.NewUserException.PasswordError;
+import authentication.NewUserException.UsernameError;
+
 /**
  * This class contains defines the parameters required for user names and
- * passwords It also contains methods for validation for conforming to these
+ * passwords. It also contains methods for validation for conforming to these
  * parameters.
  * 
  * @author Nils Johnson
