@@ -53,12 +53,12 @@ public class Constants
 	public final static double TUNA_INITIAL_WEIGHT_MIN = 5;
 	public final static double TUNA_INITIAL_WEIGHT_MAX = 12;
 	
-	public final static double CRAB_INITIAL_WEIGHT_MIN = .2;
+	public final static double CRAB_INITIAL_WEIGHT_MIN = 2;
 	public final static double CRAB_INITIAL_WEIGHT_MAX = 5;
-	public final static double LOBSTER_INITIAL_WEIGHT_MIN = .3;
+	public final static double LOBSTER_INITIAL_WEIGHT_MIN = 3;
 	public final static double LOBSTER_INITIAL_WEIGHT_MAX = 7;
-	public final static double OYSTER_INITIAL_WEIGHT_MIN = .1;
-	public final static double OYSTER_INITIAL_WEIGHT_MAX = .4;
+	public final static double OYSTER_INITIAL_WEIGHT_MIN = 1;
+	public final static double OYSTER_INITIAL_WEIGHT_MAX = 4;
 	
 	// Basics
 	public final static String APPLICATION_NAME = "Catch! - By Caileigh, Matt, Nils, Thanh";
