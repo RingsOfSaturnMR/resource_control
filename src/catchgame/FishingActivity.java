@@ -1,5 +1,25 @@
 package catchgame;
 
+/*
+Class by Dr. Java and the JavaDocs
+Nils Johnson, Caileigh Fitzgerald, Thanh Lam, and Matt Roberts
+Date: 11-27-2017
+*/
+/*
+Purpose: to allow the user to catch SeaCreatures by getting
+SeaCreaturesfrom the server and adding them to the user's
+SimpleFishingPane with onClick event handler's theat extract
+a fish when the fish's GUI is clicked on and add it to
+the Player's IceChest.  SeaCreatures are currently rendered
+with circles colored by species and sized by SeaCreature's
+weight.
+
+Modification Info:
+These methods were originally found in GameControl.
+Colors have been added, and the ability to get all SeaCreatures
+(as opposed to just cod) has been added.  The ability to add the
+SeaCreature to the player's ice chest is new too.
+*/
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
