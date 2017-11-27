@@ -1,5 +1,23 @@
 package catchgame;
 
+/*
+Class by Dr. Java and the JavaDocs
+Nils Johnson, Caileigh Fitzgerald, Thanh Lam, and Matt Roberts
+*/
+/*
+Purpose: to generate, "gives away", and regenerate SeaCreatures. 
+It can determine a number of sea creatures to give based on recieved
+info, and can regeenrate sea creatures based on there previous
+population, the time that has passed, and the max population
+the ocean can hold.  Currently holds cod, salmon, tuna,
+lobster, oysters, and crab.
+
+Modification info:
+Ocean has been refined to have more efficient code then in the orignal
+submission, and better naming.  The overall effect has not changed however,
+except that the get population methods noew return the ArrayLists' sizes,
+as opposed to a random number bettwen 0 and max possible.
+*/
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
