@@ -16,14 +16,14 @@ public class ServerPane extends VBox
 {
 	private TextArea taOutput = new TextArea("");
 
-	// menuBar things
+	// MenuBar related nodes
 	public MenuBar menuBar = new MenuBar();
 	private Menu fileMenu = new Menu("File");
 	private MenuItem dbManipulatorItem = new MenuItem("DB Manipulator");
 	private MenuItem exitMenuItem = new MenuItem("Exit");
 	
 	// buttons
-	private Button btnFH=new Button("Frequency Histogram Of Ocean");
+	private Button btnFH = new Button("Frequency Histogram Of Ocean");
 
 	public ServerPane(EventHandler<ActionEvent> launchDbManipulator, EventHandler<ActionEvent> closeProgramHandler, EventHandler launch_FH_Action)
 	{

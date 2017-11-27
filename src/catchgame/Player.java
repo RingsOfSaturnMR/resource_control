@@ -7,7 +7,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import resources.Equipment;
 import resources.SeaCreature;
-
+/**
+ * @author Nils
+ */
 public class Player extends authentication.User implements Serializable
 {
 	// stats

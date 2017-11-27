@@ -1,9 +1,14 @@
 package catchgame;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.event.EventTarget;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import market.SeafoodMarket;
 import resources.FishSpecies;
 import userinterface.GamePane;
@@ -14,6 +19,7 @@ import java.net.Socket;
 import java.util.Random;
 import catchgame.Packets.LoginPacket;
 import catchgame.Packets.ResultPacket;
+import catchgame.Packets.RequestPacket;
 
 /**
  * This class is a client that lets users start FishingActivities, and controls
@@ -38,8 +44,10 @@ public class GameControl
 	private ObjectInputStream fromServer = null;
 
 	// for exchanginng resources for money
-	
 	SeafoodMarket market = new SeafoodMarket("The Fish Market");
+	
+	// so Catch.java can listen to what is happening in the game
+	private SimpleBooleanProperty gameRunning = new SimpleBooleanProperty(false);
 
 	/**
 	 * Starts a new game
@@ -60,8 +68,7 @@ public class GameControl
 		logPlayerIn(enteredName, enteredPassword);
 
 		// sequence for closing down
-		gameStage.setOnCloseRequest(e ->
-		{
+		gameStage.setOnCloseRequest( e-> {
 			try
 			{
 				saveGame();
@@ -78,12 +85,15 @@ public class GameControl
 			{
 				toServer = null;
 				fromServer = null;
+				gameRunning.set(false);
 			}
-
 		});
 
+		// set game to running
+		gameRunning.set(true);
+		
 		// Display GUI
-		gamePane = new GamePane(new SellFishAction(), player, new FishingActivityActions());
+		gamePane = new GamePane(new SellFishAction(), player, new FishingActivityActions(), new DeleteAccountAction(), new SaveGameAction(), new ExitAction());
 		gameScene = new Scene(gamePane, Constants.INITIAL_GAME_PANE_WIDTH, Constants.INITIAL_GAME_PANE_HEIGHT);
 		gameStage.setScene(gameScene);
 		gameStage.setTitle("Catch!");
@@ -151,6 +161,18 @@ public class GameControl
 		}
 
 	}
+	
+	/**
+	 * Action that occurs when user desires to exit.
+	 */
+	private class ExitAction implements EventHandler<ActionEvent>
+	{
+		@Override
+		public void handle(ActionEvent e)
+		{
+			gameStage.fireEvent(new WindowEvent(gameStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+		}
+	}
 
 	/**
 	 * Action that occurs when a fish is sold.
@@ -172,6 +194,46 @@ public class GameControl
 	{
 		toServer.writeObject(player);
 	}
+	
+	/**
+	 * Action that deletes a user account.
+	 */
+	private class DeleteAccountAction implements EventHandler<ActionEvent>
+	{
+		@Override
+		public void handle(ActionEvent e)
+		{
+			try
+			{
+				toServer.writeObject(new RequestPacket(Codes.DELETE_ACCOUNT_CODE));
+			}
+			catch (IOException e1)
+			{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * Action that saves a game.
+	 */
+	private class SaveGameAction implements EventHandler<ActionEvent>
+	{
+		@Override
+		public void handle(ActionEvent e)
+		{
+			try
+			{
+				saveGame();
+			}
+			catch (Exception e1)
+			{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	}
 
 	/**
 	 * this method sends a request to the server to remove the player from the list
@@ -179,12 +241,16 @@ public class GameControl
 	 */
 	private void logOut() throws Exception
 	{
-		toServer.writeObject(new Packets.RequestPacket(Codes.LOGOUT_REQUEST_CODE));
+		toServer.writeObject(new RequestPacket(Codes.LOGOUT_REQUEST_CODE));
+	}
+
+	public SimpleBooleanProperty getGameRunning()
+	{
+		return gameRunning;
 	}
 
 	public class FishingActivityActions
 	{
-
 		public void startFishingActivity()
 		{
 			fishingActivity = new FishingActivity(gamePane, toServer, fromServer, player);

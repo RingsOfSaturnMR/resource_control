@@ -8,6 +8,7 @@ import catchgame.Packets.NewUserPacket;
 import catchgame.Packets.ResultPacket;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -27,9 +28,13 @@ import userinterface.NewUserPane;
 public class Catch extends Application
 {
 	private LoginPane loginPane=null;
-	private Stage loginStage = new Stage();
-	static CatchServer catchServer=null;
+	private static Stage loginStage = new Stage();
+	private CatchServer catchServer=null;
 	private Socket socket = null;
+	
+	// to save port/ip to
+	private static Integer lastPort = null;
+	private static String lastIp = null;
 
 	/**
 	 * Loads the initial login pane, which also is passed 
@@ -52,6 +57,12 @@ public class Catch extends Application
 		loginStage.setTitle("Catch! Log-in");
 		loginStage.show();
 		loginStage.requestFocus();
+		
+		if(lastPort != null && lastIp != null)
+		{
+			loginPane.setClientPortNum(lastPort);
+			loginPane.setServerIpAddress(lastIp);
+		}
 	}
 
 	/**
@@ -123,7 +134,7 @@ public class Catch extends Application
 					}
 					catch (IOException e1)
 					{
-						newUserPane.setErrorText(e1.getMessage() + "\nMake sure your port # is the same as the server you're connecting to :)");
+						newUserPane.setErrorText(e1.getMessage() + "\nDouble check port number and ip address. :)");
 						e1.printStackTrace();
 					}
 					catch (ClassNotFoundException e2)
@@ -157,7 +168,7 @@ public class Catch extends Application
 	}
 
 	/**
-	 *	Launches a new CtachServer
+	 *	Launches a new CatchServer
 	 */
 	public class NewServerHandler implements EventHandler<ActionEvent>
 	{
@@ -169,7 +180,7 @@ public class Catch extends Application
 			catchServer.isListeningForClients().addListener(ov -> {
 				if(loginPane != null)
 				{
-					loginPane.setTfClientPort(catchServer.getServerSocketPort());
+					loginPane.setClientPortNum(catchServer.getServerSocketPort());
 				}});
 		}
 	}
@@ -185,8 +196,17 @@ public class Catch extends Application
 	{
 		try
 		{
-			new GameControl(serverIpAddress, clientPort, playerName, playerPassword);
+			GameControl gameControl = new GameControl(serverIpAddress, clientPort, playerName, playerPassword);
+			
+			gameControl.getGameRunning().addListener(ov -> {
+				loadLoginPane();
+				loginPane.setClientPortNum(catchServer.getServerSocketPort());
+			});
+			
 			loginStage.close();
+			
+			lastIp = serverIpAddress;
+			lastPort = clientPort;
 			
 		}
 		catch (Exception e1)

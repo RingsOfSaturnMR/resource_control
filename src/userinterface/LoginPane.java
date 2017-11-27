@@ -100,15 +100,21 @@ public class LoginPane extends VBox
 		this.txtError.setText(str);
 	}
 	
-	//NEED TO ADD check for exceptions!!!
 	public int getClientPort()
 	{
 		return Integer.parseInt((tfClientPort.getText()));
 	}
 	
-	public void setTfClientPort(int portNum)
+	public void setClientPortNum(int portNum)
 	{
 		tfClientPort.setText(Integer.toString(portNum));
 	}
+	
+	public void setServerIpAddress(String address)
+	{
+		tfServerIp.setText(address);
+	}
+	
+	
 	
 }

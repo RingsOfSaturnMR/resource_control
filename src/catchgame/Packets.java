@@ -6,9 +6,14 @@ import java.util.ArrayList;
 import resources.Fish;
 import resources.SeaCreature;
 import resources.Shellfish;
-
+/**
+ * This class defines various packets for client/server communication used throughout the program. 
+ */
 public class Packets
 {
+	/**
+	 * Packet to hold a a request code. Tells the receiver to do something.
+	 */
 	public static class RequestPacket implements Serializable
 	{
 		public int code;
@@ -19,6 +24,9 @@ public class Packets
 		}
 	}
 
+	/**
+	 * Packet to let the sender know the result of what happened.
+	 */
 	public static class ResultPacket implements Serializable
 	{
 		public int code;
@@ -29,6 +37,9 @@ public class Packets
 		}
 	}
 
+	/**
+	 * Packet to send login information.
+	 */
 	public static class LoginPacket implements Serializable
 	{
 		public String enteredName;
@@ -40,7 +51,10 @@ public class Packets
 			this.enteredPassword = password;
 		}
 	}
-
+	
+	/**
+	 * Packet to send new user information.
+	 */
 	public static class NewUserPacket implements Serializable
 	{
 		public String enteredName;
@@ -55,6 +69,10 @@ public class Packets
 		}
 	}
 
+	/**
+	 * @author Matt Roberts
+	 * Packet to send SeaCreatures to client during game.
+	 */
 	public static class SeaCreaturesPacket implements Serializable
 	{
 		ArrayList<Fish> codPopulation = new ArrayList<>();
@@ -87,7 +105,10 @@ public class Packets
 		// ArrayList<Fish>oysterPopuliation = new ArrayList<>();
 	}
 
-	
+	/**
+	 * @author Matt Roberts
+	 * Packet to send to the server to describe the state of the resources currently available to the client.
+	 */
 	public static class ClientSubOceanSeaCreatureStatePacket implements Serializable
 	{
 		int currentPopulationCod=0;
@@ -124,8 +145,5 @@ public class Packets
 			this.maxPopulationCrab=maxPopulationCrab;
 			
 		}
-
 	}
-	
-
 }

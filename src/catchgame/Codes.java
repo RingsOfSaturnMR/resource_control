@@ -22,6 +22,7 @@ public class Codes
 	
 	// client request codes
 	public static final int LOGOUT_REQUEST_CODE = 20;
+	public static final int DELETE_ACCOUNT_CODE = 21;
 	
 	
 }

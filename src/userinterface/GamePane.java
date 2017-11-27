@@ -7,11 +7,15 @@ import catchgame.Constants;
 import catchgame.GameControl;
 import catchgame.Player;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -19,21 +23,32 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import javafx.stage.WindowEvent;
 import market.SeafoodMarket;
 import resources.Boat;
 import resources.BoatTypes;
 import resources.Equipment;
 import resources.Fish;
 import resources.FishSpecies;
+import catchgame.GameControl.FishingActivityActions;
 
 import resources.SeaCreature;
 
+/**
+ * Primary container for all gameplay GUI components.
+ */
 public class GamePane extends VBox
 {
+	// has player from GameControl to show the player's attributes
 	private Player player;
 
+	// pane to hold the main nodes for what the player is doing
 	private StackPane primaryPane = new StackPane();
+	// pane to hold the nodes that fire actions to change what nodes go in primary
+	// pane
 	private ActionVBox actionHBox = new ActionVBox();
+
+	// pane to hold readout of players attributes.
 	private MyStatsPane myStatsPane;
 
 	public SimpleFishingPane simpleFishingPane;
@@ -41,8 +56,14 @@ public class GamePane extends VBox
 	private GameControl.FishingActivityActions fishingActivityActions;
 	private boolean fishingStarted = false;
 
-	public GamePane(EventHandler<ActionEvent> sellFishAction, Player player, GameControl.FishingActivityActions fishingActivityActions)
+	// for dropdown menu
+	public MenuBar menuBar = new MenuBar();
+	private Menu fileMenu = new Menu("File");
+	private MenuItem accountDeleteMenuItem = new MenuItem("Delete Account");
+	private MenuItem saveMenuItem = new MenuItem("Save");
+	private MenuItem exitMenuItem = new MenuItem("Exit");
 
+	public GamePane(EventHandler<ActionEvent> sellFishAction, Player player, FishingActivityActions fishingActivityActions, EventHandler<ActionEvent> deleteAccountAction, EventHandler<ActionEvent> saveAction, EventHandler<ActionEvent> exitAction)
 	{
 		this.player = player;
 		myStatsPane = new MyStatsPane();
@@ -51,9 +72,18 @@ public class GamePane extends VBox
 		simpleFishingPane = new SimpleFishingPane();
 		marketsPane = new MarketsPane(sellFishAction);
 
+		// set up menu
+		fileMenu.getItems().addAll(accountDeleteMenuItem, saveMenuItem, exitMenuItem);
+		menuBar.getMenus().add(fileMenu);
+
 		primaryPane.getChildren().add(myStatsPane);
 
-		this.getChildren().addAll(primaryPane, actionHBox);
+		this.getChildren().addAll(menuBar, primaryPane, actionHBox);
+
+		// set actions
+		accountDeleteMenuItem.setOnAction(deleteAccountAction);
+		saveMenuItem.setOnAction(saveAction);
+		exitMenuItem.setOnAction(exitAction);
 
 	}
 
@@ -226,16 +256,14 @@ public class GamePane extends VBox
 				i++;
 			}
 
-			/*seaCreatureListView.getSelectionModel().selectedItemProperty().addListener(ov ->
-			{
-				pwViewGridPane.getChildren();
-
-				for (Integer i : seaCreatureList.getSelectionModel().getSelectedIndices())
-				{
-
-				}
-				;
-			});*/
+			/*
+			 * seaCreatureListView.getSelectionModel().selectedItemProperty().addListener(ov
+			 * -> { pwViewGridPane.getChildren();
+			 * 
+			 * for (Integer i : seaCreatureList.getSelectionModel().getSelectedIndices()) {
+			 * 
+			 * } ; });
+			 */
 
 			btnSellFishAction.setOnAction(sellFishAction);
 			this.getChildren().addAll(priceGridPane, seaCreatureListView, btnSellFishAction);

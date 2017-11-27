@@ -337,9 +337,16 @@ public class CatchServer
 						switch (code)
 						{
 						case Codes.LOGOUT_REQUEST_CODE:
-							Platform.runLater(() -> serverPane.appendToOutput("Logout Request Recieved!"));
+							Platform.runLater(() -> serverPane.appendToOutput("Logout Request Recieved."));
 							loggedIn = false;
 							continue;
+							
+						case Codes.DELETE_ACCOUNT_CODE:
+							Platform.runLater(() -> serverPane.appendToOutput("Delete Account Request Recieved."));
+							loggedIn = false;
+							userDAO.deleteUser(username);
+							continue;
+							
 						default:
 							Platform.runLater(() -> serverPane.appendToOutput("Unknown Request from " + username + " recieved"));
 						}
@@ -412,7 +419,6 @@ public class CatchServer
 	}
 	
 	/**
-	 * Simple getter for the server socket port
 	 * @return the server socket port
 	 */
 	public int getServerSocketPort()
@@ -428,7 +434,6 @@ public class CatchServer
 		return listeningForNewClients;
 	}
 
-	
 	/**
 	 * Action to trigger a WINDOW_CLOSE_REQUEST
 	 */
@@ -439,7 +444,6 @@ public class CatchServer
 		{
 			serverStage.fireEvent(new WindowEvent(serverStage, WindowEvent.WINDOW_CLOSE_REQUEST));	
 		}
-		
 	}
 	
 	/**
@@ -452,6 +456,5 @@ public class CatchServer
 		{
 			new DatabaseManipulator();
 		}
-		
 	}
 }
