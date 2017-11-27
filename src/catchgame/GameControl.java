@@ -6,7 +6,11 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import market.SeafoodMarket;
@@ -16,6 +20,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Optional;
 import java.util.Random;
 import catchgame.Packets.LoginPacket;
 import catchgame.Packets.ResultPacket;
@@ -45,7 +50,7 @@ public class GameControl
 
 	// for exchanginng resources for money
 	SeafoodMarket market = new SeafoodMarket("The Fish Market");
-	
+
 	// so Catch.java can listen to what is happening in the game
 	private SimpleBooleanProperty gameRunning = new SimpleBooleanProperty(false);
 
@@ -68,11 +73,31 @@ public class GameControl
 		logPlayerIn(enteredName, enteredPassword);
 
 		// sequence for closing down
-		gameStage.setOnCloseRequest( e-> {
+		gameStage.setOnCloseRequest(e ->
+		{
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Exit");
+			alert.setHeaderText("Exit Options");
+			alert.setContentText("Choose your option.");
+
+			ButtonType saveAndExit = new ButtonType("Save And Quit");
+			ButtonType justExit = new ButtonType("Quit");
+
+			alert.getButtonTypes().setAll(saveAndExit, justExit);
+
+			Optional<ButtonType> result = alert.showAndWait();
 			try
 			{
-				saveGame();
-				logOut();
+				if (result.get() == saveAndExit)
+				{
+					saveGame();
+					logOut();
+				}
+				else if (result.get() == justExit)
+				{
+					logOut();
+				}
+
 				toServer.close();
 				fromServer.close();
 			}
@@ -83,15 +108,17 @@ public class GameControl
 			}
 			finally
 			{
+
 				toServer = null;
 				fromServer = null;
 				gameRunning.set(false);
+
 			}
 		});
 
 		// set game to running
 		gameRunning.set(true);
-		
+
 		// Display GUI
 		gamePane = new GamePane(new SellFishAction(), player, new FishingActivityActions(), new DeleteAccountAction(), new SaveGameAction(), new ExitAction());
 		gameScene = new Scene(gamePane, Constants.INITIAL_GAME_PANE_WIDTH, Constants.INITIAL_GAME_PANE_HEIGHT);
@@ -107,6 +134,7 @@ public class GameControl
 	 * Takes user's name and password and logs them in, or throws an exception that
 	 * will make GameControl pass out of scope and get propagated back to where it
 	 * was instantiated.
+	 * 
 	 * @param enteredName
 	 * @param enteredPassword
 	 * @throws Exception
@@ -161,7 +189,7 @@ public class GameControl
 		}
 
 	}
-	
+
 	/**
 	 * Action that occurs when user desires to exit.
 	 */
@@ -194,7 +222,7 @@ public class GameControl
 	{
 		toServer.writeObject(player);
 	}
-	
+
 	/**
 	 * Action that deletes a user account.
 	 */
@@ -203,18 +231,32 @@ public class GameControl
 		@Override
 		public void handle(ActionEvent e)
 		{
-			try
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Confirmation Dialog");
+			alert.setHeaderText("Delete This Account");
+			alert.setContentText("Are you Sure? This cannot be undone.");
+
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK)
 			{
-				toServer.writeObject(new RequestPacket(Codes.DELETE_ACCOUNT_CODE));
+				try
+				{
+					toServer.writeObject(new RequestPacket(Codes.DELETE_ACCOUNT_CODE));
+					gameStage.fireEvent(new WindowEvent(gameStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+				}
+				catch (IOException e1)
+				{
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
-			catch (IOException e1)
+			else
 			{
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				return;
 			}
 		}
 	}
-	
+
 	/**
 	 * Action that saves a game.
 	 */

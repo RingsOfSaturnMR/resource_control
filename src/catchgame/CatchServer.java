@@ -326,6 +326,7 @@ public class CatchServer
 					{
 						Player player = (Player) recievedObject;
 						userDAO.savePlayer(player);
+						Platform.runLater(() -> serverPane.appendToOutput(username + " Saved their game."));
 						continue;
 					}
 
@@ -337,12 +338,12 @@ public class CatchServer
 						switch (code)
 						{
 						case Codes.LOGOUT_REQUEST_CODE:
-							Platform.runLater(() -> serverPane.appendToOutput("Logout Request Recieved."));
+							Platform.runLater(() -> serverPane.appendToOutput(username + "sent a logout request."));
 							loggedIn = false;
 							continue;
 							
 						case Codes.DELETE_ACCOUNT_CODE:
-							Platform.runLater(() -> serverPane.appendToOutput("Delete Account Request Recieved."));
+							Platform.runLater(() -> serverPane.appendToOutput(username + "sent an account delete request."));
 							loggedIn = false;
 							userDAO.deleteUser(username);
 							continue;
