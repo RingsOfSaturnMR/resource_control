@@ -13,7 +13,7 @@ server's DAO fetches an object containing that players Player object
 		if that user does not exist, throw BadLoginException(USER_NOT_FOUND)
 		if that user exists but the password is wrong, throw BadLoginException(INVALID_PASSWORD)
 		if there are now users, throw BadLoginException(NO_USERS)
-		if the login information was too short or incomplete, throw BadLoginException(INVALID_ATTEMPT). Does not make database call.
+		if the login information was too short or incomplete, throw BadLoginException(INVALID_ATTEMPT). Does not make database 				call.
 		Update serverPane to show what happened
 		send ResponsePacket(response code for what happened)
 		GameControl stops making the GameControl object
@@ -51,12 +51,24 @@ CatchServer finds an open port and creates a server socket and makes two streams
 sets listeningForNewClientsToTrue
 while listeningForNewClientsToTrue, set objectInputStream to accept new connections and wait. 
 
-
-    -GamePlay-
+   -GamePlay-
 User clicks "Go fishing"
 a new fishing activity is started
+User clicks “Go to Market”
+Right now there is just one “Sell Fish” button
+User clicks "View My Resources"
+Resources are displayed, but only number of fish changes so far,
+and only can go up (when a fish is caught)
 
-
+    -FishingActivity and Related Server/Ocean Stuff-
+SeaCreatures are sent from the server to the client
+When a fish is caught, a request is made of the server for more SeaCreatures by sending info about the state of the clientSubOcean from the client to the Server, which handles it in a thread called HandleServerSideGameControl, a nested class of CatchServer.  It handles the request by calling ocean’s extractAndReturnABunchOfFish method for each species (or extractAndReturnABunchOfShellfish), which determines how many SeaCreatures of each species to send.  These SeaCreatures are then sent to the client and added to the client’s SimpleFishingPane.
+A fish is caught by clicking on it (There is a event handler ExtractFishAction that is passed to the corresponding node of the fish).
+When this action is fired, the fish’s graphic (right now just a circle)
+Is removed from the screen and the fish object is added to the player’s ice chest.
+See Pseudocode for FishingActivity for how fish are added and “caught”, and
+see Pseudocode for HandleServerSideGameControl for how fish are sent on the server’s side, and Pseudocode for Ocean, for all the details of how it is determined what gets sent and what SeaCreatures are created and replenished
+in Ocean.
 
     -Close GameControl-
 User fires stageCloseRequest by "x-ing out" or file -> close
