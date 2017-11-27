@@ -381,7 +381,7 @@ public class CatchServer
 								oysterPacket,lobsterPacket,crabPacket));
 					}
 				}
-				// TODO Consider refactor this into fewer catch blocks
+				// TODO Consider refactoring this into fewer catch blocks
 				catch (FileNotFoundException e)
 				{
 					e.printStackTrace();
@@ -420,19 +420,17 @@ public class CatchServer
 		return this.serverSocketPort;
 	}
 	
+	/**
+	 * @return True or False for if the server is listening for new clients
+	 */
 	public SimpleBooleanProperty isListeningForClients()
 	{
 		return listeningForNewClients;
 	}
 
-	public void setListeningForClients(boolean val)
-	{
-		this.listeningForNewClients.set(val);
-	}
 	
 	/**
-	 * Right now this action is a stub that just says the user has tried to 
-	 * shut down the server
+	 * Action to trigger a WINDOW_CLOSE_REQUEST
 	 */
 	private class ShutdownServerHandler implements EventHandler<ActionEvent>
 	{
@@ -445,7 +443,7 @@ public class CatchServer
 	}
 	
 	/**
-	 * Action for creating anew DatabaseManipulator object.
+	 * Action for creating a new DatabaseManipulator object.
 	 */
 	private class LaunchDbManipulatorHandler implements EventHandler<ActionEvent>
 	{
