@@ -1,5 +1,18 @@
 package userinterface;
 
+/*
+Class by Dr. Java and the JavaDocs
+Nils Johnson, Caileigh Fitzgerald, Thanh Lam, and Matt Roberts
+Date: 11-27-2017
+*/
+/*
+Purpose: currently simply to display a bar graph where the
+height of each bar is the number of that species in the ocean,
+and that has the time it was updated in the title.  All the control 
+is currently handled in the pane, as there is little.
+Modification Info:
+new
+*/
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
