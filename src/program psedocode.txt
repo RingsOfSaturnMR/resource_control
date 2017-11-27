@@ -8,7 +8,17 @@ user presses login
 Catch.java calls the constructor of GameControl.
 GameControl sends a loginPacket to the IP the user entered.
 server recieves a loginPacket with the entered name and password.
-server's DAO fetches an object containg that players Player object
+server's DAO fetches an object containing that players Player object
+	DAO checks to see if that user exists
+		if that user does not exist, throw BadLoginException(USER_NOT_FOUND)
+		if that user exists but the password is wrong, throw BadLoginException(INVALID_PASSWORD)
+		if there are now users, throw BadLoginException(NO_USERS)
+		if the login information was too short or incomplete, throw BadLoginException(INVALID_ATTEMPT). Does not make database call.
+		Update serverPane to show what happened
+		send ResponsePacket(response code for what happened)
+		GameControl stops making the GameControl object
+		LoginPane displays the error.
+		go back to displaing LoginPane
 server sends that object back to Catch.java
 server starts a new thread serving requests from that client, with the current streams.
 server goes back to listening for requests.
@@ -20,10 +30,16 @@ user enters the server they wish to connect to and port number.
 user enters desired login credentials
 each textField listens for change.
 on change, it verifies if the field is legally formatted.
-if it is, it turns that requirment green.
+if it is, it turns that requirement green.
 User clicks "Create Account"
-
 Catch.java sends a newUserPacket to the server.
+	if the username is invalid, throw NewUserExcption(INVALID_USERNAME)
+	if the password is invalid, throw NewUserExcption(INVALID_PASSWORD)
+	if the username is taken, throw NewUserExcption(NAME_TAKEN)
+	Update serverPane to show what happened
+	send ResponsePacket(response code for what happened)
+	update NewUserpane with message for the error.
+	go back to displaying NewUserPane
 servers DAO makes a new Player object
 Server responds with NEW_USER_SUCESS_CODE
 Catch.java calls GameControl's constructor and starts a new game

@@ -28,6 +28,9 @@ public class BadLoginException extends Exception
 		case USER_NOT_FOUND:
 			message = "User Not Found";
 			break;
+		case INVALID_ATTEMPT:
+			message = "Incomplete Login Credentials";
+			break;
 		default:
 			message = "Login Error";
 		}
