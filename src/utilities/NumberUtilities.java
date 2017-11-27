@@ -1,5 +1,17 @@
 package utilities;
+/*
+Class by Dr. Java and the JavaDocs
+Nils Johnson, Caileigh Fitzgerald, Thanh Lam, and Matt Roberts
+Date: 11-27-2017
+*/
+/*
+Purpose: to contain any really generic number functions.
+This currently includes getRandomInt for a range,
+and getRandomDouble for a range
 
+Modification info:
+new
+*/
 import java.util.Random;
 
 public class NumberUtilities {
