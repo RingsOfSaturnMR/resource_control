@@ -1,4 +1,16 @@
 package catchgame;
+/*
+Class by Dr. Java and the JavaDocs
+Nils Johnson, Caileigh Fitzgerald, Thanh Lam, and Matt Roberts
+Date: 11-27-2017
+*/
+/*
+Purpose: to have int values for all server/client request and response codes,
+all in one class (like a c++ struct)
+
+Modification info:
+added LOGOUT_REQUEST_CODE
+*/
 /**
  * Constant values that represent requests and responses
  */
