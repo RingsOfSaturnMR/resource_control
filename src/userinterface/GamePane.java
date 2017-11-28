@@ -1,5 +1,25 @@
 package userinterface;
 
+/*
+Class by Dr. Java and the JavaDocs
+Nils Johnson, Caileigh Fitzgerald, Thanh Lam, and Matt Roberts
+Date: 11-27-2017
+*/
+
+/*
+Purpose: to let user navigate between MyStatsPane, MarketsPane,
+and SimpleFishingPane
+SimpleFishingPane's purpose is to launch a FishingActivity when
+it is loaded if one has not already been launched
+MyStatsPane just gets stats from player object
+MarketsPane is in progress
+
+Modification info:
+SimpleFishingActivity launches a FishingActivity,
+and only if one has not already been launched
+MarketsPane is in progress
+*/
+
 import java.util.ArrayList;
 import java.util.Random;
 
