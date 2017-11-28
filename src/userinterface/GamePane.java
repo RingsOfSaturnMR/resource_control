@@ -55,11 +55,7 @@ import javafx.scene.text.Text;
 import javafx.stage.WindowEvent;
 import market.Market;
 import market.SeafoodMarket;
-import resources.Boat;
-import resources.BoatTypes;
-import resources.Equipment;
-import resources.Fish;
-import resources.FishSpecies;
+
 import catchgame.GameControl.FishingActivityActions;
 
 import resources.SeaCreature;
@@ -243,31 +239,8 @@ public class GamePane extends VBox
 			this.getChildren().addAll(labelExplanation);
 
 		}
-
 	}
 
-	private class BoatFishingPane extends Pane
-	{
-		private Button btnExtractFishAction = new Button("Extract Fish");
-
-		public BoatFishingPane(EventHandler<ActionEvent> extractFishAction)
-		{
-			btnExtractFishAction.setOnAction(extractFishAction);
-			this.getChildren().addAll(btnExtractFishAction);
-		}
-	}
-
-	private class LobsterTrappingPane extends Pane
-	{
-
-	}
-
-	/**
-	 * This pane is the GUI for selling SeaCreatures, and buying Equipment
-	 * 
-	 * @author Nils
-	 *
-	 */
 	public class MarketsPane extends VBox
 	{
 		// the market that is doing the transaction
@@ -346,6 +319,13 @@ public class GamePane extends VBox
 
 			btnDoTransaction.setOnAction(sellFishAction);
 			this.getChildren().addAll(txtMarketName, transactionContainer, btnDoTransaction);
+			
+			// spacing
+			priceGridPane.setHgap(6);
+			myResourcesGridPane.setHgap(6);
+			
+			priceGridPane.setVgap(3);
+			myResourcesGridPane.setVgap(3);
 		}
 
 		public void setSeafoodMarket(SeafoodMarket market)
@@ -371,6 +351,7 @@ public class GamePane extends VBox
 				int numPlayerHas = player.getNumOf(Constants.supportedSpecies.get(i));
 				Text text = new Text("You Have: " + Integer.toString(numPlayerHas));
 				TextField textField = new TextField();
+				textField.setMaxWidth(50);
 				
 				speciesTextList.add(text);
 				speciesTextFieldList.add(textField);
@@ -383,8 +364,6 @@ public class GamePane extends VBox
 				myResourcesGridPane.add(text, 2, i);
 			}
 		}
-
-		
 	}
 
 }
