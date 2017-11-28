@@ -49,10 +49,10 @@ public class SeafoodMarket extends Market<SeaCreature, Enum>
 	}
 
 	@Override
-	public double sellItem(ArrayList<SeaCreature> items)
+	public double sellItem(SeaCreature items)
 	{
 		// TODO Auto-generated method stub
-		return 0;
+		return 2;
 	}
 	
 	public Date getNextPriceChange()

@@ -35,7 +35,7 @@ public class EquipmentMarket extends Market<Equipment, Enum>
 	}
 
 	@Override
-	public double sellItem(ArrayList<Equipment> items)
+	public double sellItem(Equipment item)
 	{
 		// TODO Auto-generated method stub
 		return 0;

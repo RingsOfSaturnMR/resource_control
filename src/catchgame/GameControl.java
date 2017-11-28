@@ -215,6 +215,17 @@ public class GameControl
 		public void handle(ActionEvent e)
 		{
 			System.out.println("Sell Fish action triggered(fish sold to market)");
+			
+			for(int i = 0; i < Constants.supportedSpecies.size(); i++)
+			{
+				int numToSell = Integer.parseInt(gamePane.marketsPane.getSpeciesTextFieldList().get(i).getText());
+				
+				for(int j = 0; j < numToSell; i++)
+				{
+					player.addMoney(market.sellItem(player.getSeaNextSeaCreature(Constants.supportedSpecies.get(i))));
+				}
+			}
+			
 		}
 	}
 

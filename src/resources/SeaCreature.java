@@ -75,4 +75,10 @@ public abstract class SeaCreature <T> implements Serializable
 	{
 		this.GUICircle = null;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return this.getSpecies().toString() + ", " + this.getWeight() + " pounds";
+	}
 }

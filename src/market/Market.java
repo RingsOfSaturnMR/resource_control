@@ -25,6 +25,6 @@ public abstract class Market<T, Enum>
 	
 	public abstract String getMarketType();
 	
-	public abstract double sellItem(ArrayList<T> items);
+	public abstract double sellItem(T item);
 	
 }
