@@ -192,8 +192,8 @@ public class Player extends authentication.User implements Serializable
 					{
 						numOfSpecies++;
 					}
-					return numOfSpecies;
 				}
+				return numOfSpecies;
 
 			case LOBSTER:
 				for (int i = 0; i < iceChest.size(); i++)
