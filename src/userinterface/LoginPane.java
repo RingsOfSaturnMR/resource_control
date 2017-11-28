@@ -1,5 +1,19 @@
 package userinterface;
 
+/*
+Class by Dr. Java and the JavaDocs
+Nils Johnson, Caileigh Fitzgerald, Thanh Lam, and Matt Roberts
+Date: 11-27-2017
+*/
+
+/*
+Purpose: to let the user log in by filling in name and password and hitting login,
+to launch a new server, to launch a new user pane
+
+Modification info:
+no modifications known
+*/
+
 import catchgame.CatchServer;
 import catchgame.Constants;
 import javafx.event.ActionEvent;
