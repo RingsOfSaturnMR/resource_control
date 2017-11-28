@@ -1,5 +1,20 @@
 package catchgame;
 
+/*
+Class by Dr. Java and the JavaDocs
+Nils Johnson, Caileigh Fitzgerald, Thanh Lam, and Matt Roberts
+Date: 11-27-2017
+*/
+/*
+Purpose: to create methods that the rest of the program can depend on to be 
+carried out by the DAO, however it does that.  That way, the rest of the 
+program will not need to be reengineered however the DAO is implemented
+(and if this implmentation changes)
+
+Modification info:
+no changes known
+*/
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
