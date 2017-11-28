@@ -1,5 +1,22 @@
 package userinterface;
 
+/*
+Class by Dr. Java and the JavaDocs
+Nils Johnson, Caileigh Fitzgerald, Thanh Lam, and Matt Roberts
+Date: 11-27-2017
+*/
+
+/*
+Purpose: to let a user enter a userrname, password, and confirmation password,
+to listen to changes in the password, to tell the user if the passwords are valid
+and match, and to let the user send the info to the server by hitting "Create
+Account" button
+*/
+
+/*
+Modification info:
+No modifications known
+*/
 import java.util.ArrayList;
 
 import authentication.Authenticator;

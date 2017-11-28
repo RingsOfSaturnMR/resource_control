@@ -1,5 +1,21 @@
 package catchgame;
 
+/*
+Class by Dr. Java and the JavaDocs
+Nils Johnson, Caileigh Fitzgerald, Thanh Lam, and Matt Roberts
+Date: 11-27-2017
+*/
+/*
+Purpose: to load a loginPane (initial pane) and pass it the actions to handle
+logging in, createing a new user, launching game control, and launchimg a new
+server
+
+Modification info:
+Moved logging in function to within GameControl where it can throw an exception 
+back out to Catch (The exception will be handled there and make GameControl
+pass out of scope
+*/
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

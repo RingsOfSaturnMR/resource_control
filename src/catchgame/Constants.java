@@ -1,14 +1,22 @@
 package catchgame;
+/*
+Class by Dr. Java and the JavaDocs
+Nils Johnson, Caileigh Fitzgerald, Thanh Lam, and Matt Roberts
+Date: 11-27-2017
+*/
+/*
+Purpose: to provide a class (acts more like a c++ struct) that contains
+in one place all the constant values that can be 
+played around tweak the game-play, the user interface etc. (or at least that's the goal)
 
-import java.util.ArrayList;
-import java.util.Arrays;
 
-import resources.FishSpecies;
-import resources.SeaCreature;
-import resources.ShellfishSpecies;
+Modification info:
+added frequency histogram height and width
+added application name
+*/
 
 /**
- * Constants for initial used throughout program.
+ * Constants for initial values used throughout the program.
  */
 public class Constants
 {

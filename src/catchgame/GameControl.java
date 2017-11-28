@@ -1,5 +1,22 @@
 package catchgame;
 
+/*
+Class by Dr. Java and the JavaDocs
+Nils Johnson, Caileigh Fitzgerald, Thanh Lam, and Matt Roberts
+Date: 11-27-2017
+*/
+/*
+Purpose: logs in user or throws an exception, can save a game,
+can log a player out, can load a GamePane, passes the 
+sellFishAction to the gamePane, and the functor 
+FishingActivityActions to the gamePane
+
+Modification info:
+can save a game, can log a player out, the FishingActivity 
+code has been moved to FishingActivity (was just free floating in 
+GameControl, and the functor and its passing have been added
+*/
+
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.event.Event;

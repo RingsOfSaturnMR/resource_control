@@ -1,5 +1,18 @@
 package catchgame;
+/*
+Class by Dr. Java and the JavaDocs
+Nils Johnson, Caileigh Fitzgerald, Thanh Lam, and Matt Roberts
+Date: 11-27-2017
+*/
 
+/*
+Purpose: to load a FrequencyHistogramPane.  Since the control for the pane
+(besides what's handled by JavaFX behind the scenes) is so simple, right now
+that occurs in the FrequencyHistogramPane itself
+
+Modification info:
+new
+*/
 import catchgame.Catch.LoginHandler;
 import catchgame.Catch.NewUserHandler;
 import catchgame.Catch.NewServerHandler;

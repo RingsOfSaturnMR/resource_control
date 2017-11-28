@@ -14,6 +14,7 @@ a fish when the fish's GUI is clicked on and add it to
 the Player's IceChest.  SeaCreatures are currently rendered
 with circles colored by species and sized by SeaCreature's
 weight.
+
 Modification Info:
 These methods were originally found in GameControl.
 Colors have been added, and the ability to get all SeaCreatures

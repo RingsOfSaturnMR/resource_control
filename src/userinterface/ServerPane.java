@@ -1,5 +1,20 @@
 package userinterface;
 
+/*
+Class by Dr. Java and the JavaDocs
+Nils Johnson, Caileigh Fitzgerald, Thanh Lam, and Matt Roberts
+Date: 11-27-2017
+*/
+/*
+Purpose: to have a TextArea that displays server related output, a 
+button that launch a FrequencyHistogram, and a menu that can call the
+launchDbManipulator action and the closeProgramHandler
+
+Modification info:
+added Frequency histogram button stuff and menu stuff 
+(launchDbManipulator and closeProgramHandler menu items)
+*/
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
