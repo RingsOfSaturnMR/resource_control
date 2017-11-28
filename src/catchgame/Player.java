@@ -229,7 +229,7 @@ public class Player extends authentication.User implements Serializable
 		int i = 0;
 		SeaCreature creature = null;
 		
-		while(!creatureFound)
+		while(!creatureFound && i < iceChest.size())
 		{
 			if(iceChest.get(i).getSpecies() == species)
 			{
@@ -237,6 +237,7 @@ public class Player extends authentication.User implements Serializable
 				creatureFound = true;
 				iceChest.remove(i);
 			}
+			i++;
 		}
 		
 		return creature;
