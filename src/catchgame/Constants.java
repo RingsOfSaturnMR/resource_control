@@ -15,6 +15,12 @@ added frequency histogram height and width
 added application name
 */
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import resources.FishSpecies;
+import resources.ShellfishSpecies;
+
 /**
  * Constants for initial values used throughout the program.
  */
