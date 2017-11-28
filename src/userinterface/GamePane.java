@@ -318,7 +318,7 @@ public class GamePane extends VBox
 			transactionContainer.setSpacing(5);
 
 			btnDoTransaction.setOnAction(sellFishAction);
-			this.getChildren().addAll(txtMarketName, transactionContainer, btnDoTransaction);
+			this.getChildren().addAll(new Label("Note: Market is still a stub, which causes logic errors."), txtMarketName, transactionContainer, btnDoTransaction);
 			
 			// spacing
 			priceGridPane.setHgap(6);

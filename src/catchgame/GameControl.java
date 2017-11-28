@@ -134,7 +134,7 @@ public class GameControl
 		});
 
 		// get markets
-		SeafoodMarket seafoodMarket = new SeafoodMarket("Caileigh's Market");
+		SeafoodMarket seafoodMarket = new SeafoodMarket("The Market");
 
 		// set game to running
 		gameRunning.set(true);
