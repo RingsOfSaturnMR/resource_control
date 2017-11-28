@@ -1,5 +1,24 @@
 package catchgame;
 
+/*
+Class by Dr. Java and the JavaDocs
+Nils Johnson, Caileigh Fitzgerald, Thanh Lam, and Matt Roberts
+Date: 11-27-2017
+*/
+/*
+Purpose: To create a server that loads the ui and let's users create acounts, login 
+logout, and save and to launch ServerSideGameControl threads (a nested class of 
+CatchServer) to do this and respond to requests for SeaCreatures from clients 
+that are actively being used to play the game.  UI let's the user stop the server
+launch a DBManipulator (now pretty minimal), and launch a frequency histogram of 
+the server's ocean.
+
+Modification info:
+User's can now logout, save, and quit
+ServerSideGameControl threads will stop if user logs out
+Can launch a DBManipulator and a FrequencyHistogram
+*/
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
