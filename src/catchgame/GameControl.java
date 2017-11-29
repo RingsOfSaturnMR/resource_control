@@ -133,13 +133,12 @@ public class GameControl
 			}
 		});
 
-		
 		// get markets
-		SeafoodMarket seafoodMarket = new SeafoodMarket("Caileigh's Market");
-		
+		SeafoodMarket seafoodMarket = new SeafoodMarket("The Market");
+
 		// set game to running
 		gameRunning.set(true);
-		
+
 		// Display GUI
 		gamePane = new GamePane(new SellFishAction(), player, new FishingActivityActions(), new DeleteAccountAction(), new SaveGameAction(), new ExitAction(), seafoodMarket);
 		gameScene = new Scene(gamePane, Constants.INITIAL_GAME_PANE_WIDTH, Constants.INITIAL_GAME_PANE_HEIGHT);
@@ -231,16 +230,55 @@ public class GameControl
 		@Override
 		public void handle(ActionEvent e)
 		{
-			System.out.println("Sell Fish action triggered(fish sold to market)");
-			
-			for(int i = 0; i <= Constants.supportedSpecies.size()-1; i++)
+			System.out.println("Starting Transaction");
+
+			boolean validTransaction = true;
+
+			// input validation
+			for (int i = 0; i < Constants.supportedSpecies.size(); i++)
 			{
-				int numToSell = Integer.parseInt(gamePane.marketsPane.getSpeciesTextFieldList().get(i).getText());
-				
-				for(int j = 0; j < numToSell; j++)
+				String str = gamePane.marketsPane.getSpeciesTextFieldList().get(i).getText();
+
+				if (str.equals(""))
 				{
-					player.addMoney(market.sellItem(player.getSeaNextSeaCreature(Constants.supportedSpecies.get(i))));
+					str = "0";
 				}
+
+				int numToSell = Integer.parseInt(str);
+
+				if (numToSell > player.getNumOf(Constants.supportedSpecies.get(i)))
+				{
+					gamePane.marketsPane.getSpeciesTextFieldList().get(i).setStyle("-fx-control-inner-background: red;");
+					validTransaction = false;
+				}
+			}
+
+			if (validTransaction)
+			{
+				for (int i = 0; i < Constants.supportedSpecies.size(); i++)
+				{
+					// reset to white
+					gamePane.marketsPane.getSpeciesTextFieldList().get(i).setStyle("-fx-control-inner-background: white;");
+					
+					String str = gamePane.marketsPane.getSpeciesTextFieldList().get(i).getText();
+
+					if (str.equals(""))
+					{
+						str = "0";
+					}
+
+					int numToSell = Integer.parseInt(str);
+
+					for (int j = 0; j < numToSell; j++)
+					{
+						player.addMoney(market.sellItem(player.getSeaNextSeaCreature(Constants.supportedSpecies.get(i))));
+					}
+				}
+				System.out.println("Transaction sucess");
+			}
+			else
+			{
+				System.out.println("Transaction didnt happen");
 			}
 			
 		}

@@ -32,11 +32,9 @@ import userinterface.LoginPane;
 import userinterface.NewUserPane;
 
 /**
- * 
  * This class is used to start a game of 'Catch!'. Primarily, it can instantiate
  * a CatchServer, instantiate a GameControl and communicate with CatchServer to
- * make new accounts. It is also used to define packets to transfer information
- * from CatchServer to GameControl and vice versa.
+ * make new accounts.
  * 
  * @author Nils Johnson
  * @author Matt Roberts

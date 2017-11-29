@@ -223,11 +223,11 @@ public class Player extends authentication.User implements Serializable
 		return 0;
 	}
 
-	public SeaCreature getSeaNextSeaCreature(Enum species)
+	public SeaCreature<?> getSeaNextSeaCreature(Enum<?> species)
 	{
 		boolean creatureFound = false;
 		int i = 0;
-		SeaCreature creature = null;
+		SeaCreature<?> creature = null;
 		
 		while(!creatureFound && i < iceChest.size())
 		{
