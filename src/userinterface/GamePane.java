@@ -113,7 +113,8 @@ public class GamePane extends VBox
 		exitMenuItem.setOnAction(exitAction);
 
 	}
-
+	
+	// where user selects what they want to do
 	private class ActionVBox extends VBox
 	{
 		private Text txtTitle = new Text("Primary Actions - What would you like to do?");

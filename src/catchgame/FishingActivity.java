@@ -1,6 +1,11 @@
 
 package catchgame;
 
+import java.io.BufferedWriter;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 /*
 Class by Dr. Java and the JavaDocs
 Nils Johnson, Caileigh Fitzgerald, Thanh Lam, and Matt Roberts
@@ -24,12 +29,17 @@ SeaCreature to the player's ice chest is new too.
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.util.ArrayList;
 
 import catchgame.Packets.ClientSubOceanSeaCreatureStatePacket;
 import catchgame.Packets.SeaCreaturesPacket;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import resources.Fish;
@@ -64,17 +74,23 @@ public class FishingActivity {
 	 * @param toServer an ObjectOutputStream to the server
 	 * @param fromServer an ObjectInputStream from the server
 	 * @param player the player who will be affected by the user fishing
+	 * @throws IOException 
 	 */
 	public FishingActivity(GamePane gamePane, ObjectOutputStream toServer, 
-			ObjectInputStream fromServer, Player player){
+			ObjectInputStream fromServer, Player player) {
 		clientSubOcean=new ClientSubOcean();
 		this.gamePane=gamePane;
 		this.player=player;
 		this.toServer=toServer;
 		this.fromServer=fromServer;
-		updateSeaCreaturesOnScreen();
+		//updateSeaCreaturesOnScreen();
+		
+		ImageView fishImageView = new ImageView();
+		Image fishImage = new Image("fish.png");
+		fishImageView.setImage(fishImage);
+		gamePane.simpleFishingPane.getChildren().add(fishImageView);
+		
 	}
-	
 	
 	/**
 	 * Requests new SeaCreatures from Server, and adds them to the screen
