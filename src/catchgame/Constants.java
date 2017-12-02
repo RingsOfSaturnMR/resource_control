@@ -82,7 +82,7 @@ public class Constants
 	public final static double OYSTER_INITIAL_WEIGHT_MAX = 4;
 	
 	// Basics
-	public final static String APPLICATION_NAME = "Catch! - By Caileigh, Matt, Nils, Thanh";
+	public final static String APPLICATION_NAME = "Catch!! - By Caileigh, Matt, Nls, Thanh";
 	
 	// to use throughout program to make sure every species gets accounted for in gameplay
 	public final static ArrayList<Enum> supportedSpecies = new ArrayList<>(Arrays.asList(FishSpecies.COD, FishSpecies.SALMON, FishSpecies.TUNA, ShellfishSpecies.CRAB, ShellfishSpecies.LOBSTER, ShellfishSpecies.OYSTER));

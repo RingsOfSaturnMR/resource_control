@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import authentication.BadPasswordException;
 import authentication.BadUsernameException;
 import authentication.NewUserException;
+import javafx.beans.value.ObservableDoubleValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -25,6 +26,11 @@ public class DatabaseManipulator
 	private Scene scene;
 	private DataEntryVBox dataEntryVBox;
 	
+	// TODO-
+	// make so admin can add user - in progress
+	// make so admin can delete user by name - use method in userDAO.java
+	// view all users - needs a new method in userDAO.java, and in IUserDAO.java
+	// view all users online - use method in userDAO.java
 	
 	public DatabaseManipulator()
 	{

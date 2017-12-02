@@ -49,9 +49,12 @@ public class SeafoodMarket extends Market<SeaCreature, Enum>
 	}
 
 	@Override
-	public double sellItem(SeaCreature items)
+	public double sellItem(SeaCreature item)
 	{
-		// TODO Auto-generated method stub
+		if(item.getSpecies() == FishSpecies.SALMON)
+		{
+			// its a salmon!
+		}
 		return 2;
 	}
 	
