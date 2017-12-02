@@ -83,13 +83,7 @@ public class FishingActivity {
 		this.player=player;
 		this.toServer=toServer;
 		this.fromServer=fromServer;
-		//updateSeaCreaturesOnScreen();
-		
-		ImageView fishImageView = new ImageView();
-		Image fishImage = new Image("fish.png");
-		fishImageView.setImage(fishImage);
-		gamePane.simpleFishingPane.getChildren().add(fishImageView);
-		
+		updateSeaCreaturesOnScreen();	
 	}
 	
 	/**

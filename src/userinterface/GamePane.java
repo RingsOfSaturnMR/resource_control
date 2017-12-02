@@ -69,9 +69,9 @@ public class GamePane extends VBox
 	private Player player;
 
 	// pane to hold the main nodes for what the player is doing
-	private StackPane primaryPane = new StackPane();
-	// pane to hold the nodes that fire actions to change what nodes go in primary
-	// pane
+	private Pane primaryPane = new Pane();
+	
+	// holds nodes which fire actions to change what nodes go in primaryPane
 	private ActionVBox actionHBox = new ActionVBox();
 
 	// pane to hold readout of players attributes.
@@ -97,7 +97,7 @@ public class GamePane extends VBox
 		this.fishingActivityActions = fishingActivityActions;
 
 		simpleFishingPane = new SimpleFishingPane();
-		marketsPane = new MarketsPane(sellFishAction, seafoodMarket);
+		marketsPane = new MarketsPane(player, seafoodMarket, sellFishAction);
 
 		// set up menu
 		fileMenu.getItems().addAll(accountDeleteMenuItem, saveMenuItem, exitMenuItem);
@@ -111,9 +111,14 @@ public class GamePane extends VBox
 		accountDeleteMenuItem.setOnAction(deleteAccountAction);
 		saveMenuItem.setOnAction(saveAction);
 		exitMenuItem.setOnAction(exitAction);
+		
+		// make seafoodMarketPane responsive
+		marketsPane.transactionContainer.prefWidthProperty().bind(this.widthProperty());
+		marketsPane.priceBox.prefWidthProperty().bind(marketsPane.transactionContainer.widthProperty().divide(2));
+		marketsPane.usersResourcesBox.prefWidthProperty().bind(marketsPane.transactionContainer.widthProperty().divide(2));
 
 	}
-	
+
 	// where user selects what they want to do
 	private class ActionVBox extends VBox
 	{
@@ -242,129 +247,6 @@ public class GamePane extends VBox
 		}
 	}
 
-	public class MarketsPane extends VBox
-	{
-		// the market that is doing the transaction
-		private SeafoodMarket seafoodMarket;
-
-		// for titles
-		private Label lblPrices = new Label("Current Prices");
-		private Label lblMyResources = new Label("My Sea Creatures");
-		private Label lblToSell = new Label("Resources To Sell");
-
-		// for the name of the market
-		private Text txtMarketName;
-
-		// to display current prices
-		private GridPane priceGridPane = new GridPane();
-		
-		// to display the players resources
-		private GridPane myResourcesGridPane = new GridPane();
 	
-		// to hold the resources the player wants to sell
-		private ObservableList<SeaCreature> toSellList = FXCollections.observableArrayList();
-
-		// Containers
-		private HBox transactionContainer = new HBox();
-		private VBox priceBox = new VBox();
-		private VBox usersResourcesBox = new VBox();
-		private VBox itemsToSellBox = new VBox();
-
-		// to fire event to do the transaction
-		private Button btnDoTransaction = new Button("Do Transaction");
-		
-		private ArrayList<TextField> speciesTextFieldList = new ArrayList<>();
-		private ArrayList<Text> speciesTextList = new ArrayList<>();
-
-		public MarketsPane(EventHandler<ActionEvent> sellFishAction, SeafoodMarket seafoodMarket)
-		{
-			
-			class IceChestChangeListener implements ListChangeListener<Object>
-			{
-				@Override
-				public void onChanged(Change<? extends Object> arg0)
-				{
-					for (int i = 0; i < Constants.supportedSpecies.size(); i++)
-					{
-						int numPlayerHas = player.getNumOf(Constants.supportedSpecies.get(i));
-						speciesTextList.get(i).setText("You Have: " + Integer.toString(numPlayerHas));
-					}
-				}
-			}
-			
-			player.getIceChest().addListener(new IceChestChangeListener());
-			// set the market
-			setSeafoodMarket(seafoodMarket);
-
-			// set the title
-			txtMarketName = new Text(seafoodMarket.getName());
-
-			// set the gridpanes 
-			setGridPanes();
-
-			System.out.println("There are " + speciesTextFieldList.size() + " text fields");
-			
-			// set up the left box to show prices
-			priceBox.getChildren().addAll(lblPrices, priceGridPane);
-
-			// set the middle box to show what resources I have
-			usersResourcesBox.getChildren().addAll(lblMyResources, myResourcesGridPane);
-
-			// set the right box to show what resources I want to sell
-			itemsToSellBox.getChildren().addAll(lblToSell);
-
-			// set the main container to show the three boxes from above
-			transactionContainer.getChildren().addAll(priceBox, usersResourcesBox);
-			transactionContainer.setAlignment(Pos.CENTER);
-			transactionContainer.setSpacing(5);
-
-			btnDoTransaction.setOnAction(sellFishAction);
-			this.getChildren().addAll(new Label("Note: Market is still a stub, which causes logic errors."), txtMarketName, transactionContainer, btnDoTransaction);
-			
-			// spacing
-			priceGridPane.setHgap(6);
-			myResourcesGridPane.setHgap(6);
-			
-			priceGridPane.setVgap(3);
-			myResourcesGridPane.setVgap(3);
-		}
-
-		public void setSeafoodMarket(SeafoodMarket market)
-		{
-			this.seafoodMarket = market;
-		}
-		
-		public ArrayList<TextField> getSpeciesTextFieldList()
-		{
-			return this.speciesTextFieldList;
-		}
-		
-		private void setGridPanes()
-		{
-			for (int i = 0; i < Constants.supportedSpecies.size(); i++)
-			{
-				// node, col, row
-				priceGridPane.add(new Label(Constants.supportedSpecies.get(i).toString()), 0, i);
-				double price = seafoodMarket.getCurrentPricePerPound(Constants.supportedSpecies.get(i));
-				priceGridPane.add(new Text(Double.toString(price)), 1, i);
-				
-				
-				int numPlayerHas = player.getNumOf(Constants.supportedSpecies.get(i));
-				Text text = new Text("You Have: " + Integer.toString(numPlayerHas));
-				TextField textField = new TextField();
-				textField.setMaxWidth(50);
-				
-				speciesTextList.add(text);
-				speciesTextFieldList.add(textField);
-				
-				// species label
-				myResourcesGridPane.add(new Label(Constants.supportedSpecies.get(i).toString()), 0, i);
-				// text field for number to sell
-				myResourcesGridPane.add(textField, 1, i);
-				// text show how many player has
-				myResourcesGridPane.add(text, 2, i);
-			}
-		}
-	}
 
 }

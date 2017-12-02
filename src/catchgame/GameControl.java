@@ -18,6 +18,10 @@ GameControl, and the functor and its passing have been added
 */
 
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ListChangeListener.Change;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -28,11 +32,15 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import market.EquipmentMarket;
 import market.SeafoodMarket;
 import resources.FishSpecies;
+import resources.SeaCreature;
 import userinterface.GamePane;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -65,8 +73,9 @@ public class GameControl
 	private ObjectOutputStream toServer = null;
 	private ObjectInputStream fromServer = null;
 
-	// for exchanginng resources for money
-	SeafoodMarket market = new SeafoodMarket("The Fish Market");
+	// markets for buying/selling resources
+	SeafoodMarket seafoodMarket;
+	EquipmentMarket equipMarket;
 
 	// so Catch.java can listen to what is happening in the game
 	private SimpleBooleanProperty gameRunning = new SimpleBooleanProperty(false);
@@ -133,8 +142,9 @@ public class GameControl
 			}
 		});
 
-		// get markets
-		SeafoodMarket seafoodMarket = new SeafoodMarket("The Market");
+		// 'get' markets
+		seafoodMarket = new SeafoodMarket("The Fish Wholesaler");
+		equipMarket = new EquipmentMarket("Ye 'Ol General Store");
 
 		// set game to running
 		gameRunning.set(true);
@@ -147,6 +157,72 @@ public class GameControl
 		gameStage.centerOnScreen();
 		gameStage.show();
 		gameStage.requestFocus();
+
+		// define listeners to use in the game
+		
+		/**
+		 * Listens for changes in the players 'IceChest' and updates seafoodMarketPane nodes to reflect the change.
+		 * @author Nils
+		 */
+		class IceChestChangeListener implements ListChangeListener<Object>
+		{
+			@Override
+			public void onChanged(Change<? extends Object> arg0)
+			{
+				for (int i = 0; i < Constants.supportedSpecies.length; i++)
+				{
+					int numPlayerHas = player.getNumOf(Constants.supportedSpecies[i]);
+					gamePane.marketsPane.setCreaturesOnHandTextAt(i, "You Have: " + Integer.toString(numPlayerHas));
+				}
+			}
+		}
+
+		/**
+		 * This class listens for changes in a TextField, and turns them to red if they
+		 * are set to something other than empty ("") or an integer
+		 * 
+		 * @author Nils
+		 */
+		class IsIntegerTextFieldListener implements ChangeListener
+		{
+			private TextField textField;
+
+			public IsIntegerTextFieldListener(TextField textField)
+			{
+				this.textField = textField;
+			}
+
+			@Override
+			public void changed(ObservableValue arg0, Object oldValue, Object newValue)
+			{
+				String val = textField.getText().trim();
+				if (val.equals(""))
+				{
+					val = "0";
+					textField.setStyle("-fx-control-inner-background: white;");
+				}
+				else
+				{
+					try
+					{
+						Integer.parseInt(val);
+					}
+					catch (Exception e)
+					{
+						textField.setStyle("-fx-control-inner-background: red;");
+					}
+				}
+
+			}
+		}
+
+		for (TextField tf : gamePane.marketsPane.getNumCreaturesToSellTextFields())
+		{
+			tf.textProperty().addListener(new IsIntegerTextFieldListener(tf));
+		}
+		
+		// add listener to players ice chest
+		player.getIceChest().addListener(new IceChestChangeListener());
 
 	}
 
@@ -198,16 +274,12 @@ public class GameControl
 
 			throw new Exception(errorMessage);
 		}
-		// if the response code is 'LOGIN_SUCCESS_CODE, expect to recieve the user's
-		// Object'
+
+		// if code is 'LOGIN_SUCCESS_CODE, expect to receive the user's Object
 		else if (resultPacket.code == Codes.LOGIN_SUCCESS_CODE)
 		{
-			System.out.println("Response to login request: " + resultPacket.code +
-					", aka 'LOGIN_SUCCESS_CODE' - Waiting to recieve user's Player object");
 			this.player = (Player) fromServer.readObject();
-			System.out.println("returned players name: " + player.getUsername());
 		}
-
 	}
 
 	/**
@@ -223,64 +295,65 @@ public class GameControl
 	}
 
 	/**
-	 * Action that occurs when a fish is sold.
+	 * Action that occurs user presses button to sell their fish
 	 */
 	private class SellFishAction implements EventHandler<ActionEvent>
 	{
 		@Override
 		public void handle(ActionEvent e)
 		{
-			System.out.println("Starting Transaction");
+			int numToSell = 0;
 
-			boolean validTransaction = true;
-
-			// input validation
-			for (int i = 0; i < Constants.supportedSpecies.size(); i++)
+			for (int curSpeciesIndex = 0; curSpeciesIndex < Constants.supportedSpecies.length; curSpeciesIndex++)
 			{
-				String str = gamePane.marketsPane.getSpeciesTextFieldList().get(i).getText();
+				String str = gamePane.marketsPane.getNumCreaturesToSellTextFields()[curSpeciesIndex].getText().trim();
 
 				if (str.equals(""))
 				{
 					str = "0";
 				}
 
-				int numToSell = Integer.parseInt(str);
-
-				if (numToSell > player.getNumOf(Constants.supportedSpecies.get(i)))
+				try
 				{
-					gamePane.marketsPane.getSpeciesTextFieldList().get(i).setStyle("-fx-control-inner-background: red;");
-					validTransaction = false;
-				}
-			}
+					numToSell = Integer.parseInt(str);
 
-			if (validTransaction)
-			{
-				for (int i = 0; i < Constants.supportedSpecies.size(); i++)
-				{
-					// reset to white
-					gamePane.marketsPane.getSpeciesTextFieldList().get(i).setStyle("-fx-control-inner-background: white;");
-					
-					String str = gamePane.marketsPane.getSpeciesTextFieldList().get(i).getText();
-
-					if (str.equals(""))
+					if (numToSell > player.getNumOf(Constants.supportedSpecies[curSpeciesIndex]))
 					{
-						str = "0";
+						throw new Exception("Cannot Sell " + " " +
+								numToSell + " " +
+								Constants.supportedSpecies[curSpeciesIndex].toString() +
+								". You only have " +
+								player.getNumOf(Constants.supportedSpecies[curSpeciesIndex]));
 					}
 
-					int numToSell = Integer.parseInt(str);
-
-					for (int j = 0; j < numToSell; j++)
+					for (int curSeaCreature = 0; curSeaCreature < numToSell; curSeaCreature++)
 					{
-						player.addMoney(market.sellItem(player.getSeaNextSeaCreature(Constants.supportedSpecies.get(i))));
+						// get the 'next' creature of the current type from the player
+						SeaCreature creature = player.getSeaNextSeaCreature(Constants.supportedSpecies[curSpeciesIndex]);
+						// sell the creature
+						double money = seafoodMarket.sellItem(creature);
+						player.addMoney(money);
+						
+						// set the textField to correct number
+						String setTo;
+						int num = player.getNumOf(Constants.supportedSpecies[curSpeciesIndex]);
+						// TOOD conditional here
+						if(num == 0)
+						{
+							setTo = "";
+						}
+						else
+						{
+							setTo = (Integer.toString(num));
+						}
+						gamePane.marketsPane.setSpeciesToSellTextFieldAt(curSpeciesIndex, setTo);
 					}
 				}
-				System.out.println("Transaction sucess");
+				catch (Exception ex)
+				{
+					ex.printStackTrace();
+				}
 			}
-			else
-			{
-				System.out.println("Transaction didnt happen");
-			}
-			
 		}
 	}
 

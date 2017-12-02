@@ -41,9 +41,9 @@ import userinterface.NewUserPane;
  */
 public class Catch extends Application
 {
-	private LoginPane loginPane=null;
+	private LoginPane loginPane = null;
 	private static Stage loginStage = new Stage();
-	private CatchServer catchServer=null;
+	private CatchServer catchServer = null;
 	private Socket socket = null;
 	
 	// to save port/ip to
