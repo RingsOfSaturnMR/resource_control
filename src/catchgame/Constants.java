@@ -87,8 +87,9 @@ public class Constants
 	// Basics
 	public final static String APPLICATION_NAME = "Catch!! - By Caileigh, Matt, Nls, Thanh";
 
-	// to use throughout program to make sure every species gets accounted for in
-	// gameplay
+	/**
+	 * A list of the SeaCreature Species the program supports
+	 */
 	public final static Enum[] supportedSpecies =
 	{ FishSpecies.COD, FishSpecies.SALMON, FishSpecies.TUNA, ShellfishSpecies.CRAB, ShellfishSpecies.LOBSTER, ShellfishSpecies.OYSTER };
 	

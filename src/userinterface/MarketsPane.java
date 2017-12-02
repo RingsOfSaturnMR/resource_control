@@ -78,10 +78,16 @@ public class MarketsPane extends VBox
 		// initialize gridpanes for all species
 		for (int i = 0; i < Constants.supportedSpecies.length; i++)
 		{
+			Enum currentSpecies = Constants.supportedSpecies[i];
+			
 			// node, col, row
-			priceGridPane.add(new Label(Constants.supportedSpecies[i].toString()), 0, i);
-			double price = seafoodMarket.getCurrentPricePerPound(Constants.supportedSpecies[i]);
+			priceGridPane.add(new Label(currentSpecies.toString()), 0, i);
+			double price = seafoodMarket.getCurrentPricePerPound(currentSpecies);
 			priceGridPane.add(new Text(Double.toString(price)), 1, i);
+			ImageView curImage = new ImageView(Constants.getImage(currentSpecies));
+			curImage.setFitHeight(20);
+			curImage.setFitWidth(20);
+			priceGridPane.add(curImage, 2, i);
 
 			int numPlayerHas = player.getNumOf(Constants.supportedSpecies[i]);
 			Text text = new Text("You Have: " + Integer.toString(numPlayerHas));
@@ -119,7 +125,7 @@ public class MarketsPane extends VBox
 		priceGridPane.setAlignment(Pos.CENTER);
 		
 		
-		this.getChildren().addAll(txtMarketName, transactionContainer, btnDoTransaction, new ImageView(Constants.getImage(ShellfishSpecies.CRAB)));
+		this.getChildren().addAll(txtMarketName, transactionContainer, btnDoTransaction);
 
 		// spacing
 		transactionContainer.setSpacing(6);
