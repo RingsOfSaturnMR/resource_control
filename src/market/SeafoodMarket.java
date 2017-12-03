@@ -3,6 +3,11 @@ package market;
 import java.util.ArrayList;
 import java.util.Date;
 
+import catchgame.GameControl;
+import catchgame.GameControl.SeafoodPriceSetEventHandler;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import resources.FishSpecies;
 import resources.SeaCreature;
 import resources.ShellfishSpecies;
@@ -17,13 +22,22 @@ import resources.ShellfishSpecies;
  */
 public class SeafoodMarket extends Market<SeaCreature, Enum>
 {
+	private SeafoodPriceSetEventHandler priceSetHandler;
 
-	public SeafoodMarket(String name)
+	public SeafoodMarket(String name, SeafoodPriceSetEventHandler updatePricePerPoundHandler)
 	{
 		super(name);
 		// TODO Auto-generated constructor stub
+		priceSetHandler = updatePricePerPoundHandler;
+		
 	}
 
+	//temp for testing
+	public void forcePriceUpdate()
+	{
+		priceSetHandler.setPrices();
+	}
+	
 	@Override
 	public double getCurrentPricePerPound(Enum species)
 	{

@@ -33,6 +33,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import market.EquipmentMarket;
@@ -74,8 +75,8 @@ public class GameControl
 	private ObjectInputStream fromServer = null;
 
 	// markets for buying/selling resources
-	SeafoodMarket seafoodMarket;
-	EquipmentMarket equipMarket;
+	private SeafoodMarket seafoodMarket;
+	private EquipmentMarket equipMarket;
 
 	// so Catch.java can listen to what is happening in the game
 	private SimpleBooleanProperty gameRunning = new SimpleBooleanProperty(false);
@@ -143,7 +144,7 @@ public class GameControl
 		});
 
 		// 'get' markets
-		seafoodMarket = new SeafoodMarket("The Fish Wholesaler");
+		seafoodMarket = new SeafoodMarket("The Fish Wholesaler", new SeafoodPriceSetEventHandler());
 		equipMarket = new EquipmentMarket("Ye 'Ol General Store");
 
 		// set game to running
@@ -158,10 +159,19 @@ public class GameControl
 		gameStage.show();
 		gameStage.requestFocus();
 
-		// define listeners to use in the game
+		//TODO - this is just to make sure this method works. Encapsulate this in SeafoodMarket.
+		// fire this method as a test
+		seafoodMarket.forcePriceUpdate();
 		
+		// force update of GUI
+		updateNumSellableSeaCreatures();
+		
+		
+		// define listeners to use in the game
 		/**
-		 * Listens for changes in the players 'IceChest' and updates seafoodMarketPane nodes to reflect the change.
+		 * Listens for changes in the players 'IceChest' and updates seafoodMarketPane
+		 * nodes to reflect the change.
+		 * 
 		 * @author Nils
 		 */
 		class IceChestChangeListener implements ListChangeListener<Object>
@@ -169,11 +179,7 @@ public class GameControl
 			@Override
 			public void onChanged(Change<? extends Object> arg0)
 			{
-				for (int i = 0; i < Constants.supportedSpecies.length; i++)
-				{
-					int numPlayerHas = player.getNumOf(Constants.supportedSpecies[i]);
-					gamePane.marketsPane.setCreaturesOnHandTextAt(i, "You Have: " + Integer.toString(numPlayerHas));
-				}
+				updateNumSellableSeaCreatures();
 			}
 		}
 
@@ -212,7 +218,6 @@ public class GameControl
 						textField.setStyle("-fx-control-inner-background: red;");
 					}
 				}
-
 			}
 		}
 
@@ -220,10 +225,9 @@ public class GameControl
 		{
 			tf.textProperty().addListener(new IsIntegerTextFieldListener(tf));
 		}
-		
+
 		// add listener to players ice chest
 		player.getIceChest().addListener(new IceChestChangeListener());
-
 	}
 
 	/**
@@ -304,7 +308,7 @@ public class GameControl
 		{
 			int numToSell = 0;
 
-			for (int curSpeciesIndex = 0; curSpeciesIndex < Constants.supportedSpecies.length; curSpeciesIndex++)
+			for (int curSpeciesIndex = 0; curSpeciesIndex < Constants.SUPPORTED_SPECIES.length; curSpeciesIndex++)
 			{
 				String str = gamePane.marketsPane.getNumCreaturesToSellTextFields()[curSpeciesIndex].getText().trim();
 
@@ -317,28 +321,29 @@ public class GameControl
 				{
 					numToSell = Integer.parseInt(str);
 
-					if (numToSell > player.getNumOf(Constants.supportedSpecies[curSpeciesIndex]))
+					if (numToSell > player.getNumOf(Constants.SUPPORTED_SPECIES[curSpeciesIndex]))
 					{
 						throw new Exception("Cannot Sell " + " " +
-								numToSell + " " +
-								Constants.supportedSpecies[curSpeciesIndex].toString() +
+								numToSell +
+								" " +
+								Constants.SUPPORTED_SPECIES[curSpeciesIndex].toString() +
 								". You only have " +
-								player.getNumOf(Constants.supportedSpecies[curSpeciesIndex]));
+								player.getNumOf(Constants.SUPPORTED_SPECIES[curSpeciesIndex]));
 					}
 
 					for (int curSeaCreature = 0; curSeaCreature < numToSell; curSeaCreature++)
 					{
 						// get the 'next' creature of the current type from the player
-						SeaCreature creature = player.getSeaNextSeaCreature(Constants.supportedSpecies[curSpeciesIndex]);
+						SeaCreature creature = player.getSeaNextSeaCreature(Constants.SUPPORTED_SPECIES[curSpeciesIndex]);
 						// sell the creature
 						double money = seafoodMarket.sellItem(creature);
 						player.addMoney(money);
-						
+
 						// set the textField to correct number
 						String setTo;
-						int num = player.getNumOf(Constants.supportedSpecies[curSpeciesIndex]);
+						int num = player.getNumOf(Constants.SUPPORTED_SPECIES[curSpeciesIndex]);
 						// TOOD conditional here
-						if(num == 0)
+						if (num == 0)
 						{
 							setTo = "";
 						}
@@ -440,6 +445,28 @@ public class GameControl
 		public void startFishingActivity()
 		{
 			fishingActivity = new FishingActivity(gamePane, toServer, fromServer, player);
+		}
+	}
+
+	public class SeafoodPriceSetEventHandler
+	{
+		public void setPrices()
+		{
+
+			for (int i = 0; i < Constants.SUPPORTED_SPECIES.length; i++)
+			{
+				double currentPrice = seafoodMarket.getCurrentPricePerPound(Constants.SUPPORTED_SPECIES[i]);
+				gamePane.marketsPane.setCurrentPricesTextAt(i, Double.toString(currentPrice));
+			}
+		}
+	}
+	
+	private void updateNumSellableSeaCreatures()
+	{
+		for (int i = 0; i < Constants.SUPPORTED_SPECIES.length; i++)
+		{
+			int numPlayerHas = player.getNumOf(Constants.SUPPORTED_SPECIES[i]);
+			gamePane.marketsPane.setCreaturesOnHandTextAt(i, "You Have: " + Integer.toString(numPlayerHas));
 		}
 	}
 

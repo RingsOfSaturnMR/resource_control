@@ -20,45 +20,26 @@ and only if one has not already been launched
 MarketsPane is in progress
 */
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
 
-import catchgame.Constants;
+import java.util.Random;
 import catchgame.GameControl;
 import catchgame.Player;
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import javafx.stage.WindowEvent;
-import market.Market;
 import market.SeafoodMarket;
-
 import catchgame.GameControl.FishingActivityActions;
-
-import resources.SeaCreature;
 
 /**
  * Primary container for all gameplay GUI components.
@@ -78,7 +59,7 @@ public class GamePane extends VBox
 	private MyStatsPane myStatsPane;
 
 	public SimpleFishingPane simpleFishingPane;
-	public MarketsPane marketsPane;
+	public SeafoodMarketPane marketsPane;
 	private GameControl.FishingActivityActions fishingActivityActions;
 	private boolean fishingStarted = false;
 
@@ -97,7 +78,7 @@ public class GamePane extends VBox
 		this.fishingActivityActions = fishingActivityActions;
 
 		simpleFishingPane = new SimpleFishingPane();
-		marketsPane = new MarketsPane(player, seafoodMarket, sellFishAction);
+		marketsPane = new SeafoodMarketPane(seafoodMarket.getName(), sellFishAction);
 
 		// set up menu
 		fileMenu.getItems().addAll(accountDeleteMenuItem, saveMenuItem, exitMenuItem);

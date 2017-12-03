@@ -90,7 +90,7 @@ public class Constants
 	/**
 	 * A list of the SeaCreature Species the program supports
 	 */
-	public final static Enum[] supportedSpecies =
+	public final static Enum[] SUPPORTED_SPECIES =
 	{ FishSpecies.COD, FishSpecies.SALMON, FishSpecies.TUNA, ShellfishSpecies.CRAB, ShellfishSpecies.LOBSTER, ShellfishSpecies.OYSTER };
 	
 	/**
@@ -98,13 +98,13 @@ public class Constants
 	 * @param e species of SeaCreature
 	 * @return Image of SeaCreature or null if it can't find the image.
 	 */
-	public static Image getImage(Enum e)
+	public static final Image getImage(final Enum<?> e)
 	{
-		for(int i = 0; i < supportedSpecies.length; i++ )
+		for(int i = 0; i < SUPPORTED_SPECIES.length; i++ )
 		{
-			if(e == supportedSpecies[i])
+			if(e == SUPPORTED_SPECIES[i])
 			{
-				return (new Image("img/" + supportedSpecies[i].toString().toLowerCase() + ".png"));
+				return (new Image("img/" + SUPPORTED_SPECIES[i].toString().toLowerCase() + ".png"));
 			}
 		}
 		
