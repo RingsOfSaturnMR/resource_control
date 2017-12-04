@@ -6,7 +6,10 @@ import java.util.Date;
 import resources.FishSpecies;
 import resources.SeaCreature;
 import resources.ShellfishSpecies;
-import java.util.HashMap<K,V>;
+import java.util.HashMap;
+import java.util.Iterator;
+
+import catchgame.Constants;
 
 /*
  
@@ -60,6 +63,8 @@ public class SeafoodMarket extends Market<SeaCreature, Enum>
 		}
 		else {
 			// throw because input is not in hashmap
+			// requires return added '0' for now - Nils
+			return 0;
 		}
 	}
 
