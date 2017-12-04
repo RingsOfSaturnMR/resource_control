@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import catchgame.Constants;
+import catchgame.GameControl.SeafoodPriceSetEventHandler;
 
 /*
  
@@ -20,6 +21,9 @@ import catchgame.Constants;
  */
 public class SeafoodMarket extends Market<SeaCreature, Enum>
 {
+	// handler to tell the rest of the program there are new prices
+	private SeafoodPriceSetEventHandler priceSetHandler;
+	
 	// Dictionary to hold merch and prices
 	private HashMap<Enum, Double> inventory; // type : price
 	// Iterator of traversing hashmap
@@ -29,9 +33,12 @@ public class SeafoodMarket extends Market<SeaCreature, Enum>
 	private long previousTime;
 	private long currentTime;
 
-	public SeafoodMarket(String name)
+	public SeafoodMarket(String name, SeafoodPriceSetEventHandler updatePricePerPoundHandler)
 	{
 		super(name);
+		// set the handler
+		priceSetHandler = updatePricePerPoundHandler;
+		
 		// populate hashmap with inventory
 		inventory = new HashMap<Enum, Double>();
 		// for fish species
@@ -49,6 +56,13 @@ public class SeafoodMarket extends Market<SeaCreature, Enum>
 		// set up clock
 		currentTime = System.nanoTime();
 		previousTime = System.nanoTime();
+	}
+	
+	//temp for testing
+	public void forcePriceUpdate()
+	{
+		// do this after a price change to tell the program there are new prices
+		priceSetHandler.setPrices();
 	}
 
 	public void getRandTimeCoefficient() {}
