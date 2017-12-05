@@ -55,13 +55,13 @@ public class Constants
 	
 
 	// initial population sizes for Ocean
-	public final static int COD_INITIAL_POPULATION = 10;
-	public final static int SALMON_INITIAL_POPULATION = 10;
-	public final static int TUNA_INITIAL_POPULATION = 10;
+	public final static int COD_INITIAL_POPULATION = 1000;
+	public final static int SALMON_INITIAL_POPULATION = 700;
+	public final static int TUNA_INITIAL_POPULATION = 700;
 
-	public final static int CRAB_INITIAL_POPULATION = 10;
-	public final static int LOBSTER_INITIAL_POPULATION = 10;
-	public final static int OYSTER_INITIAL_POPULATION = 10;
+	public final static int CRAB_INITIAL_POPULATION = 700;
+	public final static int LOBSTER_INITIAL_POPULATION = 300;
+	public final static int OYSTER_INITIAL_POPULATION = 500;
 
 	// maximum population sizes for Ocean
 	// for now they are equal to initial, but that could be changed
