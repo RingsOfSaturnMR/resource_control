@@ -378,8 +378,8 @@ public class CatchServer
 						ClientSubOceanSeaCreatureStatePacket clientSubOceanSeaCreatureStatePacket = (ClientSubOceanSeaCreatureStatePacket) recievedObject;
 						//System.out.println("clientSubOcean.currentPopulationCod: "+clientSubOcean.currentPopulationCod);
 						//System.out.println("clientSubOcean.maxPopulationCod: "+clientSubOcean.maxPopulationCod);
-						System.out.println("subocean crab: "+clientSubOceanSeaCreatureStatePacket.currentPopulationCrab);
-						System.out.println("subocean crab: "+clientSubOceanSeaCreatureStatePacket.maxPopulationCrab);
+						//System.out.println("subocean crab: "+clientSubOceanSeaCreatureStatePacket.currentPopulationCrab);
+						//System.out.println("subocean crab: "+clientSubOceanSeaCreatureStatePacket.maxPopulationCrab);
 						ArrayList<Fish> codPacket = ocean.extractAndReturnABunchOfFish(FishSpecies.COD, 
 								clientSubOceanSeaCreatureStatePacket.currentPopulationCod, 
 								clientSubOceanSeaCreatureStatePacket.maxPopulationCod);
@@ -398,7 +398,7 @@ public class CatchServer
 						ArrayList<Shellfish> crabPacket = ocean.ecxtractAndReturnABunchOfShellfish(ShellfishSpecies.CRAB, 
 								clientSubOceanSeaCreatureStatePacket.currentPopulationCrab, 
 								clientSubOceanSeaCreatureStatePacket.maxPopulationCrab);
-						System.out.println("crabPacket size: "+crabPacket.size());
+						//System.out.println("crabPacket size: "+crabPacket.size());
 						 //System.out.println("cod cuurent population: "
 						 //+clientSubOceanSeaCreatureStatePacket.currentPopulationCod);
 						 //System.out.println("cod max population: "
