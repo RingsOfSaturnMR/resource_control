@@ -39,12 +39,17 @@ import catchgame.Ocean;
 import catchgame.Packets.ClientSubOceanSeaCreatureStatePacket;
 import catchgame.Packets.SeaCreaturesPacket;
 import catchgame.Player;
+import graphicclasses.FishImageView;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 import resources.Fish;
 import resources.FishSpecies;
 import resources.Shellfish;
@@ -93,12 +98,13 @@ public class FishingActivityV2 {
 	public FishingActivityV2(SimpleFishingPane simpleFishingPane, /*ObjectOutputStream toServer, ObjectInputStream fromServer,*/
 			Player player) {
 		clientSubOcean = new ClientSubOcean();
-		clientFishingActivityFishManager=new ClientFishingActivityFishManager();
+		clientFishingActivityFishManager=new ClientFishingActivityFishManager(simpleFishingPane);
 		this.simpleFishingPane = simpleFishingPane;
 		this.player = player;
 		this.toServer = toServer;
 		this.fromServer = fromServer;
 		testAddFishToFishingActivity();
+		clientFishingActivityFishManager.doBasicClientSubOceanAnimation();
 		//fishImageView.setImage(fishImage);
 		//fishImageView.setOnMouseClicked(new ExtractImageViewAction(fishImageView));
 		//this.simpleFishingPane.getChildren().add(fishImageView);
@@ -205,7 +211,8 @@ public class FishingActivityV2 {
 	
 	public void testAddFishToFishingActivity(){
 		try{
-		ArrayList<Fish> sampleCod=ocean.extractAndReturnABunchOfFish(FishSpecies.COD, (clientSubOcean.currentPopulationCod+90), 
+		ArrayList<Fish> sampleCod=ocean.extractAndReturnABunchOfFish(
+				FishSpecies.COD, (clientSubOcean.currentPopulationCod+90), 
 				clientSubOcean.maxPopulationCod);
 		clientFishingActivityFishManager.codPopulation.addAll(sampleCod);
 		System.out.println("sample cod: "+sampleCod.size());
@@ -277,16 +284,16 @@ public class FishingActivityV2 {
 		// System.out.print(fish.getBody().toString());
 		double width = simpleFishingPane.getMinWidth();
 		double height = simpleFishingPane.getMinHeight();
-		fish.getFishGraphic().getSeaCreatureImageView().setTranslateX(NumberUtilities.getRandomDouble(
-				0, width-fish.getFishGraphic().getSeaCreatureImageView().getImage().getWidth()));
-		fish.getFishGraphic().getSeaCreatureImageView().setTranslateY(NumberUtilities.getRandomDouble(
-				50 + topOffset, 
-				height - bottomOffset-fish.getFishGraphic().getSeaCreatureImageView().getImage().getHeight()));
+		fish.getFishGraphic().getFishImageView().setTranslateX(NumberUtilities.getRandomDouble(
+				0, width-fish.getFishGraphic().getFishImageView().getImage().getWidth()));
+		fish.getFishGraphic().getFishImageView().setTranslateY(NumberUtilities.getRandomDouble(
+				75 + topOffset, 
+				height - bottomOffset-fish.getFishGraphic().getFishImageView().getImage().getHeight()));
 		// System.out.print(fish.getBody().toString());
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				simpleFishingPane.getChildren().add(fish.getFishGraphic().getSeaCreatureImageView());
+				simpleFishingPane.getChildren().add(fish.getFishGraphic().getFishImageView());
 				//fish.getBody().setOnMouseClicked(new ExtractFishAction(fish));
 			}
 		});
@@ -471,16 +478,4 @@ public class FishingActivityV2 {
 		int currentPopulationCrab = 0;
 		int maxPopulationCrab = Constants.CRAB_MAX_POPULATION / 10;
 	}
-	
-	class ClientFishingActivityFishManager{
-		ArrayList<Fish>codPopulation = new ArrayList<>();
-		ArrayList<Fish>salmonPopulation = new ArrayList<>(); 
-		ArrayList<Fish>tunaPopulation = new ArrayList<>();
-		
-		// resounces.ShellFishSpecies
-		ArrayList<Shellfish>lobsterPopulation = new ArrayList<>();
-		ArrayList<Shellfish>crabPopulation = new ArrayList<>(); 
-		ArrayList<Fish>oysterPopuliation = new ArrayList<>();
-	}
-
 }

@@ -3,6 +3,7 @@ package animation_work_and_driver;
 import catchgame.Constants;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 
 public class SimpleFishingPane extends Pane
 {
@@ -20,7 +21,6 @@ public class SimpleFishingPane extends Pane
 
 	public SimpleFishingPane()
 	{
-
 		this.setMinWidth(Constants.INITIAL_SIMPLE_FISHING_PANE_WIDTH);
 		this.setMinHeight(Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT);
 		labelExplanation.setMaxWidth(Constants.INITIAL_SIMPLE_FISHING_PANE_WIDTH);
@@ -28,6 +28,8 @@ public class SimpleFishingPane extends Pane
 		// labelExplanation.setTranslateY(50);
 		// btnExtractFishAction.setOnAction(extractFishAction);
 		this.getChildren().addAll(labelExplanation);
-
+		Rectangle clippingRectangle=new Rectangle(Constants.INITIAL_SIMPLE_FISHING_PANE_WIDTH,
+				Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT);
+		this.setClip(clippingRectangle);
 	}
 }

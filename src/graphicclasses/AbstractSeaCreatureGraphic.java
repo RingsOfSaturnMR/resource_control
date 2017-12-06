@@ -1,11 +1,10 @@
-package userinterface;
+package graphicclasses;
 
 import catchgame.Constants;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class AbstractSeaCreatureGraphic {
-	protected ImageView seaCreatureImageView=new ImageView();
 	protected Image seaCreatureImage;
 	
 	public static final Image getImage(final Enum<?> e)
@@ -21,7 +20,4 @@ public class AbstractSeaCreatureGraphic {
 		return null;	
 	}
 	
-	public ImageView getSeaCreatureImageView(){
-		return seaCreatureImageView;
-	}
 }

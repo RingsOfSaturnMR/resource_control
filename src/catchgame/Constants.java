@@ -92,6 +92,8 @@ public class Constants
 
 	// Basics
 	public final static String APPLICATION_NAME = "Catch!! - By Caileigh, Matt, Nls, Thanh";
+	public final static short LEFT = -1;
+	public final static short RIGHT = 1;
 
 	/**
 	 * A list of the SeaCreature Species the program supports

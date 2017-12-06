@@ -2,7 +2,7 @@ package resources;
 
 import java.io.Serializable;
 
-import userinterface.FishGraphic;
+import graphicclasses.FishGraphic;
 
 public class Fish extends SeaCreature<FishSpecies> implements Serializable
 {

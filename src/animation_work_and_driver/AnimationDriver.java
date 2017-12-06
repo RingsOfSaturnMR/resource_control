@@ -5,6 +5,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import com.sun.javafx.geom.Rectangle;
+
 import catchgame.Constants;
 import catchgame.Catch.LoginHandler;
 import catchgame.Catch.NewServerHandler;

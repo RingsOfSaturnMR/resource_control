@@ -1,4 +1,4 @@
-package userinterface;
+package graphicclasses;
 
 import catchgame.Constants;
 import javafx.scene.image.Image;
@@ -7,14 +7,16 @@ import resources.Fish;
 import resources.FishSpecies;
 
 public class FishGraphic extends AbstractSeaCreatureGraphic{
-	public Fish fish;
+	private Fish fish;
+	private FishImageView fishImageView;
+	
 	public FishGraphic(Fish fish){
 		this.fish=fish;
 		
-		
+		fishImageView=new FishImageView(fish);
 		super.seaCreatureImage=AbstractSeaCreatureGraphic.getImage(fish.getSpecies());
 		System.out.println("got image");
-		super.seaCreatureImageView.setImage(super.seaCreatureImage);
+		fishImageView.setImage(super.seaCreatureImage);
 		System.out.println("set image");
 		
 		/*
@@ -25,6 +27,9 @@ public class FishGraphic extends AbstractSeaCreatureGraphic{
 		*/
 	}
 	
+	public FishImageView getFishImageView(){
+		return fishImageView;
+	}
 	
 	/*
 	protected ImageView seaCreatureImageView=new ImageView();
