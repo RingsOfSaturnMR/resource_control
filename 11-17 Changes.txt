@@ -1,0 +1,13 @@
+Hey Guys, I just pushed a bunch of stuff to my branch. It uses SQLite now. Here are changes you should know about:
+
+1.) SQLite is now being used. Get the driver for it here (https://bitbucket.org/xerial/sqlite-jdbc/downloads/) and add it as a dependecny. (Right click “JRE System Library” ->buildpath config → add external JAR
+
+2.) Refactor: All packets are in a class called “Packets”. ServerCodePacket no longer exists. I made it so we have “RequestPacket” and “ResultPacket”, which are both basically the same as “ServerCodePacket”. This is so that whoever is reading the code knows the general purpose of the packet. Inside the packet, I changed the code from being a constant value because, even though it will never change in its instance, it will be different in each packet. (it is constant, but it is not a constant value, like MAX_WIDTH or something)
+
+3.) Refactor: ServerCodes is now just Codes, so that it can contain codes for the whole program. Just use descriptive names, so we know what the code does. Example: LOGIN_SUCCESS_CODE or NEW_USER_ERR_ILLEGAL_PW_CODE. 
+
+4.) The infastructe to save the game is no in place. See 'gameStage.setOnCloseReques →' to see the methods that do it. When this event is triggered, GameControl sends the player object to the server. The server is set so that if it recieves a Player it just saves it. After sending the Player, it also sends a RequestPacket containing Codes.LOGOUT_REQUEST_CODE, which signals the while loop to stop, and then run() returns, thus stopping the thread.
+
+5.) I made a “DatabaseManipulator” Object. Its barely an object at this point, but my idea is that this will giver serverside users the ability to control the database as the see fit. If someonme wants to work on this that would be great! Basically just make a graphical way to test the database – make new users, delete users, make useres with resouces(as a cheat).
+
+6.) I incorperated the Frequency Histogram as Thanh and Matt put into the project.

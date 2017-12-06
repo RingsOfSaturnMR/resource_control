@@ -2,7 +2,7 @@ package market;
 
 import java.util.ArrayList;
 
-public abstract class Market<T>
+public abstract class Market<T, Enum>
 {
 	private String name;
 	
@@ -21,10 +21,10 @@ public abstract class Market<T>
 		this.name = name;
 	}
 
-	public abstract double getCurrentPrice(T sellable);
+	public abstract double getCurrentPricePerPound(Enum species);
 	
 	public abstract String getMarketType();
 	
-	public abstract double sellItem(ArrayList<T> items);
+	public abstract double sellItem(T item);
 	
 }

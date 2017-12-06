@@ -2,8 +2,6 @@ package market;
 
 import java.util.ArrayList;
 
-import resources.Boat;
-import resources.BoatTypes;
 import resources.Equipment;
 
 
@@ -12,7 +10,7 @@ import resources.Equipment;
  Notice there is no method to buy an item. That is because Equipment resources are unlimited, and then can just be made
  in the event handler for when a player purchases something. This class just determines the values.  
  */
-public class EquipmentMarket extends Market<Equipment>
+public class EquipmentMarket extends Market<Equipment, Enum>
 {
 
 	public EquipmentMarket(String name)
@@ -23,7 +21,7 @@ public class EquipmentMarket extends Market<Equipment>
 
 	// price for purchasing new equipment
 	@Override
-	public double getCurrentPrice(Equipment item)
+	public double getCurrentPricePerPound(Enum item)
 	{
 		// TODO Auto-generated method stub
 		return 0;
@@ -37,13 +35,13 @@ public class EquipmentMarket extends Market<Equipment>
 	}
 
 	@Override
-	public double sellItem(ArrayList<Equipment> items)
+	public double sellItem(Equipment item)
 	{
 		// TODO Auto-generated method stub
 		return 0;
 	}
 	
-	// ammount of money you recieve when you sell old equip
+	// amount of money you recieve when you sell old equip
 	public double getItemValue(Equipment item)
 	{
 		// TODO Auto-generated method stub

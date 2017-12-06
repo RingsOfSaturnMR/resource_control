@@ -2,7 +2,12 @@ package resources;
 
 import java.io.Serializable;
 
+
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+
 import javafx.scene.shape.Circle;
+import userinterface.AbstractSeaCreatureGraphic;
 
 /**
  */
@@ -12,7 +17,8 @@ public abstract class SeaCreature <T> implements Serializable
 	
 	private double weight;
 	private T species;
-	private Circle GUICircle = null;
+	private transient Circle GUICircle = null;
+	//protected transient AbstractSeaCreatureGraphic seaCreatureBody=null;
 
 	SeaCreature(){
 		
@@ -62,9 +68,19 @@ public abstract class SeaCreature <T> implements Serializable
 		this.GUICircle = new Circle(weight);
 	}
 	
+	public void setBodyColor(Color color){
+		this.GUICircle.setFill(color);
+	}
+	
 	// for serializing
 	public void setBodyToNull()
 	{
 		this.GUICircle = null;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return this.getSpecies().toString() + ", " + this.getWeight() + " pounds";
 	}
 }

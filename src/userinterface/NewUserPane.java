@@ -1,10 +1,27 @@
 package userinterface;
 
+/*
+Class by Dr. Java and the JavaDocs
+Nils Johnson, Caileigh Fitzgerald, Thanh Lam, and Matt Roberts
+Date: 11-27-2017
+*/
+
+/*
+Purpose: to let a user enter a userrname, password, and confirmation password,
+to listen to changes in the password, to tell the user if the passwords are valid
+and match, and to let the user send the info to the server by hitting "Create
+Account" button
+*/
+
+/*
+Modification info:
+No modifications known
+*/
 import java.util.ArrayList;
 
 import authentication.Authenticator;
-import authentication.PasswordError;
-import authentication.UsernameError;
+import authentication.NewUserException.UsernameError;
+import authentication.NewUserException.PasswordError;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -51,7 +68,7 @@ public class NewUserPane extends VBox
 	// textfields
 	private TextField tfServerIp = new TextField("localhost");
 	private TextField tfClientPort = new TextField("8000");
-	public TextField tfName = new TextField("testUser");
+	public TextField tfName = new TextField();
 	public TextField pfPassword = new PasswordField();
 	public TextField pfPasswordConfirm = new PasswordField();
 	private Text txtMessageArea = new Text();
@@ -247,7 +264,7 @@ public class NewUserPane extends VBox
 			txtNumber.setFill(Color.GREEN);
 		}
 
-		if (errorList != null && errorList.contains(PasswordError.NEEDS_SPECIAL))
+		if (errorList != null && errorList.contains(PasswordError.NEEDS_SPECIAL_CHAR))
 		{
 			txtSpecial.setFill(Color.BLACK);
 		}
@@ -381,6 +398,16 @@ public class NewUserPane extends VBox
 	public String getServerIpAddress()
 	{
 		return tfServerIp.getText().trim();
+	}
+	
+	public void setClientPortNum(int portNum)
+	{
+		tfClientPort.setText(Integer.toString(portNum));
+	}
+	
+	public void setServerIpAddress(String address)
+	{
+		tfServerIp.setText(address);
 	}
 }
 

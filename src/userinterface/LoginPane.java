@@ -1,23 +1,33 @@
 package userinterface;
 
+/*
+Class by Dr. Java and the JavaDocs
+Nils Johnson, Caileigh Fitzgerald, Thanh Lam, and Matt Roberts
+Date: 11-27-2017
+*/
+
+/*
+Purpose: to let the user log in by filling in name and password and hitting login,
+to launch a new server, to launch a new user pane
+
+Modification info:
+no modifications known
+*/
+
 import catchgame.CatchServer;
 import catchgame.Constants;
-import catchgame.GameControl;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import userinterface.LoginPane;
 
 public class LoginPane extends VBox
 {
@@ -31,10 +41,11 @@ public class LoginPane extends VBox
 	private Label lblClientPort = new Label("Client Port: ");
 
 	// fields for entry, filled with default values for easy testing
-	private TextField tfName = new TextField("testUser");
-	private TextField pfPassword = new TextField("testPass1!");
+
+	private TextField tfName = new TextField();
+	private TextField pfPassword = new TextField();
 	private TextField tfServerIp = new TextField("localhost");
-	private TextField tfClientPort = new TextField("8000");
+	private TextField tfClientPort = new TextField();
 	
 	// containers
 	private GridPane loginGridPane = new GridPane();
@@ -103,10 +114,21 @@ public class LoginPane extends VBox
 		this.txtError.setText(str);
 	}
 	
-	//NEED TO ADD check for exceptions!!!
 	public int getClientPort()
 	{
 		return Integer.parseInt((tfClientPort.getText()));
 	}
+	
+	public void setClientPortNum(int portNum)
+	{
+		tfClientPort.setText(Integer.toString(portNum));
+	}
+	
+	public void setServerIpAddress(String address)
+	{
+		tfServerIp.setText(address);
+	}
+	
+	
 	
 }

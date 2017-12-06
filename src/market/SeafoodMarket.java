@@ -3,12 +3,14 @@ package market;
 import java.util.ArrayList;
 import java.util.Date;
 
-import catchgame.Catch;
-import resources.Fish;
 import resources.FishSpecies;
 import resources.SeaCreature;
-import catchgame.Constants;
+import resources.ShellfishSpecies;
+import java.util.HashMap;
+import java.util.Iterator;
 
+import catchgame.Constants;
+import catchgame.GameControl.SeafoodPriceSetEventHandler;
 
 /*
  
@@ -17,20 +19,67 @@ import catchgame.Constants;
  - Use the Constants class to get the market fluctuation value, and how long before prices expire.
  
  */
-public class SeafoodMarket extends Market<SeaCreature>
+public class SeafoodMarket extends Market<SeaCreature, Enum>
 {
+	// handler to tell the rest of the program there are new prices
+	private SeafoodPriceSetEventHandler priceSetHandler;
+	
+	// Dictionary to hold merch and prices
+	private HashMap<Enum, Double> inventory; // type : price
+	// Iterator of traversing hashmap
+	private Iterator<Enum> keySetIterator;
 
-	public SeafoodMarket(String name)
+	// for keeping track of time
+	private long previousTime;
+	private long currentTime;
+
+	public SeafoodMarket(String name, SeafoodPriceSetEventHandler updatePricePerPoundHandler)
 	{
 		super(name);
-		// TODO Auto-generated constructor stub
+		// set the handler
+		priceSetHandler = updatePricePerPoundHandler;
+		
+		// populate hashmap with inventory
+		inventory = new HashMap<Enum, Double>();
+		// for fish species
+		inventory.put(FishSpecies.COD, Constants.COD_INITIAL_PRICE_PER_POUND);
+		inventory.put(FishSpecies.SALMON, Constants.SALMON_INITIAL_PRICE_PER_POUND);
+		inventory.put(FishSpecies.TUNA, Constants.TUNA_INITIAL_PRICE_PER_POUND);
+		// for shellfish
+		inventory.put(ShellfishSpecies.OYSTER, Constants.OYSTER_INITIAL_PRICE_PER_POUND);
+		inventory.put(ShellfishSpecies.LOBSTER, Constants.LOBSTER_INITIAL_PRICE_PER_POUND);
+		inventory.put(ShellfishSpecies.CRAB, Constants.CRAB_INITIAL_PRICE_PER_POUND);
+
+		// initialize iterator for traversal
+		this.keySetIterator = inventory.keySet().iterator();
+
+		// set up clock
+		currentTime = System.nanoTime();
+		previousTime = System.nanoTime();
+	}
+	
+	//temp for testing
+	public void forcePriceUpdate()
+	{
+		// do this after a price change to tell the program there are new prices
+		priceSetHandler.setPrices();
 	}
 
+	public void getRandTimeCoefficient() {}
+	public void getDeltaTime() {} // will check time
+	public void marketFlux() {} // this one will contain the thread for checking the time and updated price
+
 	@Override
-	public double getCurrentPrice(SeaCreature item)
+	public double getCurrentPricePerPound(Enum species)
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		if (this.inventory.containsKey(species)) {
+			return this.inventory.get(species); // returns the value which is the current price per pound
+		}
+		else {
+			// throw because input is not in hashmap
+			// requires return added '0' for now - Nils
+			return 0;
+		}
 	}
 
 	@Override
@@ -41,10 +90,13 @@ public class SeafoodMarket extends Market<SeaCreature>
 	}
 
 	@Override
-	public double sellItem(ArrayList<SeaCreature> items)
+	public double sellItem(SeaCreature item)
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		if(item.getSpecies() == FishSpecies.SALMON)
+		{
+			// its a salmon!
+		}
+		return 2;
 	}
 	
 	public Date getNextPriceChange()
