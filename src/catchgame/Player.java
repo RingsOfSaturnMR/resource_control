@@ -81,9 +81,9 @@ public class Player extends authentication.User implements Serializable
 		cashOnHand += amount;
 	}
 
-	public void subtractMoney(int amount)
+	public void subtractMoney(double d)
 	{
-		cashOnHand -= amount;
+		cashOnHand -= d;
 	}
 
 	public SeaCreature getSeaCreatureAt(int index)

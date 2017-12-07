@@ -254,7 +254,7 @@ public class GameControl
 		// action to buy an item
 		class BuyEquipmentHandler implements EventHandler<ActionEvent>, EquipmentMarket.TakePlayersMoney
 		{
-			Enum itemType;
+			Enum<?> itemType;
 			
 			public BuyEquipmentHandler(Enum<?> itemType)
 			{
@@ -264,14 +264,14 @@ public class GameControl
 			@Override
 			public void handle(ActionEvent arg0)
 			{
-				player.addItemToToolChest((Equipment) equipMarket.buyItem(itemType));
+				player.addItemToToolChest((Equipment<?>) equipMarket.buyItem(itemType));
+				takeMoney();
 			}
 
 			@Override
 			public void takeMoney()
 			{
-				
-				
+				player.subtractMoney(equipMarket.getCurrentPrice(itemType));
 			}
 			
 		}
