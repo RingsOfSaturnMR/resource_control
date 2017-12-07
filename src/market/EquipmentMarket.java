@@ -2,7 +2,11 @@ package market;
 
 import java.util.ArrayList;
 
+import resources.Boat;
+import resources.BoatTypes;
 import resources.Equipment;
+import resources.SimpleFishingItem;
+import resources.SimpleFishingItemType;
 
 
 /*
@@ -13,18 +17,34 @@ import resources.Equipment;
 public class EquipmentMarket extends Market<Equipment, Enum>
 {
 
+	public interface TakePlayersMoney
+	{
+		void takeMoney();
+	}
+	
 	public EquipmentMarket(String name)
 	{
 		super(name);
 		// TODO Auto-generated constructor stub
 	}
 
+	public Object buyItem(Enum<?> desiredItem)
+	{
+		if(desiredItem instanceof BoatTypes)
+		{
+			return new Boat(BoatTypes.TRAWLER);
+		}
+		else
+		{
+			return new SimpleFishingItem(SimpleFishingItemType.NET);
+		}	
+	}
+	
 	// price for purchasing new equipment
-	@Override
-	public double getCurrentPricePerPound(Enum item)
+	public double getCurrentPrice(Enum item)
 	{
 		// TODO Auto-generated method stub
-		return 0;
+		return 12.3;
 	}
 
 	@Override

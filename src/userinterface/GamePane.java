@@ -59,7 +59,8 @@ public class GamePane extends VBox
 	private MyStatsPane myStatsPane;
 
 	public SimpleFishingPane simpleFishingPane;
-	public SeafoodMarketPane marketsPane;
+	public SeafoodMarketPane seafoodMarketPane;
+	public EquipmentMarketPane equipmentMarketPane;
 	private GameControl.FishingActivityActions fishingActivityActions;
 	private boolean fishingStarted = false;
 
@@ -78,8 +79,9 @@ public class GamePane extends VBox
 		this.fishingActivityActions = fishingActivityActions;
 
 		simpleFishingPane = new SimpleFishingPane();
-		marketsPane = new SeafoodMarketPane(seafoodMarket.getName(), sellFishAction);
-
+		seafoodMarketPane = new SeafoodMarketPane(seafoodMarket.getName(), sellFishAction);
+		equipmentMarketPane = new EquipmentMarketPane("Ye 'Ol Fishing Store");
+		
 		// set up menu
 		fileMenu.getItems().addAll(accountDeleteMenuItem, saveMenuItem, exitMenuItem);
 		menuBar.getMenus().add(fileMenu);
@@ -94,9 +96,9 @@ public class GamePane extends VBox
 		exitMenuItem.setOnAction(exitAction);
 		
 		// make seafoodMarketPane responsive
-		marketsPane.transactionContainer.prefWidthProperty().bind(this.widthProperty());
-		marketsPane.priceBox.prefWidthProperty().bind(marketsPane.transactionContainer.widthProperty().divide(2));
-		marketsPane.usersResourcesBox.prefWidthProperty().bind(marketsPane.transactionContainer.widthProperty().divide(2));
+		seafoodMarketPane.transactionContainer.prefWidthProperty().bind(this.widthProperty());
+		seafoodMarketPane.priceBox.prefWidthProperty().bind(seafoodMarketPane.transactionContainer.widthProperty().divide(2));
+		seafoodMarketPane.usersResourcesBox.prefWidthProperty().bind(seafoodMarketPane.transactionContainer.widthProperty().divide(2));
 
 	}
 
@@ -107,7 +109,8 @@ public class GamePane extends VBox
 
 		// buttons
 		private Button btnGoFishing = new Button("Go Fishing");
-		private Button btnGoToMarket = new Button("Go to Market");
+		private Button btnGoToSeaFoodMarket = new Button("Sell Fish");
+		private Button btnGoToEquipMarket = new Button("Buy Equipment");
 		private Button btnCheckMyResources = new Button("View My Resouces");
 
 		// containers
@@ -140,14 +143,20 @@ public class GamePane extends VBox
 				primaryPane.getChildren().add(myStatsPane);
 			});
 
-			btnGoToMarket.setOnAction(e ->
+			btnGoToSeaFoodMarket.setOnAction(e ->
 			{
 				primaryPane.getChildren().clear();
-				primaryPane.getChildren().add(marketsPane);
+				primaryPane.getChildren().add(seafoodMarketPane);
+			});
+			
+			btnGoToEquipMarket.setOnAction(e ->
+			{
+				primaryPane.getChildren().clear();
+				primaryPane.getChildren().add(equipmentMarketPane);
 			});
 
 			// put buttons in their container
-			buttonHBox.getChildren().addAll(btnGoFishing, btnGoToMarket, btnCheckMyResources);
+			buttonHBox.getChildren().addAll(btnGoFishing, btnGoToSeaFoodMarket, btnGoToEquipMarket, btnCheckMyResources);
 
 			// set spacing and alignment elements
 			this.setSpacing(10);

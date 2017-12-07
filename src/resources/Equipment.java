@@ -38,6 +38,7 @@ public abstract class Equipment<T>
 	{
 		return this.usage;
 	}
+	
 }
 
 

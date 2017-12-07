@@ -20,8 +20,6 @@ public abstract class Market<T, Enum>
 	{
 		this.name = name;
 	}
-
-	public abstract double getCurrentPricePerPound(Enum species);
 	
 	public abstract String getMarketType();
 	

@@ -6,5 +6,5 @@ public class Boat extends Equipment<BoatTypes>
 	{
 		super(boatType);
 	}
-
+	
 }

@@ -38,7 +38,6 @@ public class SeafoodMarket extends Market<SeaCreature, Enum>
 		priceSetHandler.setPrices();
 	}
 	
-	@Override
 	public double getCurrentPricePerPound(Enum species)
 	{
 		if(species instanceof ShellfishSpecies)

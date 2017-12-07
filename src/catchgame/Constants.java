@@ -21,8 +21,10 @@ import java.util.Arrays;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import resources.BoatTypes;
 import resources.FishSpecies;
 import resources.ShellfishSpecies;
+import resources.SimpleFishingItemType;
 
 /**
  * Constants for initial values used throughout the program.
@@ -88,26 +90,49 @@ public class Constants
 	public final static String APPLICATION_NAME = "Catch!! - By Caileigh, Matt, Nls, Thanh";
 
 	/**
-	 * A list of the SeaCreature Species the program supports
+	 * An array of SeaCreature Species the game supports
 	 */
 	public final static Enum[] SUPPORTED_SPECIES =
 	{ FishSpecies.COD, FishSpecies.SALMON, FishSpecies.TUNA, ShellfishSpecies.CRAB, ShellfishSpecies.LOBSTER, ShellfishSpecies.OYSTER };
-	
+
+	/**
+	 * An array of Equipment types the game supports
+	 */
+	public static Enum[] SUPPORTED_EQUIPMENT =
+	{ BoatTypes.COMMERCIAL_TRAWLER, BoatTypes.FISHING_SKIFF, BoatTypes.TRAWLER, SimpleFishingItemType.NET, SimpleFishingItemType.LARGE_NET };
+
 	/**
 	 * 
-	 * @param e species of SeaCreature
+	 * @param desiredResourceType species of SeaCreature
 	 * @return Image of SeaCreature or null if it can't find the image.
 	 */
-	public static final Image getImage(final Enum<?> e)
+	public static final Image getImage(final Enum<?> desiredResourceType)
 	{
-		for(int i = 0; i < SUPPORTED_SPECIES.length; i++ )
+		if (desiredResourceType instanceof FishSpecies || desiredResourceType instanceof ShellfishSpecies)
 		{
-			if(e == SUPPORTED_SPECIES[i])
+			for (int i = 0; i < SUPPORTED_SPECIES.length; i++)
 			{
-				return (new Image("img/" + SUPPORTED_SPECIES[i].toString().toLowerCase() + ".png"));
+				if (desiredResourceType == SUPPORTED_SPECIES[i])
+				{
+					return (new Image("img/" + SUPPORTED_SPECIES[i].toString().toLowerCase() +
+							".png"));
+				}
 			}
 		}
 		
-		return null;	
+		if (desiredResourceType instanceof BoatTypes || desiredResourceType instanceof SimpleFishingItemType)
+		{	
+			for(Enum<?> currentType: SUPPORTED_EQUIPMENT )
+			{
+				if( desiredResourceType == currentType)
+				{
+					return (new Image("img/" + currentType.toString().toLowerCase() +
+							".png"));
+				}
+			}
+		}
+		return null;
 	}
+	
+
 }

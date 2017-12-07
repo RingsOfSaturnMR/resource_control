@@ -38,6 +38,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import market.EquipmentMarket;
 import market.SeafoodMarket;
+import resources.Equipment;
 import resources.FishSpecies;
 import resources.SeaCreature;
 import userinterface.GamePane;
@@ -163,7 +164,7 @@ public class GameControl
 		// fire this method as a test
 		seafoodMarket.forcePriceUpdate();
 		
-		// force update of GUI
+		// initialize the number the player can sell with what they have
 		updateNumSellableSeaCreatures();
 		
 		
@@ -189,7 +190,7 @@ public class GameControl
 		 * 
 		 * @author Nils
 		 */
-		class IsIntegerTextFieldListener implements ChangeListener
+		class IsIntegerTextFieldListener implements ChangeListener<Object>
 		{
 			private TextField textField;
 
@@ -199,7 +200,7 @@ public class GameControl
 			}
 
 			@Override
-			public void changed(ObservableValue arg0, Object oldValue, Object newValue)
+			public void changed(ObservableValue<?> arg0, Object oldValue, Object newValue)
 			{
 				String val = textField.getText().trim();
 				if (val.equals(""))
@@ -221,15 +222,80 @@ public class GameControl
 			}
 		}
 
-		for (TextField tf : gamePane.marketsPane.getNumCreaturesToSellTextFields())
+		// add a listner to each  "numCreaturesToSell" text field to validate
+		for (TextField tf : gamePane.seafoodMarketPane.getNumCreaturesToSellTextFields())
 		{
 			tf.textProperty().addListener(new IsIntegerTextFieldListener(tf));
 		}
 
 		// add listener to players ice chest
 		player.getIceChest().addListener(new IceChestChangeListener());
+		
+		
+		// set the EquipmentMarket Up
+		for (int i = 0; i < Constants.SUPPORTED_EQUIPMENT.length; i++)
+		{
+			double currentPrice = equipMarket.getCurrentPrice(Constants.SUPPORTED_EQUIPMENT[i]);
+			gamePane.equipmentMarketPane.setCurrentPricesTextAt(i, Double.toString(currentPrice));
+		}
+		
+		// initiaize the equipmarket with number on hand
+		updateNumEquipOnHand();
+		
+		class ToolChestChangeListener implements ListChangeListener<Object>
+		{
+			@Override
+			public void onChanged(Change<? extends Object> arg0)
+			{
+				updateNumEquipOnHand();
+			}
+		}
+		
+		// action to buy an item
+		class BuyEquipmentHandler implements EventHandler<ActionEvent>, EquipmentMarket.TakePlayersMoney
+		{
+			Enum itemType;
+			
+			public BuyEquipmentHandler(Enum<?> itemType)
+			{
+				this.itemType = itemType;
+			}
+			
+			@Override
+			public void handle(ActionEvent arg0)
+			{
+				player.addItemToToolChest((Equipment) equipMarket.buyItem(itemType));
+			}
+
+			@Override
+			public void takeMoney()
+			{
+				
+				
+			}
+			
+		}
+		
+		player.getToolChest().addListener(new ToolChestChangeListener());
+		
+		
+		// add buying actions to buttons
+		for(int i = 0; i < Constants.SUPPORTED_EQUIPMENT.length; i++)
+		{
+			gamePane.equipmentMarketPane.setBtnSellActionAt(i, new BuyEquipmentHandler(Constants.SUPPORTED_EQUIPMENT[i]));
+		}
+		
 	}
 
+	private void updateNumEquipOnHand()
+	{
+		for (int i = 0; i < Constants.SUPPORTED_EQUIPMENT.length; i++)
+		{
+			int numPlayerHas = player.getNumOf(Constants.SUPPORTED_EQUIPMENT[i]);
+			gamePane.equipmentMarketPane.setEquipOnHandTextAt(i, "You Have: " + Integer.toString(numPlayerHas));
+		}
+	}
+	
 	/**
 	 * Takes user's name and password and logs them in, or throws an exception that
 	 * will make GameControl pass out of scope and get propagated back to where it
@@ -310,7 +376,7 @@ public class GameControl
 
 			for (int curSpeciesIndex = 0; curSpeciesIndex < Constants.SUPPORTED_SPECIES.length; curSpeciesIndex++)
 			{
-				String str = gamePane.marketsPane.getNumCreaturesToSellTextFields()[curSpeciesIndex].getText().trim();
+				String str = gamePane.seafoodMarketPane.getNumCreaturesToSellTextFields()[curSpeciesIndex].getText().trim();
 
 				if (str.equals(""))
 				{
@@ -351,7 +417,7 @@ public class GameControl
 						{
 							setTo = (Integer.toString(num));
 						}
-						gamePane.marketsPane.setSpeciesToSellTextFieldAt(curSpeciesIndex, setTo);
+						gamePane.seafoodMarketPane.setSpeciesToSellTextFieldAt(curSpeciesIndex, setTo);
 					}
 				}
 				catch (Exception ex)
@@ -448,15 +514,14 @@ public class GameControl
 		}
 	}
 
-	public class SeafoodPriceSetEventHandler
+	public class SeafoodPriceSetEventHandler 
 	{
 		public void setPrices()
 		{
-
 			for (int i = 0; i < Constants.SUPPORTED_SPECIES.length; i++)
 			{
 				double currentPrice = seafoodMarket.getCurrentPricePerPound(Constants.SUPPORTED_SPECIES[i]);
-				gamePane.marketsPane.setCurrentPricesTextAt(i, Double.toString(currentPrice));
+				gamePane.seafoodMarketPane.setCurrentPricesTextAt(i, Double.toString(currentPrice));
 			}
 		}
 	}
@@ -466,7 +531,7 @@ public class GameControl
 		for (int i = 0; i < Constants.SUPPORTED_SPECIES.length; i++)
 		{
 			int numPlayerHas = player.getNumOf(Constants.SUPPORTED_SPECIES[i]);
-			gamePane.marketsPane.setCreaturesOnHandTextAt(i, "You Have: " + Integer.toString(numPlayerHas));
+			gamePane.seafoodMarketPane.setCreaturesOnHandTextAt(i, "You Have: " + Integer.toString(numPlayerHas));
 		}
 	}
 

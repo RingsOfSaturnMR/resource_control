@@ -5,10 +5,14 @@ import java.util.ArrayList;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.image.Image;
+import resources.BoatTypes;
 import resources.Equipment;
 import resources.FishSpecies;
 import resources.SeaCreature;
 import resources.ShellfishSpecies;
+import resources.SimpleFishingItem;
+import resources.SimpleFishingItemType;
 
 /**
  * @author Nils
@@ -116,7 +120,7 @@ public class Player extends authentication.User implements Serializable
 		observableListsLoaded = false;
 	}
 
-	// TODO - make work with equipment
+	// TODO - make work with equipment, done, cleanup though!
 	private void loadObservableLists()
 	{
 		// if iceChest is null and the iceChestArray is not null, it means that this
@@ -132,11 +136,24 @@ public class Player extends authentication.User implements Serializable
 		{
 			iceChest = FXCollections.observableArrayList();
 		}
+		
+		if (toolChest == null && toolChestArray != null)
+		{
+			toolChest = FXCollections.observableArrayList(toolChestArray);
+		}
+		// if both are null, it means no SeaCreatures have ever been caught. Set the
+		// iceChest to be empty;
+		else if (toolChest == null && toolChestArray == null)
+		{
+			toolChest = FXCollections.observableArrayList();
+		}
 
 		// set the object to not do this again, until it gets serialized
 		observableListsLoaded = false;
 	}
 
+	// TODO holy shit nils, fix this up
+	// see Constants -> public static final Image getImage(final Enum<?> desiredResourceType) for ideas
 	public int getNumOf(Enum<?> species)
 	{
 		// counter
@@ -220,6 +237,79 @@ public class Player extends authentication.User implements Serializable
 				return 0;
 			}
 		}
+		
+		// for Simple Fishing items
+		if (species instanceof BoatTypes)
+		{
+			switch ((BoatTypes) species)
+			{
+			case FISHING_SKIFF:
+				for (int i = 0; i < toolChest.size(); i++)
+				{
+					if (toolChest.get(i).getType() == BoatTypes.FISHING_SKIFF)
+					{
+						numOfSpecies++;
+					}
+				}
+				return numOfSpecies;
+
+			case TRAWLER:
+				for (int i = 0; i < toolChest.size(); i++)
+				{
+					if (toolChest.get(i).getType() == BoatTypes.TRAWLER)
+					{
+						numOfSpecies++;
+					}
+				}
+				return numOfSpecies;
+
+			case COMMERCIAL_TRAWLER:
+				for (int i = 0; i < toolChest.size(); i++)
+				{
+					if (toolChest.get(i).getType() == BoatTypes.COMMERCIAL_TRAWLER)
+					{
+						numOfSpecies++;
+					}
+				}
+				return numOfSpecies;
+
+			// TODO - handle this a little better
+			default:
+				return 0;
+			}
+		}
+		
+		// For SimpleFishingTypes
+		if (species instanceof SimpleFishingItemType)
+		{
+			switch ((SimpleFishingItemType) species)
+			{
+			case NET:
+				for (int i = 0; i < toolChest.size(); i++)
+				{
+					if (toolChest.get(i).getType() == SimpleFishingItemType.NET)
+					{
+						numOfSpecies++;
+					}
+				}
+				return numOfSpecies;
+
+			case LARGE_NET:
+				for (int i = 0; i < toolChest.size(); i++)
+				{
+					if (toolChest.get(i).getType() == SimpleFishingItemType.LARGE_NET)
+					{
+						numOfSpecies++;
+					}
+				}
+				return numOfSpecies;
+
+			// TODO - handle this a little better
+			default:
+				return 0;
+			}
+	
+		}
 		return 0;
 	}
 
@@ -243,4 +333,9 @@ public class Player extends authentication.User implements Serializable
 		return creature;
 	}
 
+	
+	public ObservableList getToolChest()
+	{
+		return this.toolChest;
+	}
 }
