@@ -18,7 +18,7 @@ public class Fish extends SeaCreature<FishSpecies> implements Serializable
 		super(species, weight);
 	}
 	
-	public void setFishBody(){
+	public void setFishBodyByWeight(){
 		fishGraphic=new FishGraphic(this);
 	}
 	

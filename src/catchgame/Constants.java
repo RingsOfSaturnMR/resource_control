@@ -118,4 +118,7 @@ public class Constants
 		
 		return null;	
 	}
+	
+	//constants to multiple weight by to get pixel width (aspect is preserved)
+	public final static short COD_WEIGHT_GRAPHIC_MULTIPLE = 10;
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import catchgame.Constants;
 import graphicclasses.FishImageView;
+import graphicclasses.ShellfishImageView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.shape.Shape;
@@ -23,7 +24,7 @@ public class ClientFishingActivityFishManager {
 		// resounces.ShellFishSpecies
 		ArrayList<Shellfish>lobsterPopulation = new ArrayList<>();
 		ArrayList<Shellfish>crabPopulation = new ArrayList<>(); 
-		ArrayList<Fish>oysterPopuliation = new ArrayList<>();
+		ArrayList<Shellfish>oysterPopuliation = new ArrayList<>();
 		
 		ArrayList<Fish>offScreenCod= new ArrayList<>();
 	
@@ -33,16 +34,29 @@ public class ClientFishingActivityFishManager {
 
 	 void doBasicClientSubOceanAnimation(){
 		Timeline timeline = new Timeline();
-		KeyFrame frame = new KeyFrame(Duration.seconds(0.1),event->{
+		//KeyFrame[] keyFrames=new KeyFrame[1];
+		//for (int i=0; i<1; i++){
+		KeyFrame keyFrame/*[i]*/ = new KeyFrame(Duration.seconds(0.05),event->{
 			makeSeaCreaturesOnScreenGo();
 		});
+		//}
 			    		  
-		timeline.getKeyFrames().addAll(frame); // add frame to the timeline KeyFrames
+		timeline.getKeyFrames().addAll(keyFrame); // add frame to the timeline KeyFrames
         timeline.setCycleCount(Timeline.INDEFINITE);
 		
         timeline.play();
 	}
 	
+	 private void makeSeaCreaturesOnScreenGo(){
+		 makeFishOnScreenGo(codPopulation);
+		 makeFishOnScreenGo(salmonPopulation);
+		 makeFishOnScreenGo(tunaPopulation);
+		 makeShellfishOnScreenGo(lobsterPopulation);
+		 makeShellfishOnScreenGo(crabPopulation);
+		 makeShellfishOnScreenGo(oysterPopuliation);
+		 
+	 }
+	 /*
 	private void makeSeaCreaturesOnScreenGo(){
 		//ArrayList<Fish> justOffScreenCod=new ArrayList<>();
 		for (Fish cod : codPopulation){
@@ -53,7 +67,47 @@ public class ClientFishingActivityFishManager {
 			//System.out.println(cod.getDirecTion()==Constants.RIGHT);
 			if ((codImageView.getTranslateX()>simpleFishingPane.getWidth()&&cod.getDirecTion()==Constants.RIGHT)
 					||(codImageView.getTranslateX()<-codImageView.getImage().getWidth()&&cod.getDirecTion()==Constants.LEFT)){
-				makeAppearFromOffScreen(cod);
+				makeFishAppearFromOffScreen(cod);
+				System.out.println("hello");
+				//codImageView.setTranslateX(0);
+				//justOffScreenCod.add(cod);
+			}
+		}
+		//offScreenCod.addAll(justOffScreenCod);
+		//codPopulation.removeAll(justOffScreenCod);
+	}
+	*/
+	private void makeFishOnScreenGo(ArrayList<Fish> fishPopulation){
+		//ArrayList<Fish> justOffScreenCod=new ArrayList<>();
+		for (Fish fish : fishPopulation){
+			FishImageView fishImageView=fish.getFishGraphic().getFishImageView();
+			fishImageView.setTranslateX(fishImageView.getTranslateX()+fish.getSpeed()*fish.getDirecTion());
+			//System.out.println(codImageView.getTranslateX());
+			//System.out.println(simpleFishingPane.getWidth());
+			//System.out.println(cod.getDirecTion()==Constants.RIGHT);
+			if ((fishImageView.getTranslateX()>simpleFishingPane.getWidth()&&fish.getDirecTion()==Constants.RIGHT)
+					||(fishImageView.getTranslateX()<-fishImageView.getImage().getWidth()&&fish.getDirecTion()==Constants.LEFT)){
+				makeFishAppearFromOffScreen(fish);
+				System.out.println("hello");
+				//codImageView.setTranslateX(0);
+				//justOffScreenCod.add(cod);
+			}
+		}
+		//offScreenCod.addAll(justOffScreenCod);
+		//codPopulation.removeAll(justOffScreenCod);
+	}
+	
+	private void makeShellfishOnScreenGo(ArrayList<Shellfish> shellfishPopulation){
+		//ArrayList<Fish> justOffScreenCod=new ArrayList<>();
+		for (Shellfish shellFish : shellfishPopulation){
+			ShellfishImageView shellfishImageView=shellFish.getShellfishGraphic().getShellfishImageView();
+			shellfishImageView.setTranslateX(shellfishImageView.getTranslateX()+shellFish.getSpeed()*shellFish.getDirecTion());
+			//System.out.println(codImageView.getTranslateX());
+			//System.out.println(simpleFishingPane.getWidth());
+			//System.out.println(cod.getDirecTion()==Constants.RIGHT);
+			if ((shellfishImageView.getTranslateX()>simpleFishingPane.getWidth()&&shellFish.getDirecTion()==Constants.RIGHT)
+					||(shellfishImageView.getTranslateX()<-shellfishImageView.getImage().getWidth()&&shellFish.getDirecTion()==Constants.LEFT)){
+				makeShellfishAppearFromOffScreen(shellFish);
 				System.out.println("hello");
 				//codImageView.setTranslateX(0);
 				//justOffScreenCod.add(cod);
@@ -71,25 +125,13 @@ public class ClientFishingActivityFishManager {
 			height - bottomOffset-fish.getFishGraphic().getFishImageView().getImage().getHeight()));
 	*/
 	
-	private void makeAppearFromOffScreen(Fish fish){
+	private void makeFishAppearFromOffScreen(Fish fish){
 		int leftOrRight=NumberUtilities.getRandomInt(0, 1);
 		FishImageView fishImageView=fish.getFishGraphic().getFishImageView();
 		System.out.println(leftOrRight);
 		//go right
 		if (leftOrRight==1){
 			System.out.println("should go right");
-			
-			/*
-			//if image direction was already right, keep it
-			if (fish.getDirecTion()==Constants.RIGHT){
-			}
-			//if image direction was left, flip it
-			else{
-				fishImageView.setScaleX(1);
-				System.out.println("should flip");
-				//fishImageView.setRotate(180);
-			}
-			*/
 			
 			//set image to rightward-facing
 			fishImageView.setScaleX(1);
@@ -102,18 +144,6 @@ public class ClientFishingActivityFishManager {
 		else{
 			System.out.println("should go left");
 			
-			/*
-			//if image direction was already left, keep it
-			if (fish.getDirecTion()==Constants.LEFT){
-			}
-			//if image direction was right, flip it
-			else{
-				System.out.println("should flip");
-				fishImageView.setScaleX(-1);
-				//fishImageView.setRotate(180);
-			}
-			*/
-			
 			fishImageView.setScaleX(-1);
 			//move fish to far right
 			fishImageView.setTranslateX(simpleFishingPane.getWidth()+20);
@@ -121,8 +151,40 @@ public class ClientFishingActivityFishManager {
 			fish.setDirecTion(false);
 		}
 		//get a random height within proper range
-		fish.getFishGraphic().getFishImageView().setTranslateY(NumberUtilities.getRandomDouble(
+		fishImageView.setTranslateY(NumberUtilities.getRandomDouble(
 				75 , 
-				simpleFishingPane.getHeight()-fish.getFishGraphic().getFishImageView().getImage().getHeight()));
+				simpleFishingPane.getHeight()-fishImageView.getImage().getHeight()));
+	}
+	
+	private void makeShellfishAppearFromOffScreen(Shellfish shellfish){
+		int leftOrRight=NumberUtilities.getRandomInt(0, 1);
+		ShellfishImageView shellfishImageView=shellfish.getShellfishGraphic().getShellfishImageView();
+		System.out.println(leftOrRight);
+		//go right
+		if (leftOrRight==1){
+			System.out.println("should go right");
+			
+			//set image to rightward-facing
+			shellfishImageView.setScaleX(1);
+			//move fish to far left
+			shellfishImageView.setTranslateX(-shellfishImageView.getImage().getWidth()-20);
+			//set direction to right
+			shellfish.setDirecTion(true);
+		}
+		//go left
+		else{
+			System.out.println("should go left");
+			
+			
+			shellfishImageView.setScaleX(-1);
+			//move fish to far right
+			shellfishImageView.setTranslateX(simpleFishingPane.getWidth()+20);
+			//set direction to left
+			shellfish.setDirecTion(false);
+		}
+		//get a random height within proper range
+		shellfishImageView.setTranslateY(NumberUtilities.getRandomDouble(
+				75+300, 
+				simpleFishingPane.getHeight()-shellfishImageView.getImage().getHeight()));
 	}
 }

@@ -215,9 +215,34 @@ public class FishingActivityV2 {
 				FishSpecies.COD, (clientSubOcean.currentPopulationCod+90), 
 				clientSubOcean.maxPopulationCod);
 		clientFishingActivityFishManager.codPopulation.addAll(sampleCod);
-		System.out.println("sample cod: "+sampleCod.size());
+		ArrayList<Fish> sampleSalmon=ocean.extractAndReturnABunchOfFish(
+				FishSpecies.SALMON, (clientSubOcean.currentPopulationSalmon+60), 
+				clientSubOcean.maxPopulationSalmon);
+		clientFishingActivityFishManager.salmonPopulation.addAll(sampleSalmon);
+		ArrayList<Fish> sampleTuna=ocean.extractAndReturnABunchOfFish(
+				FishSpecies.TUNA, (clientSubOcean.currentPopulationTuna+60), 
+				clientSubOcean.maxPopulationTuna);
+		clientFishingActivityFishManager.tunaPopulation.addAll(sampleTuna);
+		ArrayList<Shellfish> sampleLobsters=ocean.ecxtractAndReturnABunchOfShellfish(
+				ShellfishSpecies.LOBSTER, (clientSubOcean.currentPopulationLobster+20), 
+				clientSubOcean.maxPopulationLobster);
+		clientFishingActivityFishManager.lobsterPopulation.addAll(sampleLobsters);
+		ArrayList<Shellfish> sampleCrab=ocean.ecxtractAndReturnABunchOfShellfish(
+				ShellfishSpecies.CRAB, (clientSubOcean.currentPopulationCrab+60), 
+				clientSubOcean.maxPopulationCrab);
+		clientFishingActivityFishManager.crabPopulation.addAll(sampleCrab);
+		ArrayList<Shellfish> sampleOysters=ocean.ecxtractAndReturnABunchOfShellfish(
+				ShellfishSpecies.OYSTER, (clientSubOcean.currentPopulationOyster+40), 
+				clientSubOcean.maxPopulationOyster);
+		clientFishingActivityFishManager.oysterPopuliation.addAll(sampleOysters);
+		//System.out.println("sample cod: "+sampleCod.size());
 		addFishPacketToScreen(sampleCod, 0, 0);
-		System.out.println("sample cod: "+sampleCod.size());
+		addFishPacketToScreen(sampleSalmon, 0, 0);
+		addFishPacketToScreen(sampleTuna, 0, 0);
+		addShellfishPacketToScreen(sampleLobsters, 300, 0);
+		addShellfishPacketToScreen(sampleCrab, 300, 0);
+		addShellfishPacketToScreen(sampleOysters, 300, 0);
+		//System.out.println("sample cod: "+sampleCod.size());
 		}
 		catch(Exception e){
 			
@@ -256,10 +281,9 @@ public class FishingActivityV2 {
 	 * @param color
 	 *            the color the shellfish should be given
 	 */
-	public void addShellfishPacketToScreen(ArrayList<Shellfish> shellfishUpdate, int topOffset, int bottomOffset,
-			Color color) {
+	public void addShellfishPacketToScreen(ArrayList<Shellfish> shellfishUpdate, int topOffset, int bottomOffset) {
 		for (int i = 0; i <= shellfishUpdate.size() - 1; i++) {
-			addShellfishToScreen(shellfishUpdate.get(i), topOffset, bottomOffset, color);
+			addShellfishToScreen(shellfishUpdate.get(i), topOffset, bottomOffset);
 		}
 	}
 
@@ -279,7 +303,7 @@ public class FishingActivityV2 {
 	public void addFishToScreen(Fish fish, int topOffset, int bottomOffset) {
 		//fish.SetBodyByWeight();
 		//fish.setBodyColor(color);
-		fish.setFishBody();
+		fish.setFishBodyByWeight();
 		System.out.println("set FishBody");
 		// System.out.print(fish.getBody().toString());
 		double width = simpleFishingPane.getMinWidth();
@@ -312,20 +336,23 @@ public class FishingActivityV2 {
 	 * @param color
 	 *            the color the shellfish should be given
 	 */
-	public void addShellfishToScreen(Shellfish shellfish, int topOffset, int bottomOffset, Color color) {
-		shellfish.SetBodyByWeight();
-		shellfish.setBodyColor(color);
+	public void addShellfishToScreen(Shellfish shellfish, int topOffset, int bottomOffset) {
+		shellfish.setShellfishBodyByWeight();
+		//shellfish.setBodyColor(color);
 		// System.out.print(fish.getBody().toString());
 		double width = simpleFishingPane.getMinWidth();
 		double height = simpleFishingPane.getMinHeight();
-		shellfish.getBody().setCenterX(NumberUtilities.getRandomDouble(0, width));
-		shellfish.getBody().setCenterY(NumberUtilities.getRandomDouble(150 + topOffset, height - bottomOffset));
+		shellfish.getShellfishGraphic().getShellfishImageView().setTranslateX(NumberUtilities.getRandomDouble(
+				0, width-shellfish.getShellfishGraphic().getShellfishImageView().getImage().getWidth()));
+		shellfish.getShellfishGraphic().getShellfishImageView().setTranslateY(NumberUtilities.getRandomDouble(
+				75 + topOffset, 
+				height - bottomOffset-shellfish.getShellfishGraphic().getShellfishImageView().getImage().getHeight()));
 		// System.out.print(fish.getBody().toString());
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				simpleFishingPane.getChildren().add(shellfish.getBody());
-				shellfish.getBody().setOnMouseClicked(new ExtractShellfishAction(shellfish));
+				simpleFishingPane.getChildren().add(shellfish.getShellfishGraphic().getShellfishImageView());
+				//shellfish.getBody().setOnMouseClicked(new ExtractShellfishAction(shellfish));
 			}
 		});
 	}

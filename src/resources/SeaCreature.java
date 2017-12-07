@@ -17,7 +17,7 @@ public abstract class SeaCreature <T> implements Serializable
 	
 	private double weight;
 	private T species;
-	private double speed=15;
+	private double speed=10;
 	private short direction=Constants.RIGHT;
 	private transient Circle GUICircle = null;
 	//protected transient AbstractSeaCreatureGraphic seaCreatureBody=null;

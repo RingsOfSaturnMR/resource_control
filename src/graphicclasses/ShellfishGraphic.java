@@ -5,35 +5,36 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import resources.Fish;
 import resources.FishSpecies;
+import resources.Shellfish;
 
-public class FishGraphic extends AbstractSeaCreatureGraphic{
-	private Fish fish;
-	private FishImageView fishImageView;
+public class ShellfishGraphic extends AbstractSeaCreatureGraphic{
+	private Shellfish shellfish;
+	private ShellfishImageView shellfishImageView;
 	
-	public FishGraphic(Fish fish){
-		this.fish=fish;
+	public ShellfishGraphic(Shellfish shellfish){
+		this.shellfish=shellfish;
 		
-		fishImageView=new FishImageView(fish);
-		super.seaCreatureImage=AbstractSeaCreatureGraphic.getImage(fish.getSpecies());
+		shellfishImageView=new ShellfishImageView(shellfish);
+		super.seaCreatureImage=AbstractSeaCreatureGraphic.getImage(shellfish.getSpecies());
 		System.out.println("got image");
-		fishImageView.setImage(super.seaCreatureImage);
+		shellfishImageView.setImage(super.seaCreatureImage);
 		System.out.println("set image");
 		short WEIGHT_GRAPHIC_MULTIPLE=10;
-		switch (fish.getSpecies()){
-		case COD:
+		switch (shellfish.getSpecies()){
+		case LOBSTER:
 			WEIGHT_GRAPHIC_MULTIPLE=Constants.COD_WEIGHT_GRAPHIC_MULTIPLE;
 			break;
-		case SALMON:
+		case CRAB:
 			WEIGHT_GRAPHIC_MULTIPLE=Constants.COD_WEIGHT_GRAPHIC_MULTIPLE;
 			break;
-		case TUNA:
+		case OYSTER:
 			WEIGHT_GRAPHIC_MULTIPLE=Constants.COD_WEIGHT_GRAPHIC_MULTIPLE;
 			break;
 		}
-		fishImageView.setFitWidth(fish.getWeight()*Constants.COD_WEIGHT_GRAPHIC_MULTIPLE);
-		fishImageView.setPreserveRatio(true);
-		fishImageView.setSmooth(true);
-		fishImageView.setCache(true);
+		shellfishImageView.setFitWidth(shellfish.getWeight()*WEIGHT_GRAPHIC_MULTIPLE);
+		shellfishImageView.setPreserveRatio(true);
+		shellfishImageView.setSmooth(true);
+		shellfishImageView.setCache(true);
 		
 		/*
 		seaCreatureImage=getImage(fish.getSpecies());
@@ -43,8 +44,8 @@ public class FishGraphic extends AbstractSeaCreatureGraphic{
 		*/
 	}
 	
-	public FishImageView getFishImageView(){
-		return fishImageView;
+	public ShellfishImageView getShellfishImageView(){
+		return shellfishImageView;
 	}
 	
 	/*
