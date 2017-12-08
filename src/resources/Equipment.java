@@ -1,6 +1,8 @@
 package resources;
 
-public abstract class Equipment<T>
+import java.io.Serializable;
+
+public abstract class Equipment<T> implements Serializable
 {
 	private T type;
 	private Usage usage;
@@ -38,6 +40,7 @@ public abstract class Equipment<T>
 	{
 		return this.usage;
 	}
+	
 }
 
 

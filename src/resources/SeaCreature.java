@@ -2,8 +2,12 @@ package resources;
 
 import java.io.Serializable;
 
+<<<<<<< HEAD
 import catchgame.Constants;
 import graphicclasses.AbstractSeaCreatureGraphic;
+=======
+
+>>>>>>> nils_branch
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
@@ -17,10 +21,14 @@ public abstract class SeaCreature <T> implements Serializable
 	
 	private double weight;
 	private T species;
+<<<<<<< HEAD
 	private double speed=10;
 	private short direction=Constants.RIGHT;
 	private transient Circle GUICircle = null;
 	//protected transient AbstractSeaCreatureGraphic seaCreatureBody=null;
+=======
+	private transient Circle GUICircle = null;
+>>>>>>> nils_branch
 
 	SeaCreature(){
 		
@@ -85,6 +93,7 @@ public abstract class SeaCreature <T> implements Serializable
 	{
 		return this.getSpecies().toString() + ", " + this.getWeight() + " pounds";
 	}
+<<<<<<< HEAD
 	
 	public double getSpeed(){
 		return speed;
@@ -115,4 +124,6 @@ public abstract class SeaCreature <T> implements Serializable
 			this.direction = Constants.LEFT;
 		}
 	}
+=======
+>>>>>>> nils_branch
 }

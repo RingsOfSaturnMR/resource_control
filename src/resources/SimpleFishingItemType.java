@@ -2,6 +2,5 @@ package resources;
 
 public enum SimpleFishingItemType
 {
-	NET,
-	LARGE_NET
+	FISHING_POLE
 }

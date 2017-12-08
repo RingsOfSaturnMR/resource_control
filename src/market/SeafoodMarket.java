@@ -38,7 +38,11 @@ public class SeafoodMarket extends Market<SeaCreature, Enum>
 		super(name);
 		// set the handler
 		priceSetHandler = updatePricePerPoundHandler;
+<<<<<<< HEAD
 		
+=======
+	
+>>>>>>> nils_branch
 		// populate hashmap with inventory
 		inventory = new HashMap<Enum, Double>();
 		// for fish species
@@ -56,6 +60,7 @@ public class SeafoodMarket extends Market<SeaCreature, Enum>
 		// set up clock
 		currentTime = System.nanoTime();
 		previousTime = System.nanoTime();
+<<<<<<< HEAD
 	}
 	
 	//temp for testing
@@ -63,8 +68,14 @@ public class SeafoodMarket extends Market<SeaCreature, Enum>
 	{
 		// do this after a price change to tell the program there are new prices
 		priceSetHandler.setPrices();
+=======
+		
+>>>>>>> nils_branch
 	}
+	
+	//temp for testing
 
+<<<<<<< HEAD
 	public void getRandTimeCoefficient() {}
 	public void getDeltaTime() {} // will check time
 	public void marketFlux() {} // this one will contain the thread for checking the time and updated price
@@ -72,6 +83,23 @@ public class SeafoodMarket extends Market<SeaCreature, Enum>
 	@Override
 	public double getCurrentPricePerPound(Enum species)
 	{
+=======
+	public void forcePriceUpdate()
+	{
+		// do this after a price change to tell the program there are new prices
+		priceSetHandler.setPrices();
+	}
+
+
+
+	public void getRandTimeCoefficient() {}
+	public void getDeltaTime() {} // will check time
+	public void marketFlux() {} // this one will contain the thread for checking the time and updated price
+
+
+	public double getCurrentPricePerPound(Enum species)
+	{
+>>>>>>> nils_branch
 		if (this.inventory.containsKey(species)) {
 			return this.inventory.get(species); // returns the value which is the current price per pound
 		}

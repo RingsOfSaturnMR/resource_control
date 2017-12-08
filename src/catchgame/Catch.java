@@ -20,6 +20,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+<<<<<<< HEAD
+=======
+
+import javax.security.auth.login.LoginException;
+
+>>>>>>> nils_branch
 import catchgame.Packets.NewUserPacket;
 import catchgame.Packets.ResultPacket;
 import javafx.application.Application;
@@ -220,6 +226,10 @@ public class Catch extends Application
 		{
 			GameControl gameControl = new GameControl(serverIpAddress, clientPort, playerName, playerPassword);
 			
+<<<<<<< HEAD
+=======
+			// shuts down loginPane if gameControl launches successfully
+>>>>>>> nils_branch
 			gameControl.getGameRunning().addListener(ov -> {
 				loadLoginPane();
 				loginPane.setClientPortNum(catchServer.getServerSocketPort());
@@ -231,11 +241,18 @@ public class Catch extends Application
 			lastPort = clientPort;
 			
 		}
+<<<<<<< HEAD
 		catch (Exception e1)
 		{
 			loginPane.setErrorText(e1.getMessage());
 			System.out.println(e1.getMessage());
 			e1.printStackTrace();
+=======
+		catch(Exception exception)
+		{
+			loginPane.setErrorText(exception.getMessage());
+			exception.printStackTrace();
+>>>>>>> nils_branch
 		}
 	}
 	

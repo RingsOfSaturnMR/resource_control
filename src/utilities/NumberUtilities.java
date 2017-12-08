@@ -25,7 +25,11 @@ public class NumberUtilities {
 	 */
 	public static int getRandomInt(int min, int max)
 	{
+<<<<<<< HEAD
 		int randomInt = rand.nextInt(max+1) + min;
+=======
+		int randomInt = rand.nextInt(max) + min;
+>>>>>>> nils_branch
 		return randomInt;
 	}
 

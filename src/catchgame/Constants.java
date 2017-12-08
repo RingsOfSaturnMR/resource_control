@@ -21,8 +21,15 @@ import java.util.Arrays;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+<<<<<<< HEAD
 import resources.FishSpecies;
 import resources.ShellfishSpecies;
+=======
+import resources.BoatTypes;
+import resources.FishSpecies;
+import resources.ShellfishSpecies;
+import resources.SimpleFishingItemType;
+>>>>>>> nils_branch
 
 /**
  * Constants for initial values used throughout the program.
@@ -34,8 +41,13 @@ public class Constants
 	public static final int TIME_BEFORE_PRICE_EXPIRATION = 1_000_000;// milliseconds?
 
 	// window sizes
+<<<<<<< HEAD
 	public final static int LOGIN_PANE_WIDTH = 355;
 	public final static int LOGIN_PANE_HEIGHT = 275;
+=======
+	public final static int LOGIN_PANE_WIDTH = 325;
+	public final static int LOGIN_PANE_HEIGHT = 500;
+>>>>>>> nils_branch
 	public final static int NEW_USER_PANE_WIDTH = 500;
 	public final static int NEW_USER_PANE_HEIGHT = 300;
 	public final static int INITIAL_SERVER_PANE_WIDTH = 400;
@@ -44,8 +56,11 @@ public class Constants
 	public final static int INITIAL_GAME_PANE_HEIGHT = 500;
 	public final static int FREQUENCY_HISTOGRAM_PANE_WIDTH = 500;
 	public final static int FREQUENCY_HISTOGRAM_PANE_HEIGHT = 500;
+<<<<<<< HEAD
 	public final static int INITIAL_SIMPLE_FISHING_PANE_WIDTH = 500;
 	public final static int INITIAL_SIMPLE_FISHING_PANE_HEIGHT = 400;
+=======
+>>>>>>> nils_branch
 
 	// initial Market values of resources
 	public final static double TUNA_INITIAL_PRICE_PER_POUND = 6.40;
@@ -92,8 +107,57 @@ public class Constants
 
 	// Basics
 	public final static String APPLICATION_NAME = "Catch!! - By Caileigh, Matt, Nls, Thanh";
+<<<<<<< HEAD
 	public final static short LEFT = -1;
 	public final static short RIGHT = 1;
+=======
+
+	/**
+	 * An array of SeaCreature Species the game supports
+	 */
+	public final static Enum[] SUPPORTED_SPECIES =
+	{ FishSpecies.COD, FishSpecies.SALMON, FishSpecies.TUNA, ShellfishSpecies.CRAB, ShellfishSpecies.LOBSTER, ShellfishSpecies.OYSTER };
+
+	/**
+	 * An array of Equipment types the game supports
+	 */
+	public static Enum[] SUPPORTED_EQUIPMENT =
+	{ BoatTypes.COMMERCIAL_TRAWLER, BoatTypes.FISHING_SKIFF, BoatTypes.TRAWLER, SimpleFishingItemType.FISHING_POLE };
+
+	/**
+	 * 
+	 * @param desiredResourceType species of SeaCreature
+	 * @return Image of SeaCreature or null if it can't find the image.
+	 */
+	public static final Image getImage(final Enum<?> desiredResourceType)
+	{
+		if (desiredResourceType instanceof FishSpecies || desiredResourceType instanceof ShellfishSpecies)
+		{
+			for (int i = 0; i < SUPPORTED_SPECIES.length; i++)
+			{
+				if (desiredResourceType == SUPPORTED_SPECIES[i])
+				{
+					return (new Image("img/" + SUPPORTED_SPECIES[i].toString().toLowerCase() +
+							".png"));
+				}
+			}
+		}
+		
+		if (desiredResourceType instanceof BoatTypes || desiredResourceType instanceof SimpleFishingItemType)
+		{	
+			for(Enum<?> currentType: SUPPORTED_EQUIPMENT )
+			{
+				if( desiredResourceType == currentType)
+				{
+					return (new Image("img/" + currentType.toString().toLowerCase() +
+							".png"));
+				}
+			}
+		}
+		return null;
+	}
+	
+>>>>>>> nils_branch
 
 	/**
 	 * A list of the SeaCreature Species the program supports

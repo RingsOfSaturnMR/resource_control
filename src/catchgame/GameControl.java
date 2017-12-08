@@ -38,6 +38,10 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import market.EquipmentMarket;
 import market.SeafoodMarket;
+<<<<<<< HEAD
+=======
+import resources.Equipment;
+>>>>>>> nils_branch
 import resources.FishSpecies;
 import resources.SeaCreature;
 import userinterface.GamePane;
@@ -81,11 +85,27 @@ public class GameControl
 	// so Catch.java can listen to what is happening in the game
 	private SimpleBooleanProperty gameRunning = new SimpleBooleanProperty(false);
 
+<<<<<<< HEAD
 	/**
 	 * Starts a new game
 	 * 
 	 * @param toServer The ObjectOutputStream to the server.
 	 * @param fromServer The ObjectInputStream from the server.
+=======
+	// to flag if a player deletes the account, so we dont ask them if they want to
+	// save upon deletion
+	private boolean accountDeleted = false;
+
+	/**
+	 * Starts a new game
+	 * 
+	 * @param serverIpAddress where you are connecting
+	 * @param clientPort the port you will connect to
+	 * @param enteredName username
+	 * @param enternedPasswored enteredPassword
+	 * 
+	 * @throws any problem that arrises in starting a game
+>>>>>>> nils_branch
 	 */
 	public GameControl(String serverIpAddress, int clientPort, String enteredName, String enteredPassword) throws Exception
 	{
@@ -95,6 +115,7 @@ public class GameControl
 		// set the streams
 		toServer = new ObjectOutputStream(socket.getOutputStream());
 		fromServer = new ObjectInputStream(socket.getInputStream());
+<<<<<<< HEAD
 
 		// authenticate player
 		logPlayerIn(enteredName, enteredPassword);
@@ -152,13 +173,25 @@ public class GameControl
 
 		// Display GUI
 		gamePane = new GamePane(new SellFishAction(), player, new FishingActivityActions(), new DeleteAccountAction(), new SaveGameAction(), new ExitAction(), seafoodMarket);
+=======
+
+		// authenticate player
+		logPlayerIn(enteredName, enteredPassword);
+
+		// instantiate markets
+		seafoodMarket = new SeafoodMarket("The Fish Wholesaler", new SeafoodPriceSetEventHandler());
+		equipMarket = new EquipmentMarket("Ye 'Ol General Store", new SetCurrentEquipPricesHandler());
+
+		// Display GUI
+		gamePane = new GamePane(new SellFishAction(), player, new FishingActivityActions(), new DeleteAccountAction(), new SaveGameAction(), new ExitAction(), seafoodMarket.getName());
+>>>>>>> nils_branch
 		gameScene = new Scene(gamePane, Constants.INITIAL_GAME_PANE_WIDTH, Constants.INITIAL_GAME_PANE_HEIGHT);
 		gameStage.setScene(gameScene);
 		gameStage.setTitle("Catch!");
-		gameStage.centerOnScreen();
 		gameStage.show();
 		gameStage.requestFocus();
 
+<<<<<<< HEAD
 		//TODO - this is just to make sure this method works. Encapsulate this in SeafoodMarket.
 		// fire this method as a test
 		seafoodMarket.forcePriceUpdate();
@@ -173,6 +206,22 @@ public class GameControl
 		 * nodes to reflect the change.
 		 * 
 		 * @author Nils
+=======
+		// make the markets update its prices so the GUI can display them
+		seafoodMarket.forcePriceUpdate();
+		equipMarket.forcUpdate();
+		
+		// update the GUI to have most recent player into
+		updateNumSellableSeaCreatures();
+		updateNumEquipOnHand();
+
+		//////////////////////////////////////////////////////////////////////////
+		// ----- define nested listeners to use within scope of GameControl ------
+		/////////////////////////////////////////////////////////////////////////
+		/**
+		 * Listens for changes in the players 'IceChest' and updates seafoodMarketPane
+		 * nodes to reflect the change.
+>>>>>>> nils_branch
 		 */
 		class IceChestChangeListener implements ListChangeListener<Object>
 		{
@@ -184,6 +233,7 @@ public class GameControl
 		}
 
 		/**
+<<<<<<< HEAD
 		 * This class listens for changes in a TextField, and turns them to red if they
 		 * are set to something other than empty ("") or an integer
 		 * 
@@ -287,6 +337,167 @@ public class GameControl
 	}
 
 	/**
+=======
+		 * Listens for changes in the players 'ToolChest' and updates
+		 * EquipmentMarketPane nodes to reflect the change.
+		 */
+		class ToolChestChangeListener implements ListChangeListener<Object>
+		{
+			@Override
+			public void onChanged(Change<? extends Object> arg0)
+			{
+				updateNumEquipOnHand();
+			}
+		}
+
+		// add the listeners of this scope
+		player.getIceChest().addListener(new IceChestChangeListener());
+		player.getToolChest().addListener(new ToolChestChangeListener());
+
+		/////////////////////////////////////////////////////////////
+		// ------ add inner level listeners to GUI components ------
+		/////////////////////////////////////////////////////////////
+		for (int i = 0; i < Constants.SUPPORTED_SPECIES.length; i++)
+		{
+			// lets the user know if they are attempting a valid sale of SeaCreatures
+			gamePane.seafoodMarketPane.addNumToSellTfListener(i, new IsValidQuantityListener(Constants.SUPPORTED_SPECIES[i]));
+		}
+		for (int i = 0; i < Constants.SUPPORTED_EQUIPMENT.length; i++)
+		{
+			// add listeners to buttons so users can actually buy equipment
+			gamePane.equipmentMarketPane.setBtnSellActionAt(i, new BuyEquipmentHandler(Constants.SUPPORTED_EQUIPMENT[i]));
+		}
+
+		// sequence for closing down
+		gameStage.setOnCloseRequest(new shutdownHandler());
+
+		// set game to running
+		gameRunning.set(true);
+
+	}
+
+	/**
+	 * Sets the EquipmentMarketPane to show how many of an Equipment type the user
+	 * has.
+	 */
+	private void updateNumEquipOnHand()
+	{
+		for (int i = 0; i < Constants.SUPPORTED_EQUIPMENT.length; i++)
+		{
+			int numPlayerHas = player.getNumOf(Constants.SUPPORTED_EQUIPMENT[i]);
+			gamePane.equipmentMarketPane.setEquipOnHandTextAt(i, "You Have: " + Integer.toString(numPlayerHas));
+		}
+	}
+
+	/**
+	 * Course of events to shut down program.
+	 */
+	private class shutdownHandler implements EventHandler<WindowEvent>
+	{
+		@Override
+		public void handle(WindowEvent event)
+		{
+			try
+			{
+				if (!accountDeleted)
+				{
+					Alert alert = new Alert(AlertType.CONFIRMATION);
+					alert.setTitle("Exit");
+					alert.setHeaderText("Exit Options");
+					alert.setContentText("Choose your option.");
+
+					ButtonType saveAndExit = new ButtonType("Save And Quit");
+					ButtonType justExit = new ButtonType("Quit");
+
+					alert.getButtonTypes().setAll(saveAndExit, justExit);
+
+					Optional<ButtonType> result = alert.showAndWait();
+
+					if (result.get() == saveAndExit)
+					{
+						saveGame();
+						logOut();
+					}
+					else if (result.get() == justExit)
+					{
+						logOut();
+					}
+				}
+				toServer.close();
+				fromServer.close();
+			}
+			catch (Exception e1)
+			{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			finally
+			{
+				toServer = null;
+				fromServer = null;
+				gameRunning.set(false);
+			}
+		}
+	}
+
+	/**
+	 * Takes user's name and password and logs them in, or throws an exception that
+	 * will make GameControl pass out of scope and get propagated back to where it
+	 * was instantiated.
+	 * 
+	 * @param enteredName
+	 * @param enteredPassword
+	 * @throws Exception for network error, or authentication error
+	 */
+	private void logPlayerIn(String enteredName, String enteredPassword) throws Exception
+	{
+		// send login info to server
+		LoginPacket loginPacket = new LoginPacket(enteredName, enteredPassword);
+		toServer.writeObject(loginPacket);
+
+		// get response
+		ResultPacket resultPacket = (ResultPacket) fromServer.readObject();
+
+		// if the response code is not 'LOGIN_SUCCESS_CODE'
+		if (resultPacket.code != Codes.LOGIN_SUCCESS_CODE)
+		{
+			String errorMessage;
+
+			switch (resultPacket.code)
+			{
+			case Codes.LOGIN_ERR_INVALID_PASSWORD_CODE:
+				errorMessage = "Invalid Password";
+				break;
+			case Codes.LOGIN_ERR_NO_USERS_FOUND_CODE:
+				errorMessage = "This Server Has No Users Yet!";
+				break;
+			case Codes.LOGIN_ERR_USER_NOT_FOUND_CODE:
+				errorMessage = "Invalid Username";
+				break;
+			case Codes.LOGIN_ERR_INVALID_ATTEMPT_CODE:
+				errorMessage = "Invalid Attempt";
+				break;
+			case Codes.LOGIN_ERR_UNKNOWN_ERROR_CODE:
+				errorMessage = "The Server Doesnt Know Why You Cant Login :(";
+				break;
+			default:
+				errorMessage = "The server responded '" + resultPacket.code +
+						"', I dont know what that means :(";
+				break;
+			}
+
+			throw new Exception(errorMessage);
+		}
+
+		// if code is 'LOGIN_SUCCESS_CODE, expect to receive the user's Object
+		else if (resultPacket.code == Codes.LOGIN_SUCCESS_CODE)
+		{
+			this.player = (Player) fromServer.readObject();
+		}
+	}
+
+	/**
+>>>>>>> nils_branch
 	 * Action that occurs when user desires to exit.
 	 */
 	private class ExitAction implements EventHandler<ActionEvent>
@@ -310,7 +521,11 @@ public class GameControl
 
 			for (int curSpeciesIndex = 0; curSpeciesIndex < Constants.SUPPORTED_SPECIES.length; curSpeciesIndex++)
 			{
+<<<<<<< HEAD
 				String str = gamePane.marketsPane.getNumCreaturesToSellTextFields()[curSpeciesIndex].getText().trim();
+=======
+				String str = gamePane.seafoodMarketPane.getNumCreaturesToSellTextFields()[curSpeciesIndex].getText().trim();
+>>>>>>> nils_branch
 
 				if (str.equals(""))
 				{
@@ -334,7 +549,11 @@ public class GameControl
 					for (int curSeaCreature = 0; curSeaCreature < numToSell; curSeaCreature++)
 					{
 						// get the 'next' creature of the current type from the player
+<<<<<<< HEAD
 						SeaCreature creature = player.getSeaNextSeaCreature(Constants.SUPPORTED_SPECIES[curSpeciesIndex]);
+=======
+						SeaCreature<?> creature = player.getSeaNextSeaCreature(Constants.SUPPORTED_SPECIES[curSpeciesIndex]);
+>>>>>>> nils_branch
 						// sell the creature
 						double money = seafoodMarket.sellItem(creature);
 						player.addMoney(money);
@@ -351,7 +570,11 @@ public class GameControl
 						{
 							setTo = (Integer.toString(num));
 						}
+<<<<<<< HEAD
 						gamePane.marketsPane.setSpeciesToSellTextFieldAt(curSpeciesIndex, setTo);
+=======
+						gamePane.seafoodMarketPane.setSpeciesToSellFfAt(curSpeciesIndex, setTo);
+>>>>>>> nils_branch
 					}
 				}
 				catch (Exception ex)
@@ -370,6 +593,223 @@ public class GameControl
 	{
 		player.prepareToSerialze();
 		toServer.writeObject(player);
+<<<<<<< HEAD
+=======
+	}
+
+	/**
+	 * Action that deletes a user account.
+	 */
+	private class DeleteAccountAction implements EventHandler<ActionEvent>
+	{
+		@Override
+		public void handle(ActionEvent e)
+		{
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Confirmation Dialog");
+			alert.setHeaderText("Delete This Account");
+			alert.setContentText("Are you Sure? This cannot be undone.");
+
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK)
+			{
+				try
+				{
+					toServer.writeObject(new RequestPacket(Codes.DELETE_ACCOUNT_CODE));
+					accountDeleted = true;
+					gameStage.fireEvent(new WindowEvent(gameStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+				}
+				catch (IOException e1)
+				{
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			else
+			{
+				return;
+			}
+		}
+	}
+
+	/**
+	 * Action that saves a game.
+	 */
+	private class SaveGameAction implements EventHandler<ActionEvent>
+	{
+		@Override
+		public void handle(ActionEvent e)
+		{
+			try
+			{
+				saveGame();
+			}
+			catch (Exception e1)
+			{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * this method sends a request to the server to remove the player from the list
+	 * of active users, and set the DB to have him as offline.
+	 */
+	private void logOut() throws Exception
+	{
+		toServer.writeObject(new RequestPacket(Codes.LOGOUT_REQUEST_CODE));
+	}
+
+	/**
+	 * Used to determine if the LoginPane, or NewUserPane shoud close
+	 * 
+	 * @return status of the game
+	 */
+	public SimpleBooleanProperty getGameRunning()
+	{
+		return gameRunning;
+	}
+
+	// TODO - Matt
+	public class FishingActivityActions
+	{
+		public void startFishingActivity()
+		{
+			fishingActivity = new FishingActivity(gamePane, toServer, fromServer, player);
+		}
+	}
+
+	/**
+	 * Updates the GUI to display current Seafood prices per pound.
+	 */
+	public class SeafoodPriceSetEventHandler
+	{
+		public void setPrices()
+		{
+			for (int i = 0; i < Constants.SUPPORTED_SPECIES.length; i++)
+			{
+				double currentPrice = seafoodMarket.getCurrentPricePerPound(Constants.SUPPORTED_SPECIES[i]);
+				gamePane.seafoodMarketPane.setCurrentPricesTextAt(i, Double.toString(currentPrice));
+			}
+		}
+	}
+
+	/**
+	 * updates the GUI to display how many SeaCreatures of each type the player has
+	 * to sell
+	 */
+	private void updateNumSellableSeaCreatures()
+	{
+		for (int i = 0; i < Constants.SUPPORTED_SPECIES.length; i++)
+		{
+			int numPlayerHas = player.getNumOf(Constants.SUPPORTED_SPECIES[i]);
+			gamePane.seafoodMarketPane.setCreaturesOnHandTextAt(i, "You Have: " + Integer.toString(numPlayerHas));
+		}
+	}
+
+	/**
+	 * Used to listen for changes in SeafoodMarketPane's TextFields. Turns them to
+	 * red if they are set to something other than empty (""), an integer, or more
+	 * than the player has.
+	 */
+	public class IsValidQuantityListener implements ChangeListener<Object>
+	{
+		private TextField textField;
+		private Enum<?> speciesType;
+
+		public IsValidQuantityListener(Enum<?> speciesType)
+		{
+			this.speciesType = speciesType;
+		}
+
+		public void setTextField(TextField tf)
+		{
+			this.textField = tf;
+		}
+
+		@Override
+		public void changed(ObservableValue<?> arg0, Object oldValue, Object newValue)
+		{
+			if (textField != null)
+			{
+				String val = textField.getText().trim();
+				if (val.equals(""))
+				{
+					val = "0";
+					setWhite();
+				}
+				else
+				{
+					try
+					{
+						if (Integer.parseInt(val) <= player.getNumOf(speciesType))
+						{
+							setWhite();
+						}
+						else
+						{
+							setRed();
+						}
+					}
+					catch (Exception e)
+					{
+						setRed();
+					}
+				}
+			}
+			else
+			{
+				System.out.println("listner does not have associated Textfield attached.");
+			}
+		}
+
+		private void setWhite()
+		{
+			textField.setStyle("-fx-control-inner-background: white;");
+		}
+
+		private void setRed()
+		{
+			textField.setStyle("-fx-control-inner-background: red;");
+		}
+	}
+
+	/**
+	 * The methods that let a player buy more equipment
+	 */
+	public class BuyEquipmentHandler implements EventHandler<ActionEvent>
+	{
+		private Enum<?> itemType;
+
+		public BuyEquipmentHandler(Enum<?> itemType)
+		{
+			this.itemType = itemType;
+		}
+
+		@Override
+		public void handle(ActionEvent arg0)
+		{
+			player.addItemToToolChest((Equipment<?>) equipMarket.buyItem(itemType));
+			takeMoney();
+		}
+
+		public void takeMoney()
+		{
+			player.subtractMoney(equipMarket.getCurrentPrice(itemType));
+		}
+	}
+
+	public class SetCurrentEquipPricesHandler
+	{
+		public void setPrices()
+		{
+			for (int i = 0; i < Constants.SUPPORTED_EQUIPMENT.length; i++)
+			{
+				gamePane.equipmentMarketPane.setCurrentPricesTextAt(i, Double.toString(equipMarket.getCurrentPrice(Constants.SUPPORTED_EQUIPMENT[i])));
+			}
+		}
+>>>>>>> nils_branch
 	}
 
 	/**

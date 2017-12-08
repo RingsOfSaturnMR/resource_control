@@ -59,7 +59,12 @@ public class GamePane extends VBox
 	private MyStatsPane myStatsPane;
 
 	public SimpleFishingPane simpleFishingPane;
+<<<<<<< HEAD
 	public SeafoodMarketPane marketsPane;
+=======
+	public SeafoodMarketPane seafoodMarketPane;
+	public EquipmentMarketPane equipmentMarketPane;
+>>>>>>> nils_branch
 	private GameControl.FishingActivityActions fishingActivityActions;
 	private boolean fishingStarted = false;
 
@@ -71,20 +76,31 @@ public class GamePane extends VBox
 	private MenuItem exitMenuItem = new MenuItem("Exit");
 
 	public GamePane(EventHandler<ActionEvent> sellFishAction, Player player, FishingActivityActions fishingActivityActions, EventHandler<ActionEvent> deleteAccountAction, EventHandler<ActionEvent> saveAction,
+<<<<<<< HEAD
 			EventHandler<ActionEvent> exitAction, SeafoodMarket seafoodMarket)
+=======
+			EventHandler<ActionEvent> exitAction, String seaFoodMarketName)
+>>>>>>> nils_branch
 	{
 		this.player = player;
 		myStatsPane = new MyStatsPane();
 		this.fishingActivityActions = fishingActivityActions;
 
 		simpleFishingPane = new SimpleFishingPane();
+<<<<<<< HEAD
 		marketsPane = new SeafoodMarketPane(seafoodMarket.getName(), sellFishAction);
 
+=======
+		seafoodMarketPane = new SeafoodMarketPane(seaFoodMarketName, sellFishAction);
+		equipmentMarketPane = new EquipmentMarketPane("Ye 'Ol Fishing Store");
+		
+>>>>>>> nils_branch
 		// set up menu
 		fileMenu.getItems().addAll(accountDeleteMenuItem, saveMenuItem, exitMenuItem);
 		menuBar.getMenus().add(fileMenu);
 
 		primaryPane.getChildren().add(myStatsPane);
+<<<<<<< HEAD
 
 		this.getChildren().addAll(menuBar, primaryPane, actionHBox);
 
@@ -159,6 +175,91 @@ public class GamePane extends VBox
 
 		}
 
+=======
+
+		this.getChildren().addAll(menuBar, primaryPane, actionHBox);
+
+		// set actions
+		accountDeleteMenuItem.setOnAction(deleteAccountAction);
+		saveMenuItem.setOnAction(saveAction);
+		exitMenuItem.setOnAction(exitAction);
+		
+		// make seafoodMarketPane responsive
+		seafoodMarketPane.transactionContainer.prefWidthProperty().bind(this.widthProperty());
+		seafoodMarketPane.priceBox.prefWidthProperty().bind(seafoodMarketPane.transactionContainer.widthProperty().divide(2));
+		seafoodMarketPane.usersResourcesBox.prefWidthProperty().bind(seafoodMarketPane.transactionContainer.widthProperty().divide(2));
+		
+		// make equipmentMarketPane responsive
+		equipmentMarketPane.saleGridPaneContainer.prefWidthProperty().bind(this.widthProperty());
+	}
+
+	// where user selects what they want to do
+	private class ActionVBox extends VBox
+	{
+		private Text txtTitle = new Text("Primary Actions - What would you like to do?");
+
+		// buttons
+		private Button btnGoFishing = new Button("Go Fishing");
+		private Button btnGoToSeaFoodMarket = new Button("Sell Fish");
+		private Button btnGoToEquipMarket = new Button("Buy Equipment");
+		private Button btnCheckMyResources = new Button("View My Resouces");
+
+		// containers
+		private HBox buttonHBox = new HBox();
+
+		public ActionVBox()
+		{
+			// set button actions
+			btnGoFishing.setOnAction(e ->
+			{
+				primaryPane.getChildren().clear();
+				primaryPane.getChildren().add(simpleFishingPane);
+				if (fishingStarted)
+				{
+					// do nothing
+				}
+				else
+				{
+					fishingActivityActions.startFishingActivity();
+					fishingStarted = true;
+				}
+			});
+
+			btnCheckMyResources.setOnAction(e ->
+			{
+				primaryPane.getChildren().clear();
+				// TODO use observables or something, so that it automatically changes.
+				// this forces a refresh, dont leave this way...
+				myStatsPane = new MyStatsPane();
+				primaryPane.getChildren().add(myStatsPane);
+			});
+
+			btnGoToSeaFoodMarket.setOnAction(e ->
+			{
+				primaryPane.getChildren().clear();
+				primaryPane.getChildren().add(seafoodMarketPane);
+			});
+			
+			btnGoToEquipMarket.setOnAction(e ->
+			{
+				primaryPane.getChildren().clear();
+				primaryPane.getChildren().add(equipmentMarketPane);
+			});
+
+			// put buttons in their container
+			buttonHBox.getChildren().addAll(btnGoFishing, btnGoToSeaFoodMarket, btnGoToEquipMarket, btnCheckMyResources);
+
+			// set spacing and alignment elements
+			this.setSpacing(10);
+			buttonHBox.setSpacing(10);
+			this.setAlignment(Pos.CENTER);
+			buttonHBox.setAlignment(Pos.CENTER);
+
+			this.getChildren().addAll(txtTitle, buttonHBox);
+
+		}
+
+>>>>>>> nils_branch
 	}
 
 	///////////////////////////////////////////////
@@ -172,12 +273,20 @@ public class GamePane extends VBox
 		Label lblCashOnHand = new Label("Available $: ");
 		Label lblSkillLevel = new Label("Skill Level: ");
 		Label lblNumSeaCreatures = new Label("Number SeaCreatures: ");
+<<<<<<< HEAD
+=======
+		Label lblNumTools = new Label("Number Tools: ");
+>>>>>>> nils_branch
 
 		// Text Fields
 		Text txtName = new Text(player.getUsername());
 		Text txtCashOnHand = new Text(Double.toString(player.getCashOnHand()));
 		Text txtSkillLevel = new Text(Integer.toString(player.getSkillLevel()));
 		Text textNumSeaCreatures = new Text(player.getIceChest() == null ? "0" : Integer.toString(player.getIceChest().size()));
+<<<<<<< HEAD
+=======
+		Text txtNumTools = new Text(player.getToolChest() == null ? "0" : Integer.toString(player.getToolChest().size()));
+>>>>>>> nils_branch
 
 		GridPane statsGridPane = new GridPane();
 
@@ -194,6 +303,11 @@ public class GamePane extends VBox
 			statsGridPane.add(txtSkillLevel, 1, 2);
 			statsGridPane.add(lblNumSeaCreatures, 0, 3);
 			statsGridPane.add(textNumSeaCreatures, 1, 3);
+<<<<<<< HEAD
+=======
+			statsGridPane.add(lblNumTools, 0, 4);
+			statsGridPane.add(txtNumTools, 1, 4);
+>>>>>>> nils_branch
 
 			this.getChildren().addAll(statsGridPane);
 		}

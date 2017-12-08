@@ -1,6 +1,10 @@
 package userinterface;
 
 import catchgame.Constants;
+<<<<<<< HEAD
+=======
+import catchgame.GameControl.IsValidQuantityListener;
+>>>>>>> nils_branch
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -66,8 +70,13 @@ public class SeafoodMarketPane extends VBox
 			priceGridPane.add(currentPricesTextArray[i], 1, i);
 			// add picture of that SeaCreature
 			ImageView curImage = new ImageView(Constants.getImage(currentSpecies));
+<<<<<<< HEAD
 			curImage.setFitHeight(20);
 			curImage.setFitWidth(20);
+=======
+			curImage.setFitHeight(50);
+			curImage.setFitWidth(50);
+>>>>>>> nils_branch
 			priceGridPane.add(curImage, 2, i);
 			
 			// init params for MyResoucesGridPane
@@ -123,10 +132,24 @@ public class SeafoodMarketPane extends VBox
 		this.creaturesOnHandTextArray[i].setText(str);
 	}
 
+<<<<<<< HEAD
 	public void setSpeciesToSellTextFieldAt(int i, String str)
 	{
 		this.numCreaturesToSellTextFields[i].setText(str);
 	}
+=======
+	public void setSpeciesToSellFfAt(int i, String str)
+	{
+		this.numCreaturesToSellTextFields[i].setText(str);
+	}
+	
+	public void addNumToSellTfListener(int i, IsValidQuantityListener isIntegerTextFieldListener)
+	{
+		isIntegerTextFieldListener.setTextField(numCreaturesToSellTextFields[i]);
+		numCreaturesToSellTextFields[i].textProperty().addListener(isIntegerTextFieldListener);
+	}
+	
+>>>>>>> nils_branch
 
 	public TextField[] getNumCreaturesToSellTextFields()
 	{
@@ -142,4 +165,9 @@ public class SeafoodMarketPane extends VBox
 	{
 		return this.currentPricesTextArray;
 	}
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> nils_branch
 }
