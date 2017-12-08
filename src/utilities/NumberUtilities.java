@@ -25,7 +25,7 @@ public class NumberUtilities {
 	 */
 	public static int getRandomInt(int min, int max)
 	{
-		int randomInt = rand.nextInt(max) + min;
+		int randomInt = rand.nextInt(max+1) + min;
 		return randomInt;
 	}
 

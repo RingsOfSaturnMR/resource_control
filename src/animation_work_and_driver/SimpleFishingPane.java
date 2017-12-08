@@ -2,6 +2,8 @@ package animation_work_and_driver;
 
 import catchgame.Constants;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 
@@ -27,9 +29,15 @@ public class SimpleFishingPane extends Pane
 		labelExplanation.setWrapText(true);
 		// labelExplanation.setTranslateY(50);
 		// btnExtractFishAction.setOnAction(extractFishAction);
-		this.getChildren().addAll(labelExplanation);
+		
 		Rectangle clippingRectangle=new Rectangle(Constants.INITIAL_SIMPLE_FISHING_PANE_WIDTH,
 				Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT);
+		ImageView oceanImageView=new ImageView();
+		Image oceanImage=new Image("img/ocean.png");
+		oceanImageView.setImage(oceanImage);
+		oceanImageView.setFitWidth(Constants.INITIAL_SIMPLE_FISHING_PANE_WIDTH);
+		oceanImageView.setFitHeight(Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT);
+		this.getChildren().addAll(oceanImageView);
 		this.setClip(clippingRectangle);
 	}
 }
