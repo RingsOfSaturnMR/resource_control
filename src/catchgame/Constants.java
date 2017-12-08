@@ -38,8 +38,8 @@ public class Constants
 	// window sizes
 	public final static int LOGIN_PANE_WIDTH = 325;
 	public final static int LOGIN_PANE_HEIGHT = 500;
-	public final static int NEW_USER_PANE_WIDTH = 500;
-	public final static int NEW_USER_PANE_HEIGHT = 300;
+	public final static int NEW_USER_PANE_WIDTH = 460;
+	public final static int NEW_USER_PANE_HEIGHT = 250;
 	public final static int INITIAL_SERVER_PANE_WIDTH = 400;
 	public final static int INITIAL_SERVER_PANE_HEIGHT = 400;
 	public final static int INITIAL_GAME_PANE_WIDTH = 500;
@@ -143,4 +143,6 @@ public class Constants
 	
 	//constants to multiple weight by to get pixel width (aspect is preserved)
 		public final static short COD_WEIGHT_GRAPHIC_MULTIPLE = 10;
+		public static final double IMG_THUMBNAIL_HEIGHT = 50;
+		public static final double IMG_THUMBNAIL_WDITH = 50;
 }

@@ -95,13 +95,8 @@ public class GamePane extends VBox
 		saveMenuItem.setOnAction(saveAction);
 		exitMenuItem.setOnAction(exitAction);
 		
-		// make seafoodMarketPane responsive
-		seafoodMarketPane.transactionContainer.prefWidthProperty().bind(this.widthProperty());
-		seafoodMarketPane.priceBox.prefWidthProperty().bind(seafoodMarketPane.transactionContainer.widthProperty().divide(2));
-		seafoodMarketPane.usersResourcesBox.prefWidthProperty().bind(seafoodMarketPane.transactionContainer.widthProperty().divide(2));
-		
-		// make equipmentMarketPane responsive
-		equipmentMarketPane.saleGridPaneContainer.prefWidthProperty().bind(this.widthProperty());
+		// make seafoodMarketPane width the same as parent, helps with responsiveness 		
+		seafoodMarketPane.prefWidthProperty().bind(this.widthProperty());
 	}
 
 	// where user selects what they want to do

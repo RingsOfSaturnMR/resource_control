@@ -144,7 +144,7 @@ public class CatchServer
 		{
 			try
 			{
-				// let it decide for itself
+				// let it decide for itself, set to '0'
 				ServerSocket serverSocket = new ServerSocket(0);
 				serverSocketPort = serverSocket.getLocalPort();
 				
@@ -256,13 +256,17 @@ public class CatchServer
 
 								for (int i = 0; i < exception.getErrorList().size(); i++)
 								{
+									// if the name is unavailable, return that code. Dont continue checking.
 									if (exception.getErrorList().get(i) == UsernameError.UNAVAILABLE)
 									{
 										serverCode = Codes.NEW_USER_ERR_NAME_TAKEN_CODE;
+										break;
 									}
-									else if (exception.getErrorList().get(i) == UsernameError.HAS_ILLEGAL_CHAR)
+									// if any other BadUserName exception, just return generic code, dont continue checking;
+									else 
 									{
 										serverCode = Codes.NEW_USER_ERR_ILLEGAL_NAME_CODE;
+										break;
 									}
 								}
 							}

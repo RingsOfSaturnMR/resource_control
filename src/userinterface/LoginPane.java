@@ -42,8 +42,7 @@ public class LoginPane extends VBox
 	private Label lblServerIp = new Label("Server ip: ");
 	private Label lblClientPort = new Label("Client Port: ");
 
-	// fields for entry, filled with default values for easy testing
-
+	// TextFields for user entry
 	private TextField tfName = new TextField();
 	private TextField pfPassword = new TextField();
 	private TextField tfServerIp = new TextField("localhost");
@@ -88,9 +87,6 @@ public class LoginPane extends VBox
 		buttonHBox.setAlignment(Pos.CENTER);
 		buttonHBox.setSpacing(10);
 		
-		// setup the image
-		
-		
 		ImageView logoImageView = new ImageView(logoImage);
 		
 		logoImageView.setFitWidth(250);
@@ -107,14 +103,6 @@ public class LoginPane extends VBox
 		btnLogin.setOnAction(loginAction);
 		btnNewUser.setOnAction(newUserAction);
 		btnNewServer.setOnAction(newServerAction);
-		
-		this.widthProperty().addListener(e -> {
-			System.out.println("this.width: " + this.getWidth());
-		});
-		this.heightProperty().addListener(e -> {
-			System.out.println("this.height: " + this.getHeight());
-		});
-		
 	}
 	
 	public String getPlayerName()

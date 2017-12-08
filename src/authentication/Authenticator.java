@@ -27,7 +27,7 @@ public class Authenticator
 	public static final int MIN_NAME_LENGTH = 4;
 	public static final int MAX_NAME_LENGTH = 15;
 	public static final char[] ILLEGAL_NAME_CHARACTER =
-	{ ' ', '!', '#', '%', '^', '&', '*' };
+	{ ' ', '!', '#', '%', '^', '&', '*', '{', '}', '$' };
 
 	/**
 	 * This method takes a String and returns null if it is a legally formatted

@@ -43,28 +43,28 @@ public class NewUserPane extends VBox
 {
 	// title
 	private Text txtTitle = new Text("Make New Player");
-	
+
 	// to get user entry
 	private GridPane entryGridPane = new GridPane();
-	
+
 	// containers
 	private HBox buttonHBox = new HBox();
 	private HBox entryContainerHBox = new HBox();
 	private StackPane messageTxtPane = new StackPane();
 	private VBox requirementVBox = new VBox();
 	private StackPane titleStackPane = new StackPane();
-	
+
 	// buttons
 	private Button makeUserBtn = new Button("Create Account");
 	private Button cancelBtn = new Button("Cancel");
-	
+
 	// labels
 	private Label lblServerIp = new Label("Server ip: ");
 	private Label lblClientPort = new Label("Client Port: ");
 	private Label lblUsername = new Label("Desired Username: ");
 	private Label lblPassword = new Label("Password: ");
 	private Label lblPwconfirm = new Label("Confirm: ");
-	
+
 	// textfields
 	private TextField tfServerIp = new TextField("localhost");
 	private TextField tfClientPort = new TextField("8000");
@@ -72,7 +72,7 @@ public class NewUserPane extends VBox
 	public TextField pfPassword = new PasswordField();
 	public TextField pfPasswordConfirm = new PasswordField();
 	private Text txtMessageArea = new Text();
-	
+
 	// text to tell user about their entries
 	private Label lblRequirments = new Label("");
 	private Text txtMaxLength = new Text();
@@ -83,7 +83,7 @@ public class NewUserPane extends VBox
 	private Text txtSpecial = new Text();
 	private Text txtNoIllegalChar = new Text();
 	private Text txtMatch = new Text("To Be Matching");
-	
+
 	private boolean isSetForNameEntry;
 	private boolean isSetForPwEntry;
 
@@ -100,36 +100,33 @@ public class NewUserPane extends VBox
 		entryGridPane.add(pfPassword, 1, 3);
 		entryGridPane.add(lblPwconfirm, 0, 4);
 		entryGridPane.add(pfPasswordConfirm, 1, 4);
-		
+
 		// set spacing and positioning
 		entryGridPane.setVgap(5);
 		entryGridPane.setHgap(5);
-		entryGridPane.setAlignment(Pos.CENTER);
 
 		buttonHBox.setAlignment(Pos.CENTER);
 		buttonHBox.getChildren().addAll(makeUserBtn, cancelBtn);
-		buttonHBox.setSpacing(12);
-		buttonHBox.setPadding(new Insets(15, 0, 0, 0));
+		buttonHBox.setSpacing(5);
+		buttonHBox.setPadding(new Insets(5, 5, 5, 5));
 
-		messageTxtPane.setPadding(new Insets(5, 5, 5, 10));
-		
-		entryContainerHBox.setSpacing(10);
-		entryContainerHBox.setPadding(new Insets(10, 10, 10, 10));
-		
+
+		entryContainerHBox.setAlignment(Pos.CENTER);
+		entryContainerHBox.setSpacing(5);
+		entryContainerHBox.setPadding(new Insets(5, 5, 0, 5));
+
 		titleStackPane.getChildren().add(txtTitle);
 		messageTxtPane.getChildren().add(txtMessageArea);
-		
+
 		entryContainerHBox.getChildren().addAll(entryGridPane, requirementVBox);
 		this.getChildren().addAll(titleStackPane, entryContainerHBox, messageTxtPane, buttonHBox);
-
-		
 
 		setForNameEntry();
 		requirementVBox.setPadding(new Insets(5, 5, 5, 5));
 
 		makeUserBtn.setOnAction(createAccountHandler);
 		cancelBtn.setOnAction(cancelHandler);
-		
+
 		class PwChangeListener implements ChangeListener
 		{
 			@Override
@@ -147,7 +144,7 @@ public class NewUserPane extends VBox
 				updatePwStatus(errorList);
 			}
 		}
-		
+
 		class usernameChangeListener implements ChangeListener
 		{
 			@Override
@@ -158,21 +155,20 @@ public class NewUserPane extends VBox
 				{
 					setForNameEntry();
 				}
-				
+
 				tfName.setStyle("-fx-control-inner-background: white;");
 
 				ArrayList<UsernameError> errorList = Authenticator.checkUsernameLegality(tfName.getText());
 				updateNameStatus(errorList);
 			}
 		}
-		
-		
+
 		pfPassword.textProperty().addListener(new PwChangeListener());
 		pfPassword.focusedProperty().addListener(new PwChangeListener());
 
 		tfName.textProperty().addListener(new usernameChangeListener());
 		tfName.focusedProperty().addListener(new usernameChangeListener());
-		
+
 		pfPasswordConfirm.textProperty().addListener(new ChangeListener<Object>()
 		{
 			@Override
@@ -185,43 +181,46 @@ public class NewUserPane extends VBox
 				}
 
 				ArrayList<PasswordError> errorList = Authenticator.checkPasswordLegality(pfPassword.getText());
-				updatePwStatus(errorList);;
+				updatePwStatus(errorList);
+				;
 			}
 		});
-		
+
 		tfName.requestFocus();
+
+		// use for figuring out size
+		this.widthProperty().addListener(e ->
+		{
+			System.out.println("this.width: " + this.getWidth());
+		});
+		this.heightProperty().addListener(e ->
+		{
+			System.out.println("this.height: " + this.getHeight());
+		});
 	}
 
 	private void setForNameEntry()
 	{
-/*		if (this.getChildren().contains(requirementVBox))
-		{
-			//this.getChildren().remove(requirementVBox);
-			//requirementVBox.getChildren().removeAll(lblRequirments, txtMinLength, txtUpper, txtLower, txtNumber, txtSpecial, txtMatch, txtNoIllegalChar, txtMaxLength);
-		
-		}*/
 		requirementVBox.getChildren().clear();
 		lblRequirments.setText("Usernames Need:");
-		txtMinLength.setText("At Least " + Authenticator.MIN_NAME_LENGTH + " Characters");
+		txtMinLength.setText("At Least " + Authenticator.MIN_NAME_LENGTH +
+				" Characters");
 		txtNoIllegalChar.setText("");
 		txtMaxLength.setText("");
 		requirementVBox.getChildren().addAll(lblRequirments, txtMinLength, txtNoIllegalChar, txtMaxLength);
-		//this.getChildren().add(requirementVBox);
 		isSetForNameEntry = true;
 		isSetForPwEntry = false;
 	}
 
 	private void setForPwEntry()
 	{
-		//this.getChildren().remove(requirementVBox);
-		//requirementVBox.getChildren().removeAll(lblRequirments, txtMinLength, txtNoIllegalChar, txtMaxLength);
 		requirementVBox.getChildren().clear();
 		lblRequirments.setText("Passwords Need:");
-		txtMinLength.setText("At Least " + Authenticator.MIN_PW_LENGTH + " Characters");
+		txtMinLength.setText("At Least " + Authenticator.MIN_PW_LENGTH +
+				" Characters");
 		txtSpecial.setText("Special Characters(s)");
 		txtMaxLength.setText("");
 		requirementVBox.getChildren().addAll(lblRequirments, txtMinLength, txtUpper, txtLower, txtNumber, txtSpecial, txtMatch, txtNoIllegalChar, txtMaxLength);
-		//this.getChildren().add(requirementVBox);
 		isSetForNameEntry = false;
 		isSetForPwEntry = true;
 	}
@@ -277,24 +276,25 @@ public class NewUserPane extends VBox
 		{
 			txtNoIllegalChar.setText("Allowed Special Characters: \n\t" + getLegalPwSpecialChar());
 			txtNoIllegalChar.setFill(Color.BLACK);
-			
+
 		}
 		else
 		{
 			txtNoIllegalChar.setText("");
 		}
-		
+
 		if (errorList != null && errorList.contains(PasswordError.TOO_LONG))
 		{
 			txtMaxLength.setFill(Color.BLACK);
-			txtMaxLength.setText("No More Than " + Authenticator.MAX_PW_LENGTH + " Characters");
+			txtMaxLength.setText("No More Than " + Authenticator.MAX_PW_LENGTH +
+					" Characters");
 		}
 		else
 		{
 			txtMaxLength.setText("");
 		}
-		
-		if(!pfPassword.getText().equals(pfPasswordConfirm.getText()) )
+
+		if (!pfPassword.getText().equals(pfPasswordConfirm.getText()))
 		{
 			txtMatch.setFill(Color.BLACK);
 		}
@@ -326,16 +326,17 @@ public class NewUserPane extends VBox
 		}
 		if (errorList != null && errorList.contains(UsernameError.TOO_LONG))
 		{
-			txtMaxLength.setText("No More Than " + Authenticator.MAX_NAME_LENGTH + " Characters");
+			txtMaxLength.setText("No More Than " + Authenticator.MAX_NAME_LENGTH +
+					" Characters");
 			txtMaxLength.setFill(Color.BLACK);
 		}
 		else
 		{
 			txtMaxLength.setText("");
 		}
-		
+
 	}
-	
+
 	private String getLegalPwSpecialChar()
 	{
 		StringBuilder str = new StringBuilder();
@@ -369,45 +370,44 @@ public class NewUserPane extends VBox
 		}
 		return str.toString();
 	}
-	
+
 	public void setErrorText(String str)
 	{
 		txtMessageArea.setText(str);
 	}
-	
+
 	public String getDesiredPassword()
 	{
 		return pfPassword.getText();
 	}
-	
+
 	public String getDesiredPasswordConfirm()
 	{
 		return pfPasswordConfirm.getText();
 	}
-	
+
 	public String getDesiredName()
 	{
 		return tfName.getText().trim();
 	}
-	
+
 	public int getClientPort()
 	{
 		return Integer.parseInt(tfClientPort.getText());
 	}
-	
+
 	public String getServerIpAddress()
 	{
 		return tfServerIp.getText().trim();
 	}
-	
+
 	public void setClientPortNum(int portNum)
 	{
 		tfClientPort.setText(Integer.toString(portNum));
 	}
-	
+
 	public void setServerIpAddress(String address)
 	{
 		tfServerIp.setText(address);
 	}
 }
-

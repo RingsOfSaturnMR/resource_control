@@ -59,8 +59,6 @@ public class SeafoodMarket extends Market<SeaCreature, Enum>
 		
 	}
 	
-	//temp for testing
-
 	public void forcePriceUpdate()
 	{
 		// do this after a price change to tell the program there are new prices
