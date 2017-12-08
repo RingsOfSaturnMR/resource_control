@@ -23,6 +23,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -59,6 +61,9 @@ public class LoginPane extends VBox
 	
 	// text to display errors
 	private Text txtError = new Text();
+	
+	// to display logo
+	private Image logoImage = new Image("img/catch_logo.png");
 
 	public LoginPane(EventHandler<ActionEvent> loginAction, EventHandler<ActionEvent> newUserAction, EventHandler<ActionEvent> newServerAction)
 	{		
@@ -83,15 +88,33 @@ public class LoginPane extends VBox
 		buttonHBox.setAlignment(Pos.CENTER);
 		buttonHBox.setSpacing(10);
 		
+		// setup the image
+		
+		
+		ImageView logoImageView = new ImageView(logoImage);
+		
+		logoImageView.setFitWidth(250);
+		logoImageView.setFitHeight(250);
+		
+		StackPane stackPane = new StackPane(logoImageView);
+		
 		// add everything to its appropriate node
 		titleStackPane.getChildren().add(txtTitle);
 		buttonHBox.getChildren().addAll(btnLogin, btnNewUser, btnNewServer);
-		this.getChildren().addAll(titleStackPane, loginGridPane, txtError, buttonHBox);
+		this.getChildren().addAll(stackPane, titleStackPane, loginGridPane, txtError, buttonHBox);
 		
 		// set actions
 		btnLogin.setOnAction(loginAction);
 		btnNewUser.setOnAction(newUserAction);
 		btnNewServer.setOnAction(newServerAction);
+		
+		this.widthProperty().addListener(e -> {
+			System.out.println("this.width: " + this.getWidth());
+		});
+		this.heightProperty().addListener(e -> {
+			System.out.println("this.height: " + this.getHeight());
+		});
+		
 	}
 	
 	public String getPlayerName()

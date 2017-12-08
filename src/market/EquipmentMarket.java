@@ -49,14 +49,11 @@ public class EquipmentMarket extends Market<Equipment, Enum>
 		}
 		
 		// other stuff
-		if(desiredItem == SimpleFishingItemType.NET)
+		if(desiredItem == SimpleFishingItemType.FISHING_POLE)
 		{
-			return new SimpleFishingItem(SimpleFishingItemType.NET);
+			return new SimpleFishingItem(SimpleFishingItemType.FISHING_POLE);
 		}
-		if(desiredItem == SimpleFishingItemType.LARGE_NET)
-		{
-			return new SimpleFishingItem(SimpleFishingItemType.LARGE_NET);
-		}
+
 		else
 		{
 			return null;

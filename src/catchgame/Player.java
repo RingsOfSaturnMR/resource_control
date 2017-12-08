@@ -295,25 +295,16 @@ public class Player extends authentication.User implements Serializable
 		{
 			switch ((SimpleFishingItemType) species)
 			{
-			case NET:
+			case FISHING_POLE:
 				for (int i = 0; i < toolChest.size(); i++)
 				{
-					if (toolChest.get(i).getType() == SimpleFishingItemType.NET)
+					if (toolChest.get(i).getType() == SimpleFishingItemType.FISHING_POLE)
 					{
 						numOfSpecies++;
 					}
 				}
 				return numOfSpecies;
 
-			case LARGE_NET:
-				for (int i = 0; i < toolChest.size(); i++)
-				{
-					if (toolChest.get(i).getType() == SimpleFishingItemType.LARGE_NET)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;
 
 			// TODO - handle this a little better
 			default:

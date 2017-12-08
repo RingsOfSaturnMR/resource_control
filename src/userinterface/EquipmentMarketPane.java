@@ -42,8 +42,8 @@ public class EquipmentMarketPane extends VBox
 
 			// get the thumbnail img
 			ImageView curImage = new ImageView(Constants.getImage(currentItem));
-			curImage.setFitHeight(20);
-			curImage.setFitWidth(20);
+			curImage.setFitHeight(50);
+			curImage.setFitWidth(50);
 
 			// get the items name
 			Text curNameText = new Text(currentItem.toString());

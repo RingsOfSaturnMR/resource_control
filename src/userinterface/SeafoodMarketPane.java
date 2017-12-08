@@ -67,8 +67,8 @@ public class SeafoodMarketPane extends VBox
 			priceGridPane.add(currentPricesTextArray[i], 1, i);
 			// add picture of that SeaCreature
 			ImageView curImage = new ImageView(Constants.getImage(currentSpecies));
-			curImage.setFitHeight(20);
-			curImage.setFitWidth(20);
+			curImage.setFitHeight(50);
+			curImage.setFitWidth(50);
 			priceGridPane.add(curImage, 2, i);
 			
 			// init params for MyResoucesGridPane

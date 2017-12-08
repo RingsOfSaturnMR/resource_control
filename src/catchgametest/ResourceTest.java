@@ -34,11 +34,11 @@ public class ResourceTest
 		System.out.println("'getUsage()': " + commericalTrawler.getUsage()+ "\n");
 		
 		System.out.println("Making and testing new SimpleFishingItems ...");
-		SimpleFishingItem net = new SimpleFishingItem(SimpleFishingItemType.NET);
+		SimpleFishingItem net = new SimpleFishingItem(SimpleFishingItemType.FISHING_POLE);
 		System.out.println("'getType()': " + net.getType());
 		System.out.println("'getUsage()': " + net.getUsage()+ "\n");
 		
-		SimpleFishingItem largeNet = new SimpleFishingItem(SimpleFishingItemType.LARGE_NET);
+		SimpleFishingItem largeNet = new SimpleFishingItem(SimpleFishingItemType.FISHING_POLE);
 		System.out.println("'getType()': " + largeNet.getType());
 		System.out.println("'getUsage()': " + largeNet.getUsage()+ "\n");
 		

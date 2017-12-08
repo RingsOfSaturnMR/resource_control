@@ -36,8 +36,8 @@ public class Constants
 	public static final int TIME_BEFORE_PRICE_EXPIRATION = 1_000_000;// milliseconds?
 
 	// window sizes
-	public final static int LOGIN_PANE_WIDTH = 355;
-	public final static int LOGIN_PANE_HEIGHT = 275;
+	public final static int LOGIN_PANE_WIDTH = 325;
+	public final static int LOGIN_PANE_HEIGHT = 500;
 	public final static int NEW_USER_PANE_WIDTH = 500;
 	public final static int NEW_USER_PANE_HEIGHT = 300;
 	public final static int INITIAL_SERVER_PANE_WIDTH = 400;
@@ -103,7 +103,7 @@ public class Constants
 	 * An array of Equipment types the game supports
 	 */
 	public static Enum[] SUPPORTED_EQUIPMENT =
-	{ BoatTypes.COMMERCIAL_TRAWLER, BoatTypes.FISHING_SKIFF, BoatTypes.TRAWLER, SimpleFishingItemType.NET, SimpleFishingItemType.LARGE_NET };
+	{ BoatTypes.COMMERCIAL_TRAWLER, BoatTypes.FISHING_SKIFF, BoatTypes.TRAWLER, SimpleFishingItemType.FISHING_POLE };
 
 	/**
 	 * 
