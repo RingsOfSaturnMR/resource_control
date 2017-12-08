@@ -51,15 +51,19 @@ public class Constants
 	public final static double TUNA_INITIAL_PRICE_PER_POUND = 6.40;
 	public final static double SALMON_INITIAL_PRICE_PER_POUND = 12.0;
 	public final static double COD_INITIAL_PRICE_PER_POUND = 17.0;
+	public final static double OYSTER_INITIAL_PRICE_PER_POUND = 17.4;
+	public final static double CRAB_INITIAL_PRICE_PER_POUND = 11.0;
+	public final static double LOBSTER_INITIAL_PRICE_PER_POUND = 20.0;
+	
 
 	// initial population sizes for Ocean
-	public final static int COD_INITIAL_POPULATION = 10;
-	public final static int SALMON_INITIAL_POPULATION = 10;
-	public final static int TUNA_INITIAL_POPULATION = 10;
+	public final static int COD_INITIAL_POPULATION = 1000;
+	public final static int SALMON_INITIAL_POPULATION = 700;
+	public final static int TUNA_INITIAL_POPULATION = 700;
 
-	public final static int CRAB_INITIAL_POPULATION = 10;
-	public final static int LOBSTER_INITIAL_POPULATION = 10;
-	public final static int OYSTER_INITIAL_POPULATION = 10;
+	public final static int CRAB_INITIAL_POPULATION = 700;
+	public final static int LOBSTER_INITIAL_POPULATION = 300;
+	public final static int OYSTER_INITIAL_POPULATION = 500;
 
 	// maximum population sizes for Ocean
 	// for now they are equal to initial, but that could be changed
