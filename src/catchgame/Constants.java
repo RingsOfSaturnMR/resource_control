@@ -46,6 +46,8 @@ public class Constants
 	public final static int INITIAL_GAME_PANE_HEIGHT = 500;
 	public final static int FREQUENCY_HISTOGRAM_PANE_WIDTH = 500;
 	public final static int FREQUENCY_HISTOGRAM_PANE_HEIGHT = 500;
+	public final static int INITIAL_SIMPLE_FISHING_PANE_WIDTH = 500;
+	public final static int INITIAL_SIMPLE_FISHING_PANE_HEIGHT = 400;
 
 	// initial Market values of resources
 	public final static double TUNA_INITIAL_PRICE_PER_POUND = 6.40;
@@ -92,7 +94,8 @@ public class Constants
 
 	// Basics
 	public final static String APPLICATION_NAME = "Catch!! - By Caileigh, Matt, Nls, Thanh";
-
+	public final static short LEFT = -1;
+	public final static short RIGHT = 1;
 	/**
 	 * An array of SeaCreature Species the game supports
 	 */
@@ -138,5 +141,6 @@ public class Constants
 		return null;
 	}
 	
-
+	//constants to multiple weight by to get pixel width (aspect is preserved)
+		public final static short COD_WEIGHT_GRAPHIC_MULTIPLE = 10;
 }
