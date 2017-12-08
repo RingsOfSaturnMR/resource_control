@@ -1,6 +1,8 @@
 package resources;
 
-public class Boat extends Equipment<BoatTypes>
+import java.io.Serializable;
+
+public class Boat extends Equipment<BoatTypes> implements Serializable
 {
 	public Boat(BoatTypes boatType)
 	{

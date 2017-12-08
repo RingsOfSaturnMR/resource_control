@@ -86,7 +86,7 @@ public class Player extends authentication.User implements Serializable
 		cashOnHand -= d;
 	}
 
-	public SeaCreature getSeaCreatureAt(int index)
+	public SeaCreature<?> getSeaCreatureAt(int index)
 	{
 		return this.iceChest.get(index);
 	}
@@ -114,6 +114,16 @@ public class Player extends authentication.User implements Serializable
 			for (int i = 0; i < iceChestArray.length; i++)
 			{
 				iceChestArray[i] = iceChest.get(i);
+			}
+		}
+		
+		if (toolChest != null)
+		{
+			toolChestArray = new Equipment[toolChest.size()];
+
+			for (int i = 0; i < toolChestArray.length; i++)
+			{
+				toolChestArray[i] = toolChest.get(i);
 			}
 		}
 
@@ -156,6 +166,8 @@ public class Player extends authentication.User implements Serializable
 	// see Constants -> public static final Image getImage(final Enum<?> desiredResourceType) for ideas
 	public int getNumOf(Enum<?> species)
 	{
+		// GET RID OF THIS in a refactor
+		loadObservableLists();
 		// counter
 		int numOfSpecies = 0;
 
@@ -272,7 +284,6 @@ public class Player extends authentication.User implements Serializable
 					}
 				}
 				return numOfSpecies;
-
 			// TODO - handle this a little better
 			default:
 				return 0;
@@ -334,8 +345,10 @@ public class Player extends authentication.User implements Serializable
 	}
 
 	
-	public ObservableList getToolChest()
+	public ObservableList<?> getToolChest()
 	{
+		// move this or something, do this intuitively 
+		loadObservableLists();
 		return this.toolChest;
 	}
 }

@@ -2,6 +2,7 @@ package market;
 
 import java.util.ArrayList;
 
+import catchgame.GameControl.SetCurrentEquipPricesHandler;
 import resources.Boat;
 import resources.BoatTypes;
 import resources.Equipment;
@@ -15,29 +16,51 @@ import resources.SimpleFishingItemType;
  in the event handler for when a player purchases something. This class just determines the values.  
  */
 public class EquipmentMarket extends Market<Equipment, Enum>
-{
-
-	public interface TakePlayersMoney
-	{
-		void takeMoney();
-	}
+{	
+	public SetCurrentEquipPricesHandler updatePriceHandler;
 	
-	public EquipmentMarket(String name)
+	public EquipmentMarket(String name, SetCurrentEquipPricesHandler updatePriceHandler)
 	{
 		super(name);
 		// TODO Auto-generated constructor stub
+		this.updatePriceHandler = updatePriceHandler;
 	}
 
+	public void forcUpdate()
+	{
+		updatePriceHandler.setPrices();
+	}
+	
+	// TODO refactor
 	public Object buyItem(Enum<?> desiredItem)
 	{
-		if(desiredItem instanceof BoatTypes)
+		// boats
+		if(desiredItem == BoatTypes.COMMERCIAL_TRAWLER)
+		{
+			return new Boat(BoatTypes.COMMERCIAL_TRAWLER);
+		}
+		if(desiredItem == BoatTypes.FISHING_SKIFF)
+		{
+			return new Boat(BoatTypes.FISHING_SKIFF);
+		}
+		if(desiredItem == BoatTypes.TRAWLER)
 		{
 			return new Boat(BoatTypes.TRAWLER);
 		}
-		else
+		
+		// other stuff
+		if(desiredItem == SimpleFishingItemType.NET)
 		{
 			return new SimpleFishingItem(SimpleFishingItemType.NET);
-		}	
+		}
+		if(desiredItem == SimpleFishingItemType.LARGE_NET)
+		{
+			return new SimpleFishingItem(SimpleFishingItemType.LARGE_NET);
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	// price for purchasing new equipment

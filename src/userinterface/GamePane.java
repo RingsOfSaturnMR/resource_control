@@ -72,14 +72,14 @@ public class GamePane extends VBox
 	private MenuItem exitMenuItem = new MenuItem("Exit");
 
 	public GamePane(EventHandler<ActionEvent> sellFishAction, Player player, FishingActivityActions fishingActivityActions, EventHandler<ActionEvent> deleteAccountAction, EventHandler<ActionEvent> saveAction,
-			EventHandler<ActionEvent> exitAction, SeafoodMarket seafoodMarket)
+			EventHandler<ActionEvent> exitAction, String seaFoodMarketName)
 	{
 		this.player = player;
 		myStatsPane = new MyStatsPane();
 		this.fishingActivityActions = fishingActivityActions;
 
 		simpleFishingPane = new SimpleFishingPane();
-		seafoodMarketPane = new SeafoodMarketPane(seafoodMarket.getName(), sellFishAction);
+		seafoodMarketPane = new SeafoodMarketPane(seaFoodMarketName, sellFishAction);
 		equipmentMarketPane = new EquipmentMarketPane("Ye 'Ol Fishing Store");
 		
 		// set up menu
@@ -99,7 +99,9 @@ public class GamePane extends VBox
 		seafoodMarketPane.transactionContainer.prefWidthProperty().bind(this.widthProperty());
 		seafoodMarketPane.priceBox.prefWidthProperty().bind(seafoodMarketPane.transactionContainer.widthProperty().divide(2));
 		seafoodMarketPane.usersResourcesBox.prefWidthProperty().bind(seafoodMarketPane.transactionContainer.widthProperty().divide(2));
-
+		
+		// make equipmentMarketPane responsive
+		equipmentMarketPane.saleGridPaneContainer.prefWidthProperty().bind(this.widthProperty());
 	}
 
 	// where user selects what they want to do
@@ -181,12 +183,14 @@ public class GamePane extends VBox
 		Label lblCashOnHand = new Label("Available $: ");
 		Label lblSkillLevel = new Label("Skill Level: ");
 		Label lblNumSeaCreatures = new Label("Number SeaCreatures: ");
+		Label lblNumTools = new Label("Number Tools: ");
 
 		// Text Fields
 		Text txtName = new Text(player.getUsername());
 		Text txtCashOnHand = new Text(Double.toString(player.getCashOnHand()));
 		Text txtSkillLevel = new Text(Integer.toString(player.getSkillLevel()));
 		Text textNumSeaCreatures = new Text(player.getIceChest() == null ? "0" : Integer.toString(player.getIceChest().size()));
+		Text txtNumTools = new Text(player.getToolChest() == null ? "0" : Integer.toString(player.getToolChest().size()));
 
 		GridPane statsGridPane = new GridPane();
 
@@ -203,6 +207,8 @@ public class GamePane extends VBox
 			statsGridPane.add(txtSkillLevel, 1, 2);
 			statsGridPane.add(lblNumSeaCreatures, 0, 3);
 			statsGridPane.add(textNumSeaCreatures, 1, 3);
+			statsGridPane.add(lblNumTools, 0, 4);
+			statsGridPane.add(txtNumTools, 1, 4);
 
 			this.getChildren().addAll(statsGridPane);
 		}

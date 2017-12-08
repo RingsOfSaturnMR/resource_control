@@ -1,6 +1,7 @@
 package userinterface;
 
 import catchgame.Constants;
+import catchgame.GameControl.IsValidQuantityListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -123,10 +124,17 @@ public class SeafoodMarketPane extends VBox
 		this.creaturesOnHandTextArray[i].setText(str);
 	}
 
-	public void setSpeciesToSellTextFieldAt(int i, String str)
+	public void setSpeciesToSellFfAt(int i, String str)
 	{
 		this.numCreaturesToSellTextFields[i].setText(str);
 	}
+	
+	public void addNumToSellTfListener(int i, IsValidQuantityListener isIntegerTextFieldListener)
+	{
+		isIntegerTextFieldListener.setTextField(numCreaturesToSellTextFields[i]);
+		numCreaturesToSellTextFields[i].textProperty().addListener(isIntegerTextFieldListener);
+	}
+	
 
 	public TextField[] getNumCreaturesToSellTextFields()
 	{
@@ -142,4 +150,6 @@ public class SeafoodMarketPane extends VBox
 	{
 		return this.currentPricesTextArray;
 	}
+
+
 }

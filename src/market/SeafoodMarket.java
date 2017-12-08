@@ -29,10 +29,9 @@ public class SeafoodMarket extends Market<SeaCreature, Enum>
 		super(name);
 		// TODO Auto-generated constructor stub
 		priceSetHandler = updatePricePerPoundHandler;
-		
 	}
-
-	//temp for testing
+	
+	
 	public void forcePriceUpdate()
 	{
 		priceSetHandler.setPrices();
