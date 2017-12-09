@@ -110,10 +110,10 @@ public class GameControl
 
 		// instantiate markets
 		seafoodMarket = new SeafoodMarket("The Fish Wholesaler", new SeafoodPriceSetEventHandler());
-		equipMarket = new EquipmentMarket("Ye 'Ol General Store", new SetCurrentEquipPricesHandler());
+		equipMarket = new EquipmentMarket("Ye 'Ol Fishin' Store", new SetCurrentEquipPricesHandler());
 
 		// Display GUI
-		gamePane = new GamePane(new SellFishAction(), player, new FishingActivityActions(), new DeleteAccountAction(), new SaveGameAction(), new ExitAction(), seafoodMarket.getName());
+		gamePane = new GamePane(new SellFishAction(), player, new FishingActivityActions(), new DeleteAccountAction(), new SaveGameAction(), new ExitAction(), seafoodMarket.getName(), equipMarket.getName());
 		gameScene = new Scene(gamePane, Constants.INITIAL_GAME_PANE_WIDTH, Constants.INITIAL_GAME_PANE_HEIGHT);
 		gameStage.setScene(gameScene);
 		gameStage.setTitle("Catch!");

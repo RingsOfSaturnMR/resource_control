@@ -72,7 +72,7 @@ public class GamePane extends VBox
 	private MenuItem exitMenuItem = new MenuItem("Exit");
 
 	public GamePane(EventHandler<ActionEvent> sellFishAction, Player player, FishingActivityActions fishingActivityActions, EventHandler<ActionEvent> deleteAccountAction, EventHandler<ActionEvent> saveAction,
-			EventHandler<ActionEvent> exitAction, String seaFoodMarketName)
+			EventHandler<ActionEvent> exitAction, String seaFoodMarketName, String equipMarketName)
 	{
 		this.player = player;
 		myStatsPane = new MyStatsPane();
@@ -80,7 +80,7 @@ public class GamePane extends VBox
 
 		simpleFishingPane = new SimpleFishingPane();
 		seafoodMarketPane = new SeafoodMarketPane(seaFoodMarketName, sellFishAction);
-		equipmentMarketPane = new EquipmentMarketPane("Ye 'Ol Fishing Store");
+		equipmentMarketPane = new EquipmentMarketPane(equipMarketName);
 		
 		// set up menu
 		fileMenu.getItems().addAll(accountDeleteMenuItem, saveMenuItem, exitMenuItem);
@@ -95,8 +95,9 @@ public class GamePane extends VBox
 		saveMenuItem.setOnAction(saveAction);
 		exitMenuItem.setOnAction(exitAction);
 		
-		// make seafoodMarketPane width the same as parent, helps with responsiveness 		
+		// make market panes width the same as parent, helps with responsiveness 		
 		seafoodMarketPane.prefWidthProperty().bind(this.widthProperty());
+		equipmentMarketPane.prefWidthProperty().bind(this.widthProperty());
 	}
 
 	// where user selects what they want to do
