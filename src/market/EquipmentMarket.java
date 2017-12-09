@@ -31,7 +31,7 @@ public class EquipmentMarket extends Market<Equipment, Enum>
 		updatePriceHandler.setPrices();
 	}
 	
-	// TODO refactor
+	// TODO refactor, use a loop based of of Constants.SUPPORTED_EQUIPMENT[] to get each type
 	public Object buyItem(Enum<?> desiredItem)
 	{
 		// boats
@@ -52,6 +52,10 @@ public class EquipmentMarket extends Market<Equipment, Enum>
 		if(desiredItem == SimpleFishingItemType.FISHING_POLE)
 		{
 			return new SimpleFishingItem(SimpleFishingItemType.FISHING_POLE);
+		}
+		if(desiredItem == SimpleFishingItemType.BEER)
+		{
+			return new SimpleFishingItem(SimpleFishingItemType.BEER);
 		}
 
 		else

@@ -304,6 +304,16 @@ public class Player extends authentication.User implements Serializable
 					}
 				}
 				return numOfSpecies;
+				
+			case BEER:
+				for (int i = 0; i < toolChest.size(); i++)
+				{
+					if (toolChest.get(i).getType() == SimpleFishingItemType.BEER)
+					{
+						numOfSpecies++;
+					}
+				}
+				return numOfSpecies;		
 
 
 			// TODO - handle this a little better

@@ -106,7 +106,7 @@ public class Constants
 	 * An array of Equipment types the game supports
 	 */
 	public static Enum[] SUPPORTED_EQUIPMENT =
-	{ BoatTypes.COMMERCIAL_TRAWLER, BoatTypes.FISHING_SKIFF, BoatTypes.TRAWLER, SimpleFishingItemType.FISHING_POLE };
+	{ BoatTypes.COMMERCIAL_TRAWLER, BoatTypes.FISHING_SKIFF, BoatTypes.TRAWLER, SimpleFishingItemType.BEER, SimpleFishingItemType.FISHING_POLE };
 
 	/**
 	 * 

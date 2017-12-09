@@ -158,8 +158,10 @@ public class GamePane extends VBox
 			// set spacing and alignment elements
 			this.setSpacing(10);
 			buttonHBox.setSpacing(10);
-			this.setAlignment(Pos.CENTER);
+			//this.setAlignment(Pos.CENTER);
 			buttonHBox.setAlignment(Pos.CENTER);
+			
+			this.setAlignment(Pos.BOTTOM_CENTER);
 
 			this.getChildren().addAll(txtTitle, buttonHBox);
 
