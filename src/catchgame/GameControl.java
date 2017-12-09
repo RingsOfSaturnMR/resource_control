@@ -42,6 +42,7 @@ import resources.Equipment;
 import resources.FishSpecies;
 import resources.SeaCreature;
 import userinterface.GamePane;
+import utilities.NumberUtilities;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -119,7 +120,7 @@ public class GameControl
 		gameStage.setTitle("Catch!");
 		gameStage.show();
 		gameStage.requestFocus();
-
+		
 		// make the markets update its prices so the GUI can display them
 		seafoodMarket.forcePriceUpdate();
 		equipMarket.forcUpdate();
@@ -180,6 +181,8 @@ public class GameControl
 
 		// set game to running
 		gameRunning.set(true);
+		
+		gamePane.appendOutput("New Game Started");
 
 	}
 
@@ -324,9 +327,13 @@ public class GameControl
 		public void handle(ActionEvent e)
 		{
 			int numToSell = 0;
+			double totalSale = 0;
+			double totalWeight = 0;
 
 			for (int curSpeciesIndex = 0; curSpeciesIndex < Constants.SUPPORTED_SPECIES.length; curSpeciesIndex++)
 			{
+				gamePane.appendOutput((curSpeciesIndex == 0 ? "--- Starting Transaction ---" : ""));
+				
 				String str = gamePane.seafoodMarketPane.getNumCreaturesToSellTextFields()[curSpeciesIndex].getText().trim();
 
 				if (str.equals(""))
@@ -344,12 +351,12 @@ public class GameControl
 								numToSell +
 								" " +
 								Constants.SUPPORTED_SPECIES[curSpeciesIndex].toString() +
-								". You only have " +
-								player.getNumOf(Constants.SUPPORTED_SPECIES[curSpeciesIndex]));
+								", you have " +
+								player.getNumOf(Constants.SUPPORTED_SPECIES[curSpeciesIndex]) + ".");
 					}
 
 					for (int curSeaCreature = 0; curSeaCreature < numToSell; curSeaCreature++)
-					{
+					{	
 						// get the 'next' creature of the current type from the player
 						SeaCreature<?> creature = player.getSeaNextSeaCreature(Constants.SUPPORTED_SPECIES[curSpeciesIndex]);
 						// sell the creature
@@ -369,13 +376,28 @@ public class GameControl
 							setTo = (Integer.toString(num));
 						}
 						gamePane.seafoodMarketPane.setSpeciesToSellFfAt(curSpeciesIndex, setTo);
+						// log transaction for player to see
+						
+						double price = creature.getWeight() * seafoodMarket.getCurrentPricePerPound((Enum)creature.getSpecies());
+						String weight = Double.toString(creature.getWeight());
+						gamePane.appendOutput("Selling: " + creature.toString() + ", -> $" + NumberUtilities.round(price, 2));
+						
+						totalWeight += creature.getWeight();
+						totalSale += price;	
 					}
+				}
+				catch (NumberFormatException nfe)
+				{
+					nfe.printStackTrace();
 				}
 				catch (Exception ex)
 				{
-					ex.printStackTrace();
+					gamePane.appendOutput(ex.getMessage());
 				}
+
 			}
+			gamePane.appendOutput("You sold " + totalWeight + " pounds of seafood for $" + totalSale);
+			gamePane.appendOutput("--- End ---");
 		}
 	}
 

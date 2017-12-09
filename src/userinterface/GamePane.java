@@ -20,7 +20,6 @@ and only if one has not already been launched
 MarketsPane is in progress
 */
 
-
 import java.util.Random;
 import catchgame.GameControl;
 import catchgame.Player;
@@ -32,6 +31,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -51,7 +51,7 @@ public class GamePane extends VBox
 
 	// pane to hold the main nodes for what the player is doing
 	private Pane primaryPane = new Pane();
-	
+
 	// holds nodes which fire actions to change what nodes go in primaryPane
 	private ActionVBox actionHBox = new ActionVBox();
 
@@ -71,8 +71,15 @@ public class GamePane extends VBox
 	private MenuItem saveMenuItem = new MenuItem("Save");
 	private MenuItem exitMenuItem = new MenuItem("Exit");
 
-	public GamePane(EventHandler<ActionEvent> sellFishAction, Player player, FishingActivityActions fishingActivityActions, EventHandler<ActionEvent> deleteAccountAction, EventHandler<ActionEvent> saveAction,
-			EventHandler<ActionEvent> exitAction, String seaFoodMarketName, String equipMarketName)
+	public GamePane(
+			EventHandler<ActionEvent> sellFishAction,
+			Player player,
+			FishingActivityActions fishingActivityActions,
+			EventHandler<ActionEvent> deleteAccountAction,
+			EventHandler<ActionEvent> saveAction,
+			EventHandler<ActionEvent> exitAction,
+			String seaFoodMarketName,
+			String equipMarketName)
 	{
 		this.player = player;
 		myStatsPane = new MyStatsPane();
@@ -81,7 +88,7 @@ public class GamePane extends VBox
 		simpleFishingPane = new SimpleFishingPane();
 		seafoodMarketPane = new SeafoodMarketPane(seaFoodMarketName, sellFishAction);
 		equipmentMarketPane = new EquipmentMarketPane(equipMarketName);
-		
+
 		// set up menu
 		fileMenu.getItems().addAll(accountDeleteMenuItem, saveMenuItem, exitMenuItem);
 		menuBar.getMenus().add(fileMenu);
@@ -94,8 +101,8 @@ public class GamePane extends VBox
 		accountDeleteMenuItem.setOnAction(deleteAccountAction);
 		saveMenuItem.setOnAction(saveAction);
 		exitMenuItem.setOnAction(exitAction);
-		
-		// make market panes width the same as parent, helps with responsiveness 		
+
+		// make market panes width the same as parent, helps with responsiveness
 		seafoodMarketPane.prefWidthProperty().bind(this.widthProperty());
 		equipmentMarketPane.prefWidthProperty().bind(this.widthProperty());
 	}
@@ -103,7 +110,11 @@ public class GamePane extends VBox
 	// where user selects what they want to do
 	private class ActionVBox extends VBox
 	{
+		// title for pane
 		private Text txtTitle = new Text("Primary Actions - What would you like to do?");
+
+		// general action output for user
+		public TextArea taGameOutput = new TextArea();
 
 		// buttons
 		private Button btnGoFishing = new Button("Go Fishing");
@@ -116,6 +127,9 @@ public class GamePane extends VBox
 
 		public ActionVBox()
 		{
+			taGameOutput.setMaxHeight(75);
+			taGameOutput.setEditable(false);
+
 			// set button actions
 			btnGoFishing.setOnAction(e ->
 			{
@@ -146,7 +160,7 @@ public class GamePane extends VBox
 				primaryPane.getChildren().clear();
 				primaryPane.getChildren().add(seafoodMarketPane);
 			});
-			
+
 			btnGoToEquipMarket.setOnAction(e ->
 			{
 				primaryPane.getChildren().clear();
@@ -159,15 +173,22 @@ public class GamePane extends VBox
 			// set spacing and alignment elements
 			this.setSpacing(10);
 			buttonHBox.setSpacing(10);
-			//this.setAlignment(Pos.CENTER);
+			// this.setAlignment(Pos.CENTER);
 			buttonHBox.setAlignment(Pos.CENTER);
-			
+
 			this.setAlignment(Pos.BOTTOM_CENTER);
 
-			this.getChildren().addAll(txtTitle, buttonHBox);
+			this.getChildren().addAll(txtTitle, buttonHBox, taGameOutput);
 
 		}
+	}
 
+	public void appendOutput(String str)
+	{
+		if (!str.equals(""))
+		{
+			this.actionHBox.taGameOutput.appendText(str + "\n");
+		}
 	}
 
 	///////////////////////////////////////////////
@@ -240,7 +261,5 @@ public class GamePane extends VBox
 
 		}
 	}
-
-	
 
 }

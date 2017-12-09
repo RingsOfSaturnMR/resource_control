@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 import javafx.scene.shape.Circle;
+import utilities.NumberUtilities;
 
 /**
  */
@@ -41,6 +42,7 @@ public abstract class SeaCreature <T> implements Serializable
 	{
 		if (weight > 0)
 		{
+			weight = NumberUtilities.round(weight, 2);
 			this.weight = weight;
 		}
 		else
