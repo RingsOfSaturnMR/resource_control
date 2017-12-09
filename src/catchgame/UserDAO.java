@@ -35,16 +35,13 @@ import java.sql.Statement;
  * @author Nils Johnson
  */
 // TODO - Try with resources for each call, instead of try-catch-finally
-public class UserDAO implements IUserDAO
+public class UserDAO extends DAO implements IUserDAO
 {
 	// Max allowed length of path to user file
 	private static final String FILE_PATH_LENGTH = "50";
 
 	// allows monitoring or online users
 	private ObservableList<String> onlineUserList = FXCollections.observableArrayList();
-
-	private static String url = "jdbc:sqlite:users.db";
-	private static Connection connection = null;
 
 	/**
 	 * This constructor will make a table of Users if it does not exist.
@@ -53,6 +50,7 @@ public class UserDAO implements IUserDAO
 	 */
 	public UserDAO() throws SQLException
 	{
+		super();
 		String createQuery = "CREATE TABLE IF NOT EXISTS Users (\n" + "userName varchar(" +
 				Authenticator.MAX_NAME_LENGTH +
 				") not null, \n" +
@@ -390,49 +388,8 @@ public class UserDAO implements IUserDAO
 		}
 	}
 
-
 	public ObservableList<String> getOnlinePlayerList()
 	{
 		return this.onlineUserList;
 	}
-	
-	
-	/**
-	 * use to open connection prior to accessing database
-	 */
-	private static void openConnection()
-	{
-		try
-		{
-			if (connection == null || connection.isClosed())
-			{
-				connection = DriverManager.getConnection(url);
-			}
-		}
-		catch (SQLException e)
-		{
-			System.out.print(e.getMessage());
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * use to close connection after accessing database
-	 */
-	private static void closeConnection()
-	{
-		try
-		{
-			if (connection != null)
-			{
-				connection.close();
-			}
-		}
-		catch (SQLException e)
-		{
-			System.out.print(e.getMessage());
-			e.printStackTrace();
-		}
-	}
-	
 }

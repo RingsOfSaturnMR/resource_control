@@ -99,13 +99,13 @@ public class Constants
 	/**
 	 * An array of SeaCreature Species the game supports
 	 */
-	public final static Enum[] SUPPORTED_SPECIES =
+	public final static Enum<?>[] SUPPORTED_SPECIES =
 	{ FishSpecies.COD, FishSpecies.SALMON, FishSpecies.TUNA, ShellfishSpecies.CRAB, ShellfishSpecies.LOBSTER, ShellfishSpecies.OYSTER };
 
 	/**
 	 * An array of Equipment types the game supports
 	 */
-	public static Enum[] SUPPORTED_EQUIPMENT =
+	public static Enum<?>[] SUPPORTED_EQUIPMENT =
 	{ BoatTypes.COMMERCIAL_TRAWLER, BoatTypes.FISHING_SKIFF, BoatTypes.TRAWLER, SimpleFishingItemType.BEER, SimpleFishingItemType.FISHING_POLE };
 
 	/**

@@ -33,9 +33,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.Duration;
 import market.EquipmentMarket;
 import market.SeafoodMarket;
 import resources.Equipment;
@@ -48,8 +52,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Optional;
 import java.util.Random;
+
 import catchgame.Packets.LoginPacket;
 import catchgame.Packets.ResultPacket;
 import catchgame.Packets.RequestPacket;
@@ -87,6 +94,9 @@ public class GameControl
 	// save upon deletion
 	private boolean accountDeleted = false;
 
+	// for the backing audio track
+	private AudioClip backTrack = null;
+
 	/**
 	 * Starts a new game
 	 * 
@@ -120,11 +130,15 @@ public class GameControl
 		gameStage.setTitle("Catch!");
 		gameStage.show();
 		gameStage.requestFocus();
-		
+
+		// tell user game is started, before you force a price update.
+		gamePane.appendOutput("Hello " + player.getUsername() +
+				". Welcome.");
+
 		// make the markets update its prices so the GUI can display them
 		seafoodMarket.forcePriceUpdate();
 		equipMarket.forcUpdate();
-		
+
 		// update the GUI to have most recent player into
 		updateNumSellableSeaCreatures();
 		updateNumEquipOnHand();
@@ -181,9 +195,24 @@ public class GameControl
 
 		// set game to running
 		gameRunning.set(true);
-		
-		gamePane.appendOutput("New Game Started");
 
+		// start looping music
+		loopBackTrack();
+	}
+
+	private void loopBackTrack()
+	{
+		try
+		{
+			backTrack = new AudioClip(getClass().getResource("/sound/water.wav").toURI().toString());
+			backTrack.setCycleCount(MediaPlayer.INDEFINITE);
+			backTrack.play();
+		}
+		catch (URISyntaxException e)
+		{
+			gamePane.appendOutput(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -246,6 +275,7 @@ public class GameControl
 				toServer = null;
 				fromServer = null;
 				gameRunning.set(false);
+				backTrack.stop();
 			}
 		}
 	}
@@ -333,7 +363,7 @@ public class GameControl
 			for (int curSpeciesIndex = 0; curSpeciesIndex < Constants.SUPPORTED_SPECIES.length; curSpeciesIndex++)
 			{
 				gamePane.appendOutput((curSpeciesIndex == 0 ? "--- Starting Transaction ---" : ""));
-				
+
 				String str = gamePane.seafoodMarketPane.getNumCreaturesToSellTextFields()[curSpeciesIndex].getText().trim();
 
 				if (str.equals(""))
@@ -352,11 +382,12 @@ public class GameControl
 								" " +
 								Constants.SUPPORTED_SPECIES[curSpeciesIndex].toString() +
 								", you have " +
-								player.getNumOf(Constants.SUPPORTED_SPECIES[curSpeciesIndex]) + ".");
+								player.getNumOf(Constants.SUPPORTED_SPECIES[curSpeciesIndex]) +
+								".");
 					}
 
 					for (int curSeaCreature = 0; curSeaCreature < numToSell; curSeaCreature++)
-					{	
+					{
 						// get the 'next' creature of the current type from the player
 						SeaCreature<?> creature = player.getSeaNextSeaCreature(Constants.SUPPORTED_SPECIES[curSpeciesIndex]);
 						// sell the creature
@@ -377,13 +408,15 @@ public class GameControl
 						}
 						gamePane.seafoodMarketPane.setSpeciesToSellFfAt(curSpeciesIndex, setTo);
 						// log transaction for player to see
-						
-						double price = creature.getWeight() * seafoodMarket.getCurrentPricePerPound((Enum)creature.getSpecies());
+
+						double price = creature.getWeight() * seafoodMarket.getCurrentPricePerPound((Enum<?>) creature.getSpecies());
 						String weight = Double.toString(creature.getWeight());
-						gamePane.appendOutput("Selling: " + creature.toString() + ", -> $" + NumberUtilities.round(price, 2));
-						
+						gamePane.appendOutput("Selling: " + creature.toString() +
+								", -> $" +
+								NumberUtilities.round(price, 2));
+
 						totalWeight += creature.getWeight();
-						totalSale += price;	
+						totalSale += price;
 					}
 				}
 				catch (NumberFormatException nfe)
@@ -396,8 +429,15 @@ public class GameControl
 				}
 
 			}
-			gamePane.appendOutput("You sold " + totalWeight + " pounds of seafood for $" + totalSale);
-			gamePane.appendOutput("--- End ---");
+			gamePane.appendOutput("You sold " + totalWeight +
+					" pounds of seafood for $" +
+					totalSale);
+			gamePane.appendOutput("--- End Transaction ---");
+
+			if (totalWeight > 0)
+			{
+				playCashSound();
+			}
 		}
 	}
 
@@ -409,6 +449,7 @@ public class GameControl
 	{
 		player.prepareToSerialze();
 		toServer.writeObject(player);
+		gamePane.appendOutput("Game Saved.");
 	}
 
 	/**
@@ -472,6 +513,7 @@ public class GameControl
 	 */
 	private void logOut() throws Exception
 	{
+		gamePane.appendOutput("Logging Out");
 		toServer.writeObject(new RequestPacket(Codes.LOGOUT_REQUEST_CODE));
 	}
 
@@ -604,13 +646,18 @@ public class GameControl
 		@Override
 		public void handle(ActionEvent arg0)
 		{
-			player.addItemToToolChest((Equipment<?>) equipMarket.buyItem(itemType));
-			takeMoney();
-		}
+			if (player.getCashOnHand() >= equipMarket.getCurrentPrice(itemType))
+			{
+				player.addItemToToolChest((Equipment<?>) equipMarket.buyItem(itemType));
+				player.subtractMoney(equipMarket.getCurrentPrice(itemType));
 
-		public void takeMoney()
-		{
-			player.subtractMoney(equipMarket.getCurrentPrice(itemType));
+				gamePane.appendOutput("New Fishing Gear Purchased: " + itemType.toString());
+			}
+			else
+			{
+				gamePane.appendOutput("Transaction Declined, Insufficent Funds");
+			}
+
 		}
 	}
 
@@ -622,6 +669,25 @@ public class GameControl
 			{
 				gamePane.equipmentMarketPane.setCurrentPricesTextAt(i, Double.toString(equipMarket.getCurrentPrice(Constants.SUPPORTED_EQUIPMENT[i])));
 			}
+			gamePane.appendOutput("New Market Prices Posted.");
+		}
+	}
+
+	/**
+	 * plays a cash register noise
+	 */
+	private void playCashSound()
+	{
+		AudioClip chaChing;
+		try
+		{
+			chaChing = new AudioClip(getClass().getResource("/sound/cash.mp3").toURI().toString());
+			chaChing.play();
+		}
+		catch (URISyntaxException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }

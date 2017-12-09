@@ -195,42 +195,18 @@ public class GamePane extends VBox
 	// Definitons for Panes that go in 'primaryPane'
 	///////////////////////////////////////////////
 
-	private class MyStatsPane extends StackPane
+	private class MyStatsPane extends VBox
 	{
-		// Labels
-		Label lblName = new Label("Name: ");
-		Label lblCashOnHand = new Label("Available $: ");
-		Label lblSkillLevel = new Label("Skill Level: ");
-		Label lblNumSeaCreatures = new Label("Number SeaCreatures: ");
-		Label lblNumTools = new Label("Number Tools: ");
-
-		// Text Fields
-		Text txtName = new Text(player.getUsername());
-		Text txtCashOnHand = new Text(Double.toString(player.getCashOnHand()));
-		Text txtSkillLevel = new Text(Integer.toString(player.getSkillLevel()));
-		Text textNumSeaCreatures = new Text(player.getIceChest() == null ? "0" : Integer.toString(player.getIceChest().size()));
-		Text txtNumTools = new Text(player.getToolChest() == null ? "0" : Integer.toString(player.getToolChest().size()));
-
-		GridPane statsGridPane = new GridPane();
-
-		public MyStatsPane()
-		{
-			this.setWidth(200);
-			this.setHeight(200);
-			// node, col, row
-			statsGridPane.add(lblName, 0, 0);
-			statsGridPane.add(txtName, 1, 0);
-			statsGridPane.add(lblCashOnHand, 0, 1);
-			statsGridPane.add(txtCashOnHand, 1, 1);
-			statsGridPane.add(lblSkillLevel, 0, 2);
-			statsGridPane.add(txtSkillLevel, 1, 2);
-			statsGridPane.add(lblNumSeaCreatures, 0, 3);
-			statsGridPane.add(textNumSeaCreatures, 1, 3);
-			statsGridPane.add(lblNumTools, 0, 4);
-			statsGridPane.add(txtNumTools, 1, 4);
-
-			this.getChildren().addAll(statsGridPane);
-		}
+		private Text txtTitle = new Text("Gameplay Stats");
+		
+		// to hold players info
+		private GridPane myStatsGridPane = new GridPane();
+		
+		// labels
+		private Label lblName = new Label(player.getUsername());
+		
+		
+		
 	}
 
 	public class SimpleFishingPane extends Pane

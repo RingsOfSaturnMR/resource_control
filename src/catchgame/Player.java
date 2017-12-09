@@ -21,7 +21,6 @@ public class Player extends authentication.User implements Serializable
 {
 	// general stats
 	double cashOnHand;
-	private int skillLevel;
 
 	// arrays to hold resources, when serializing
 	private SeaCreature[] iceChestArray = null;
@@ -38,7 +37,6 @@ public class Player extends authentication.User implements Serializable
 	{
 		super(username);
 		this.cashOnHand = 0;
-		this.skillLevel = 0;
 	}
 
 	public void addSeaCreatureToIceChest(SeaCreature item)
@@ -69,11 +67,6 @@ public class Player extends authentication.User implements Serializable
 	public double getCashOnHand()
 	{
 		return this.cashOnHand;
-	}
-
-	public int getSkillLevel()
-	{
-		return skillLevel;
 	}
 
 	public void addMoney(double amount)
