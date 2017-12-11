@@ -12,9 +12,10 @@ import javafx.util.Duration;
 import resources.Fish;
 import resources.SeaCreature;
 import resources.Shellfish;
+import userinterface.SimpleFishingPane;
 import utilities.NumberUtilities;
 
-public class ClientFishingActivityFishManager {
+public class ClientFishingActivityFishManagerV2 {
 		SimpleFishingPane simpleFishingPane;
 	
 		ArrayList<Fish>codPopulation = new ArrayList<>();
@@ -28,7 +29,7 @@ public class ClientFishingActivityFishManager {
 		
 		ArrayList<Fish>offScreenCod= new ArrayList<>();
 	
-		ClientFishingActivityFishManager(SimpleFishingPane simpleFishingPane){
+		ClientFishingActivityFishManagerV2(SimpleFishingPane simpleFishingPane){
 			this.simpleFishingPane=simpleFishingPane;
 		}
 

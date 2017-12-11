@@ -195,6 +195,7 @@ public class GamePane extends VBox
 	// Definitons for Panes that go in 'primaryPane'
 	///////////////////////////////////////////////
 
+
 	private class MyStatsPane extends VBox
 	{
 		private Text txtTitle = new Text("Gameplay Stats");
@@ -209,6 +210,7 @@ public class GamePane extends VBox
 		
 	}
 
+	/*
 	public class SimpleFishingPane extends Pane
 	{
 		// temp for now to show professor miller where we are going with this.
@@ -237,5 +239,6 @@ public class GamePane extends VBox
 
 		}
 	}
+	*/
 
 }

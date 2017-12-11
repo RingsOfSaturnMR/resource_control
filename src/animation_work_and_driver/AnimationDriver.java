@@ -22,6 +22,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import userinterface.LoginPane;
 import userinterface.NewUserPane;
+import userinterface.SimpleFishingPane;
 
 public class AnimationDriver extends Application{
 

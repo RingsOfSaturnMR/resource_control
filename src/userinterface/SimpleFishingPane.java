@@ -1,4 +1,4 @@
-package animation_work_and_driver;
+package userinterface;
 
 import catchgame.Constants;
 import javafx.scene.control.Label;

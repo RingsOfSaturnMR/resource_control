@@ -46,6 +46,7 @@ import resources.Equipment;
 import resources.FishSpecies;
 import resources.SeaCreature;
 import userinterface.GamePane;
+import userinterface.SimpleFishingPane;
 import utilities.NumberUtilities;
 
 import java.io.IOException;
@@ -74,7 +75,7 @@ public class GameControl
 
 	// for user interface
 	private GamePane gamePane;
-	FishingActivity fishingActivity;
+	FishingActivityV3 fishingActivityV3;
 	private Stage gameStage = new Stage();
 	private Scene gameScene;
 
@@ -532,7 +533,8 @@ public class GameControl
 	{
 		public void startFishingActivity()
 		{
-			fishingActivity = new FishingActivity(gamePane, toServer, fromServer, player);
+			
+			fishingActivityV3 = new FishingActivityV3(gamePane, toServer, fromServer, player);
 		}
 	}
 
