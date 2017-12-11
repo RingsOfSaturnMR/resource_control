@@ -30,8 +30,10 @@ public class FishGraphic extends AbstractSeaCreatureGraphic{
 			WEIGHT_GRAPHIC_MULTIPLE=Constants.COD_WEIGHT_GRAPHIC_MULTIPLE;
 			break;
 		}
+		//double fishImageViewWidth=fish.getWeight()*Constants.COD_WEIGHT_GRAPHIC_MULTIPLE;
 		fishImageView.setFitWidth(fish.getWeight()*Constants.COD_WEIGHT_GRAPHIC_MULTIPLE);
-		fishImageView.setPreserveRatio(true);
+		//fishImageView.setPreserveRatio(true);
+		fishImageView.setFitHeight(this.seaCreatureImage.getHeight()*fishImageView.getFitWidth()/this.seaCreatureImage.getWidth());
 		fishImageView.setSmooth(true);
 		fishImageView.setCache(true);
 		

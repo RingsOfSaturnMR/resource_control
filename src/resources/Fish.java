@@ -16,6 +16,7 @@ public class Fish extends SeaCreature<FishSpecies> implements Serializable
 	public Fish(FishSpecies species, double weight)
 	{
 		super(species, weight);
+		super.setSpeed(10);
 	}
 	
 	public void setFishBodyByWeight(){

@@ -10,6 +10,7 @@ public class Shellfish extends SeaCreature <ShellfishSpecies>
 	public Shellfish(ShellfishSpecies species, double weight)
 	{
 		super(species, weight);
+		super.setSpeed(1);
 	}
 	
 	public void setShellfishBodyByWeight(){
