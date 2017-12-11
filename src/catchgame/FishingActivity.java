@@ -1,11 +1,3 @@
-
-package catchgame;
-
-import java.io.BufferedWriter;
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 /*
 Class by Dr. Java and the JavaDocs
 Nils Johnson, Caileigh Fitzgerald, Thanh Lam, and Matt Roberts
@@ -26,6 +18,14 @@ Colors have been added, and the ability to get all SeaCreatures
 (as opposed to just cod) has been added.  The ability to add the
 SeaCreature to the player's ice chest is new too.
 */
+package catchgame;
+
+import java.io.BufferedWriter;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

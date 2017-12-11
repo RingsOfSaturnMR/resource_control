@@ -58,6 +58,7 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.Random;
 
+import catchgame.Packets.LeaderBoardPacket;
 import catchgame.Packets.LoginPacket;
 import catchgame.Packets.ResultPacket;
 import catchgame.Packets.RequestPacket;
@@ -125,7 +126,7 @@ public class GameControl
 		equipMarket = new EquipmentMarket("Ye 'Ol Fishin' Store", new SetCurrentEquipPricesHandler());
 
 		// Display GUI
-		gamePane = new GamePane(new SellFishAction(), player, new FishingActivityActions(), new DeleteAccountAction(), new SaveGameAction(), new ExitAction(), seafoodMarket.getName(), equipMarket.getName());
+		gamePane = new GamePane(new SellFishAction(), player, new FishingActivityActions(), new DeleteAccountAction(), new SaveGameAction(), new ExitAction(), seafoodMarket.getName(), equipMarket.getName(), new FetchStatsHandler());
 		gameScene = new Scene(gamePane, Constants.INITIAL_GAME_PANE_WIDTH, Constants.INITIAL_GAME_PANE_HEIGHT);
 		gameStage.setScene(gameScene);
 		gameStage.setTitle("Catch!");
@@ -143,6 +144,7 @@ public class GameControl
 		// update the GUI to have most recent player into
 		updateNumSellableSeaCreatures();
 		updateNumEquipOnHand();
+		updateStatsPane();
 
 		//////////////////////////////////////////////////////////////////////////
 		// ----- define nested listeners to use within scope of GameControl ------
@@ -176,6 +178,8 @@ public class GameControl
 		// add the listeners of this scope
 		player.getIceChest().addListener(new IceChestChangeListener());
 		player.getToolChest().addListener(new ToolChestChangeListener());
+		// give player a way to send stats to server after change
+		player.setStatSendHandler(new SendStatsHandler());
 
 		/////////////////////////////////////////////////////////////
 		// ------ add inner level listeners to GUI components ------
@@ -446,11 +450,19 @@ public class GameControl
 	 * This method sends the player object back to the server, where it is saved as
 	 * a file.
 	 */
-	public void saveGame() throws Exception
+	private void saveGame()
 	{
+		try
+		{
 		player.prepareToSerialze();
 		toServer.writeObject(player);
 		gamePane.appendOutput("Game Saved.");
+		}
+		catch(IOException ioe)
+		{
+			gamePane.appendOutput("Game not saved, " + ioe.getMessage());
+			ioe.printStackTrace();
+		}
 	}
 
 	/**
@@ -496,15 +508,7 @@ public class GameControl
 		@Override
 		public void handle(ActionEvent e)
 		{
-			try
-			{
-				saveGame();
-			}
-			catch (Exception e1)
-			{
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			saveGame();
 		}
 	}
 
@@ -515,7 +519,7 @@ public class GameControl
 	private void logOut() throws Exception
 	{
 		gamePane.appendOutput("Logging Out");
-		toServer.writeObject(new RequestPacket(Codes.LOGOUT_REQUEST_CODE));
+		toServer.writeObject(new RequestPacket(Codes.LOGOUT_CODE));
 	}
 
 	/**
@@ -688,8 +692,58 @@ public class GameControl
 		}
 		catch (URISyntaxException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Allows GUI button to trigger an update of the leaderboard
+	 */
+	public class FetchStatsHandler
+	{
+		public void fetch()
+		{
+			updateStatsPane();
+		}
+	}
+	
+	private void updateStatsPane()
+	{
+		try
+		{
+			toServer.writeObject(new RequestPacket(Codes.GET_LEADER_BOARD_CODE));
+			LeaderBoardPacket packet = (LeaderBoardPacket) fromServer.readObject();
+			gamePane.statsPane.setPlayerStats(player.getUsername(), player.getTotalEarned(), player.getCashOnHand(), player.getTotalCatches(), packet);
+		}
+		catch (IOException | ClassNotFoundException e)
+		{
+			gamePane.appendOutput(e.getMessage());
+		}
+	}
+	
+	private void sendPlayerStats()
+	{
+		try
+		{
+			Packets.LeaderBoardRow packet = new Packets.LeaderBoardRow(player.getUsername(), player.getTotalEarned(), player.getCashOnHand(), player.getTotalCatches());
+			System.out.println("Client Side: " + packet.toString());
+			toServer.writeObject(packet);
+		}
+		catch (IOException ioe)
+		{
+			gamePane.appendOutput(ioe.getMessage());
+			ioe.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Allows other objects to send the stats to the server
+	 */
+	public class SendStatsHandler
+	{
+		public void send()
+		{
+			sendPlayerStats();
 		}
 	}
 }

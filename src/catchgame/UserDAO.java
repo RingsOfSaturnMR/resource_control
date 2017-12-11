@@ -37,9 +37,6 @@ import java.sql.Statement;
 // TODO - Try with resources for each call, instead of try-catch-finally
 public class UserDAO extends DAO implements IUserDAO
 {
-	// Max allowed length of path to user file
-	private static final String FILE_PATH_LENGTH = "50";
-
 	// allows monitoring or online users
 	private ObservableList<String> onlineUserList = FXCollections.observableArrayList();
 
@@ -51,23 +48,6 @@ public class UserDAO extends DAO implements IUserDAO
 	public UserDAO() throws SQLException
 	{
 		super();
-		String createQuery = "CREATE TABLE IF NOT EXISTS Users (\n" + "userName varchar(" +
-				Authenticator.MAX_NAME_LENGTH +
-				") not null, \n" +
-				"passwordCipher varchar(" +
-				Authenticator.MAX_PW_LENGTH +
-				") not null, \n" +
-				"filePath varchar(" +
-				FILE_PATH_LENGTH +
-				") not null, \n" +
-				"isOnline bit not null," +
-				"PRIMARY KEY (userName)" +
-				");";
-
-		try (Connection conn = DriverManager.getConnection(url); Statement stmt = conn.createStatement())
-		{
-			stmt.execute(createQuery);
-		}
 	}
 
 	/**
@@ -79,7 +59,7 @@ public class UserDAO extends DAO implements IUserDAO
 	@Override
 	public void createUser(String enteredUsername, String enteredPassword, String enteredPwConfirm) throws NewUserException, FileNotFoundException, IOException
 	{
-		// verifiy a legally formatted name is entered
+		// verify a legally formatted name is entered
 		ArrayList<UsernameError> usernameErrorList = Authenticator.checkUsernameLegality(enteredUsername);
 
 		// if there is an error list, throw an exception with that list

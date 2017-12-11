@@ -86,6 +86,7 @@ public abstract class SeaCreature <T> implements Serializable
 	{
 		return this.getSpecies().toString() + ", " + this.getWeight() + " pounds";
 	}
+	
 	public double getSpeed(){
 		return speed;
 	}

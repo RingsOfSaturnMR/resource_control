@@ -145,4 +145,5 @@ public class Constants
 		public final static short COD_WEIGHT_GRAPHIC_MULTIPLE = 10;
 		public static final double IMG_THUMBNAIL_HEIGHT = 50;
 		public static final double IMG_THUMBNAIL_WDITH = 50;
+		public static final int NUM_HIGH_SCORES = 3;
 }

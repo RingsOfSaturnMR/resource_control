@@ -7,7 +7,7 @@ import graphicclasses.FishGraphic;
 public class Fish extends SeaCreature<FishSpecies> implements Serializable
 {
 	
-	FishGraphic fishGraphic=null;
+	transient FishGraphic fishGraphic=null;
 
 	public Fish(){
 		super();

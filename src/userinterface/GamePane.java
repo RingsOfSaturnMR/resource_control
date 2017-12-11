@@ -39,6 +39,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import market.SeafoodMarket;
+import catchgame.GameControl.FetchStatsHandler;
 import catchgame.GameControl.FishingActivityActions;
 
 /**
@@ -56,7 +57,7 @@ public class GamePane extends VBox
 	private ActionVBox actionHBox = new ActionVBox();
 
 	// pane to hold readout of players attributes.
-	private MyStatsPane myStatsPane;
+	public StatsVBox statsPane;
 
 	public SimpleFishingPane simpleFishingPane;
 	public SeafoodMarketPane seafoodMarketPane;
@@ -70,6 +71,9 @@ public class GamePane extends VBox
 	private MenuItem accountDeleteMenuItem = new MenuItem("Delete Account");
 	private MenuItem saveMenuItem = new MenuItem("Save");
 	private MenuItem exitMenuItem = new MenuItem("Exit");
+	
+	// to trigger updating leaderboard
+	private FetchStatsHandler updateStatsHandler;
 
 	public GamePane(
 			EventHandler<ActionEvent> sellFishAction,
@@ -79,11 +83,14 @@ public class GamePane extends VBox
 			EventHandler<ActionEvent> saveAction,
 			EventHandler<ActionEvent> exitAction,
 			String seaFoodMarketName,
-			String equipMarketName)
+			String equipMarketName,
+			FetchStatsHandler updateStatsHandler)
 	{
 		this.player = player;
-		myStatsPane = new MyStatsPane();
+		statsPane = new StatsVBox();
 		this.fishingActivityActions = fishingActivityActions;
+		this.updateStatsHandler = updateStatsHandler;
+		
 
 		simpleFishingPane = new SimpleFishingPane();
 		seafoodMarketPane = new SeafoodMarketPane(seaFoodMarketName, sellFishAction);
@@ -93,7 +100,7 @@ public class GamePane extends VBox
 		fileMenu.getItems().addAll(accountDeleteMenuItem, saveMenuItem, exitMenuItem);
 		menuBar.getMenus().add(fileMenu);
 
-		primaryPane.getChildren().add(myStatsPane);
+		primaryPane.getChildren().add(statsPane);
 
 		this.getChildren().addAll(menuBar, primaryPane, actionHBox);
 
@@ -102,9 +109,10 @@ public class GamePane extends VBox
 		saveMenuItem.setOnAction(saveAction);
 		exitMenuItem.setOnAction(exitAction);
 
-		// make market panes width the same as parent, helps with responsiveness
+		// make pane width the same as parent, helps with responsiveness
 		seafoodMarketPane.prefWidthProperty().bind(this.widthProperty());
 		equipmentMarketPane.prefWidthProperty().bind(this.widthProperty());
+		statsPane.prefWidthProperty().bind(this.widthProperty());
 	}
 
 	// where user selects what they want to do
@@ -149,10 +157,8 @@ public class GamePane extends VBox
 			btnCheckMyResources.setOnAction(e ->
 			{
 				primaryPane.getChildren().clear();
-				// TODO use observables or something, so that it automatically changes.
-				// this forces a refresh, dont leave this way...
-				myStatsPane = new MyStatsPane();
-				primaryPane.getChildren().add(myStatsPane);
+				updateStatsHandler.fetch();
+				primaryPane.getChildren().add(statsPane);
 			});
 
 			btnGoToSeaFoodMarket.setOnAction(e ->
@@ -190,55 +196,5 @@ public class GamePane extends VBox
 			this.actionHBox.taGameOutput.appendText(str + "\n");
 		}
 	}
-
-	///////////////////////////////////////////////
-	// Definitons for Panes that go in 'primaryPane'
-	///////////////////////////////////////////////
-
-
-	private class MyStatsPane extends VBox
-	{
-		private Text txtTitle = new Text("Gameplay Stats");
-		
-		// to hold players info
-		private GridPane myStatsGridPane = new GridPane();
-		
-		// labels
-		private Label lblName = new Label(player.getUsername());
-		
-		
-		
-	}
-
-	/*
-	public class SimpleFishingPane extends Pane
-	{
-		// temp for now to show professor miller where we are going with this.
-		// Pane explainPane = new Pane();
-		// Pane fishPane = new Pane();
-
-		private Random rand = new Random();
-		// private int numCreaturesOnScreen = 0;
-		// private Button btnExtractFishAction = new Button("Extract Fish");
-		// private ArrayList<SeaCreature> creaturesOnScreen = new ArrayList<>();
-		private Label labelExplanation = new Label(
-				"Right now the fish are shown as dots. These dots are from SeaCreature objects, extracted " + "from an Ocean object belonging the server and sent to this client. We plan to animate them, and make it so that when they are " +
-						"clicked (or however else caught), they are added (By calling the function attatched to the button) to the players resouces array, " +
-						"which they can sell, to get better fishing equipment");
-
-		public SimpleFishingPane()
-		{
-
-			this.setMinWidth(500);
-			this.setMinHeight(400);
-			labelExplanation.setMaxWidth(500);
-			labelExplanation.setWrapText(true);
-			// labelExplanation.setTranslateY(50);
-			// btnExtractFishAction.setOnAction(extractFishAction);
-			this.getChildren().addAll(labelExplanation);
-
-		}
-	}
-	*/
 
 }

@@ -3,6 +3,7 @@ package catchgame;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import catchgame.GameControl.SendStatsHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
@@ -11,7 +12,6 @@ import resources.Equipment;
 import resources.FishSpecies;
 import resources.SeaCreature;
 import resources.ShellfishSpecies;
-import resources.SimpleFishingItem;
 import resources.SimpleFishingItemType;
 
 /**
@@ -20,7 +20,9 @@ import resources.SimpleFishingItemType;
 public class Player extends authentication.User implements Serializable
 {
 	// general stats
-	double cashOnHand;
+	private double cashOnHand;
+	private double totalEarned;
+	private int totalCatches;;
 
 	// arrays to hold resources, when serializing
 	private SeaCreature[] iceChestArray = null;
@@ -32,11 +34,16 @@ public class Player extends authentication.User implements Serializable
 
 	// flag to mark if the arrays need to be copied to the observable lists
 	private boolean observableListsLoaded = false;
+	
+	// allows the player to send stats to the server
+	private transient SendStatsHandler sendStatsHandler = null;
 
 	public Player(String username)
 	{
 		super(username);
 		this.cashOnHand = 0;
+		this.totalEarned = 0;
+		this.totalCatches = 0;
 	}
 
 	public void addSeaCreatureToIceChest(SeaCreature item)
@@ -47,11 +54,14 @@ public class Player extends authentication.User implements Serializable
 		}
 
 		iceChest.add(item);
+		totalCatches++;
+		sendStatsToServer();
 	}
 
 	public void removeSeaCreatureFromIceChest(int i)
 	{
 		iceChest.remove(i);
+		sendStatsToServer();
 	}
 
 	public void addItemToToolChest(Equipment item)
@@ -62,6 +72,7 @@ public class Player extends authentication.User implements Serializable
 		}
 
 		toolChest.add(item);
+		sendStatsToServer();
 	}
 
 	public double getCashOnHand()
@@ -72,11 +83,14 @@ public class Player extends authentication.User implements Serializable
 	public void addMoney(double amount)
 	{
 		cashOnHand += amount;
+		totalEarned += amount;
+		sendStatsToServer();
 	}
 
 	public void subtractMoney(double d)
 	{
 		cashOnHand -= d;
+		sendStatsToServer();
 	}
 
 	public SeaCreature<?> getSeaCreatureAt(int index)
@@ -344,5 +358,29 @@ public class Player extends authentication.User implements Serializable
 		// move this or something, do this intuitively 
 		loadObservableLists();
 		return this.toolChest;
+	}
+
+	public double getTotalEarned()
+	{
+		return this.totalEarned;
+	}
+	
+
+	public int getTotalCatches()
+	{
+		return totalCatches;
+	}
+
+	public void setStatSendHandler(SendStatsHandler sendStatsHandler)
+	{
+		this.sendStatsHandler = sendStatsHandler;
+	}
+	
+	private void sendStatsToServer()
+	{
+		if(sendStatsHandler != null)
+		{
+			sendStatsHandler.send();
+		}
 	}
 }

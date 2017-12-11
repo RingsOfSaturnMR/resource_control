@@ -36,6 +36,7 @@ import authentication.BadUsernameException;
 import authentication.NewUserException;
 import authentication.NewUserException.UsernameError;
 import catchgame.Packets.ClientSubOceanSeaCreatureStatePacket;
+import catchgame.Packets.LeaderBoardRow;
 import catchgame.Packets.LoginPacket;
 import catchgame.Packets.NewUserPacket;
 import catchgame.Packets.ResultPacket;
@@ -325,12 +326,22 @@ public class CatchServer
 		private ObjectInputStream fromClient;
 		private String username;
 		private boolean loggedIn = true;
+		private LeaderBoardDAO leaderBoardDAO;
 
 		HandleServerSideGameControl(ObjectOutputStream toClient, ObjectInputStream fromClient, String username)
 		{
 			this.toClient = toClient;
 			this.fromClient = fromClient;
 			this.username = username;
+			
+			try
+			{
+				leaderBoardDAO = new LeaderBoardDAO();
+			}
+			catch(SQLException sqlE)
+			{
+				sqlE.printStackTrace();
+			}
 		}
 
 		public void run()
@@ -352,6 +363,14 @@ public class CatchServer
 						Platform.runLater(() -> serverPane.appendToOutput(username + " Saved their game."));
 						continue;
 					}
+					
+					// if it is an entry for the leaderboard, add it to the leaderboard
+					if(recievedObject instanceof LeaderBoardRow)
+					{
+						LeaderBoardRow row = (LeaderBoardRow) recievedObject;
+						System.out.println("Server Side: " + row.toString());
+						leaderBoardDAO.update(row);
+					}
 
 					if (recievedObject instanceof RequestPacket)
 					{
@@ -360,8 +379,7 @@ public class CatchServer
 
 						switch (code)
 						{
-						case Codes.LOGOUT_REQUEST_CODE:
-							Platform.runLater(() -> serverPane.appendToOutput(username + " sent a logout request."));
+						case Codes.LOGOUT_CODE:
 							loggedIn = false;
 							continue;
 							
@@ -369,6 +387,10 @@ public class CatchServer
 							Platform.runLater(() -> serverPane.appendToOutput(username + " sent an account delete request."));
 							loggedIn = false;
 							userDAO.deleteUser(username);
+							continue;
+							
+						case Codes.GET_LEADER_BOARD_CODE:
+							toClient.writeObject(leaderBoardDAO.getLeaderBoard());
 							continue;
 							
 						default:
@@ -433,7 +455,6 @@ public class CatchServer
 					e.printStackTrace();
 					Platform.runLater(() -> serverPane.appendToOutput(e.getMessage()));
 				}
-
 			}
 
 			Platform.runLater(() -> serverPane.appendToOutput(username + " has logged out and is no longer being served."));
