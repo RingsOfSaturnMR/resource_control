@@ -1,65 +1,23 @@
-/*
-Class by Dr. Java and the JavaDocs
-Nils Johnson, Caileigh Fitzgerald, Thanh Lam, and Matt Roberts
-Date: 11-27-2017
-*/
-/*
-Purpose: to allow the user to catch SeaCreatures by getting
-SeaCreaturesfrom the server and adding them to the user's
-SimpleFishingPane with onClick event handler's theat extract
-a fish when the fish's GUI is clicked on and add it to
-the Player's IceChest.  SeaCreatures are currently rendered
-with circles colored by species and sized by SeaCreature's
-weight.
-
-Modification Info:
-These methods were originally found in GameControl.
-Colors have been added, and the ability to get all SeaCreatures
-(as opposed to just cod) has been added.  The ability to add the
-SeaCreature to the player's ice chest is new too.
-*/
 package catchgame;
-
-import java.io.BufferedWriter;
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import java.util.ArrayList;
-
 import catchgame.Packets.ClientSubOceanSeaCreatureStatePacket;
 import catchgame.Packets.SeaCreaturesPacket;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import resources.Fish;
-import resources.FishSpecies;
 import resources.Shellfish;
-import resources.ShellfishSpecies;
 import userinterface.GamePane;
+import userinterface.SimpleFishingPane;
+import utilities.ArrayListUtilities;
 import utilities.NumberUtilities;
 
-/**
- * This is responsible for sending info to the server about the ClientSubOcean
- * conditions, receiving SeaCreature packets, adding them to the screen, and
- * providing action events for when a seaCreature is caught.
- * 
- * @author Matt Roberts
- *
- */
 public class FishingActivity {
-
-	private GamePane gamePane;
+	private SimpleFishingPane simpleFishingPane;
 
 	private ObjectOutputStream toServer = null;
 	private ObjectInputStream fromServer = null;
@@ -67,6 +25,7 @@ public class FishingActivity {
 	private Player player;
 
 	private ClientSubOcean clientSubOcean;
+	private ClientFishingActivityFishManager clientFishingActivityFishManager;
 
 	/**
 	 * This constructs a FishingActivity by putting SeaCreatures on the screen.
@@ -81,14 +40,16 @@ public class FishingActivity {
 	 *            the player who will be affected by the user fishing
 	 * @throws IOException
 	 */
-	public FishingActivity(GamePane gamePane, ObjectOutputStream toServer, ObjectInputStream fromServer,
-			Player player) {
+	public FishingActivity(GamePane gamepane, ObjectOutputStream toServer, 
+			ObjectInputStream fromServer, Player player) {
+		this.simpleFishingPane = gamepane.simpleFishingPane;
 		clientSubOcean = new ClientSubOcean();
-		this.gamePane = gamePane;
+		clientFishingActivityFishManager = new ClientFishingActivityFishManager(simpleFishingPane);
 		this.player = player;
 		this.toServer = toServer;
 		this.fromServer = fromServer;
 		updateSeaCreaturesOnScreen();
+		clientFishingActivityFishManager.doBasicClientSubOceanAnimation();
 	}
 
 	/**
@@ -107,30 +68,43 @@ public class FishingActivity {
 	 * to the screen, and increments the ClientSubOcean count for all the
 	 * SeaCreatures added
 	 */
+
 	private void updateSeaCreaturesOnScreen() {
 
 		SeaCreaturesPacket seaCreaturesPacket;
 		seaCreaturesPacket = getUpdateSeaCreaturesPacketFromServer();
 
 		clientSubOcean.currentPopulationCod += seaCreaturesPacket.codPopulation.size();
-		addFishPacketToScreen(seaCreaturesPacket.codPopulation, 0, 0, Color.BLUE);
+		addFishPacketToScreen(seaCreaturesPacket.codPopulation, 
+				Constants.DISTANCE_FROM_TOP, (int)Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT/3+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT);
 
 		clientSubOcean.currentPopulationSalmon += seaCreaturesPacket.salmonPopulation.size();
-		addFishPacketToScreen(seaCreaturesPacket.salmonPopulation, 0, 0, Color.PINK);
+		addFishPacketToScreen(seaCreaturesPacket.salmonPopulation, Constants.DISTANCE_FROM_TOP, 
+				(int)Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT/3+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT);
 
 		clientSubOcean.currentPopulationTuna += seaCreaturesPacket.tunaPopulation.size();
-		addFishPacketToScreen(seaCreaturesPacket.tunaPopulation, 0, 0, Color.GRAY);
+		addFishPacketToScreen(seaCreaturesPacket.tunaPopulation, Constants.DISTANCE_FROM_TOP, 
+				(int)Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT/3+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT);
 
 		clientSubOcean.currentPopulationOyster += seaCreaturesPacket.oysterPopulation.size();
-		addShellfishPacketToScreen(seaCreaturesPacket.oysterPopulation, 0, 0, Color.YELLOW);
+		addShellfishPacketToScreen(seaCreaturesPacket.oysterPopulation, 
+				(int)Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT*2/3+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT, Constants.DISTANCE_FROM_BOTTOM);
 
 		clientSubOcean.currentPopulationLobster += seaCreaturesPacket.lobsterPopulation.size();
-		addShellfishPacketToScreen(seaCreaturesPacket.lobsterPopulation, 0, 0, Color.RED);
+		addShellfishPacketToScreen(seaCreaturesPacket.lobsterPopulation, 
+				(int)Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT*2/3+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT, Constants.DISTANCE_FROM_BOTTOM);
 
-		//System.out.println("Adding crab to subocean: " + seaCreaturesPacket.crabPopulation.size());
+		System.out.println("Adding crab to subocean: " + seaCreaturesPacket.crabPopulation.size());
 		clientSubOcean.currentPopulationCrab += seaCreaturesPacket.crabPopulation.size();
-		addShellfishPacketToScreen(seaCreaturesPacket.crabPopulation, 0, 0, Color.BLACK);
+		addShellfishPacketToScreen(seaCreaturesPacket.crabPopulation, 
+				(int)Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT*2/3+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT, Constants.DISTANCE_FROM_BOTTOM);
 
+		clientFishingActivityFishManager.codPopulation.addAll(seaCreaturesPacket.codPopulation);
+		clientFishingActivityFishManager.salmonPopulation.addAll(seaCreaturesPacket.salmonPopulation);
+		clientFishingActivityFishManager.tunaPopulation.addAll(seaCreaturesPacket.tunaPopulation);
+		clientFishingActivityFishManager.lobsterPopulation.addAll(seaCreaturesPacket.lobsterPopulation);
+		clientFishingActivityFishManager.crabPopulation.addAll(seaCreaturesPacket.crabPopulation);
+		clientFishingActivityFishManager.oysterPopuliation.addAll(seaCreaturesPacket.oysterPopulation);
 	}
 
 	/**
@@ -140,11 +114,9 @@ public class FishingActivity {
 	 * 
 	 * @return The SeaCreatures sent by the server
 	 */
+
 	public SeaCreaturesPacket getUpdateSeaCreaturesPacketFromServer() {
 		try {
-			// System.out.println("in client
-			// clientSubOcean.currentPopulationCod:
-			// "+clientSubOcean.currentPopulationCod);
 			ClientSubOceanSeaCreatureStatePacket clientSubOceanSeaCreatureStatePacket = new ClientSubOceanSeaCreatureStatePacket(
 					clientSubOcean.currentPopulationCod, clientSubOcean.maxPopulationCod,
 					clientSubOcean.currentPopulationSalmon, clientSubOcean.maxPopulationSalmon,
@@ -152,35 +124,17 @@ public class FishingActivity {
 					clientSubOcean.currentPopulationOyster, clientSubOcean.maxPopulationOyster,
 					clientSubOcean.currentPopulationLobster, clientSubOcean.maxPopulationLobster,
 					clientSubOcean.currentPopulationCrab, clientSubOcean.maxPopulationCrab);
-			// System.out.println("in client
-			// clientSubOcean.currentPopulationCod:
-			// "+clientSubOcean.currentPopulationCod);
-			// System.out.println("in client
-			// clientSubOcean.currentPopulationSalmon:
-			// "+clientSubOcean.currentPopulationSalmon);
-			// System.out.println("in client
-			// clientSubOcean.currentPopulationTuna:
-			// "+clientSubOcean.currentPopulationTuna);
-			// System.out.println("in client
-			// clientSubOcean.currentPopulationOyster:
-			// "+clientSubOcean.currentPopulationOyster);
-			// System.out.println("in client
-			// clientSubOcean.currentPopulationLobster:
-			// "+clientSubOcean.currentPopulationLobster);
-			// System.out.println("in client
-			// clientSubOcean.currentPopulationCrab:
-			// "+clientSubOcean.currentPopulationCrab);
-			toServer.writeObject(clientSubOceanSeaCreatureStatePacket);
-			// System.out.println("Sent codStatePacket");
-			// System.out.println("before getting fish packet");
-			SeaCreaturesPacket seaCreaturesPacket = (SeaCreaturesPacket) fromServer.readObject();
-			// System.out.println("after getting fish packet");
+			toServer.writeObject(clientSubOceanSeaCreatureStatePacket); //
+			System.out.println("Sent codStatePacket"); //
+			System.out.println("before getting fish packet");
+			SeaCreaturesPacket seaCreaturesPacket = (SeaCreaturesPacket) fromServer.readObject(); //
+			System.out.println("after getting fish packet");
 			return seaCreaturesPacket;
 		} catch (IOException ex) {
 			System.out.println(ex.toString());
 		} catch (ClassNotFoundException ex) {
 			System.out.println(ex.toString());
-			// System.out.println("Over here");
+
 		}
 		return new SeaCreaturesPacket();
 	}
@@ -198,9 +152,9 @@ public class FishingActivity {
 	 * @param color
 	 *            the color the fish should be given
 	 */
-	public void addFishPacketToScreen(ArrayList<Fish> fishUpdate, int topOffset, int bottomOffset, Color color) {
+	public void addFishPacketToScreen(ArrayList<Fish> fishUpdate, int topOffset, int bottomOffset) {
 		for (int i = 0; i <= fishUpdate.size() - 1; i++) {
-			addFishToScreen(fishUpdate.get(i), topOffset, bottomOffset, color);
+			addFishToScreen(fishUpdate.get(i), topOffset, bottomOffset);
 		}
 	}
 
@@ -217,10 +171,9 @@ public class FishingActivity {
 	 * @param color
 	 *            the color the shellfish should be given
 	 */
-	public void addShellfishPacketToScreen(ArrayList<Shellfish> shellfishUpdate, int topOffset, int bottomOffset,
-			Color color) {
+	public void addShellfishPacketToScreen(ArrayList<Shellfish> shellfishUpdate, int topOffset, int bottomOffset) {
 		for (int i = 0; i <= shellfishUpdate.size() - 1; i++) {
-			addShellfishToScreen(shellfishUpdate.get(i), topOffset, bottomOffset, color);
+			addShellfishToScreen(shellfishUpdate.get(i), topOffset, bottomOffset);
 		}
 	}
 
@@ -237,20 +190,20 @@ public class FishingActivity {
 	 * @param color
 	 *            the color the fish should be given
 	 */
-	public void addFishToScreen(Fish fish, int topOffset, int bottomOffset, Color color) {
-		fish.SetBodyByWeight();
-		fish.setBodyColor(color);
-		// System.out.print(fish.getBody().toString());
-		double width = gamePane.simpleFishingPane.getMinWidth();
-		double height = gamePane.simpleFishingPane.getMinHeight();
-		fish.getBody().setCenterX(NumberUtilities.getRandomDouble(0, width));
-		fish.getBody().setCenterY(NumberUtilities.getRandomDouble(150 + topOffset, height - bottomOffset));
-		// System.out.print(fish.getBody().toString());
+	public void addFishToScreen(Fish fish, int topOffset, int bottomOffset) {
+		fish.setFishBodyByWeight();
+		System.out.println("set FishBody");
+		double width = simpleFishingPane.getMinWidth();
+		double height = simpleFishingPane.getMinHeight();
+		fish.getFishGraphic().getFishImageView().setTranslateX(
+				NumberUtilities.getRandomDouble(0, width - fish.getFishGraphic().getFishImageView().getFitWidth()));
+		fish.getFishGraphic().getFishImageView().setTranslateY(NumberUtilities.getRandomDouble(topOffset,
+				height - bottomOffset - fish.getFishGraphic().getFishImageView().getFitHeight()));
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				gamePane.simpleFishingPane.getChildren().add(fish.getBody());
-				fish.getBody().setOnMouseClicked(new ExtractFishAction(fish));
+				simpleFishingPane.getChildren().add(fish.getFishGraphic().getFishImageView());
+				fish.getFishGraphic().getFishImageView().setOnMouseClicked(new ExtractFishAction(fish));
 			}
 		});
 	}
@@ -268,20 +221,20 @@ public class FishingActivity {
 	 * @param color
 	 *            the color the shellfish should be given
 	 */
-	public void addShellfishToScreen(Shellfish shellfish, int topOffset, int bottomOffset, Color color) {
-		shellfish.SetBodyByWeight();
-		shellfish.setBodyColor(color);
-		// System.out.print(fish.getBody().toString());
-		double width = gamePane.simpleFishingPane.getMinWidth();
-		double height = gamePane.simpleFishingPane.getMinHeight();
-		shellfish.getBody().setCenterX(NumberUtilities.getRandomDouble(0, width));
-		shellfish.getBody().setCenterY(NumberUtilities.getRandomDouble(150 + topOffset, height - bottomOffset));
-		// System.out.print(fish.getBody().toString());
+	public void addShellfishToScreen(Shellfish shellfish, int topOffset, int bottomOffset) {
+		shellfish.setShellfishBodyByWeight();
+		double width = Constants.INITIAL_SIMPLE_FISHING_PANE_WIDTH;//simpleFishingPane.getMinWidth();
+		double height = Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT;//simpleFishingPane.getMinHeight();
+		shellfish.getShellfishGraphic().getShellfishImageView().setTranslateX(NumberUtilities.getRandomDouble(0,
+				width - shellfish.getShellfishGraphic().getShellfishImageView().getFitWidth()));
+		shellfish.getShellfishGraphic().getShellfishImageView().setTranslateY(NumberUtilities.getRandomDouble(topOffset,
+				height - bottomOffset - shellfish.getShellfishGraphic().getShellfishImageView().getFitHeight()));
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				gamePane.simpleFishingPane.getChildren().add(shellfish.getBody());
-				shellfish.getBody().setOnMouseClicked(new ExtractShellfishAction(shellfish));
+				simpleFishingPane.getChildren().add(shellfish.getShellfishGraphic().getShellfishImageView());
+				shellfish.getShellfishGraphic().getShellfishImageView()
+						.setOnMouseClicked(new ExtractShellfishAction(shellfish));
 			}
 		});
 	}
@@ -298,36 +251,41 @@ public class FishingActivity {
 
 		@Override
 		public void handle(MouseEvent e) {
-			// System.out.println("Extract fish action "
-			// + "triggered(fish caught)");
 			try {
-				// Something like this here?
-				player.addSeaCreatureToIceChest(fish);
 
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
-
-						gamePane.simpleFishingPane.getChildren().remove(fish.getBody());
-						if (fish.getSpecies() == FishSpecies.COD) {
-							//System.out.println("It's a cod");
+						player.addSeaCreatureToIceChest(fish);
+						simpleFishingPane.getChildren().remove(fish.getFishGraphic().getFishImageView());
+						switch (fish.getSpecies()) {
+						case COD:
+							ArrayListUtilities.removeObjectFromArrayList(clientFishingActivityFishManager.codPopulation,
+									fish);
+							System.out.println("Cod: " + clientFishingActivityFishManager.codPopulation.size());
 							clientSubOcean.currentPopulationCod--;
-						}
-						if (fish.getSpecies() == FishSpecies.SALMON) {
-							//System.out.println("It's a salmon");
+							break;
+						case SALMON:
+							ArrayListUtilities
+									.removeObjectFromArrayList(clientFishingActivityFishManager.salmonPopulation, fish);
+							System.out.println("Salmon: " + clientFishingActivityFishManager.salmonPopulation.size());
 							clientSubOcean.currentPopulationSalmon--;
-						}
-						if (fish.getSpecies() == FishSpecies.TUNA) {
-							//System.out.println("");
+							break;
+
+						case TUNA:
+							ArrayListUtilities
+									.removeObjectFromArrayList(clientFishingActivityFishManager.tunaPopulation, fish);
+							System.out.println("Tuna: " + clientFishingActivityFishManager.tunaPopulation.size());
 							clientSubOcean.currentPopulationTuna--;
+							break;
 						}
 
-						updateSeaCreaturesOnScreen();
 					}
 				});
 			} catch (Exception ex) {
 				System.out.println(ex.toString());
 			}
+			updateSeaCreaturesOnScreen();
 		};
 	}
 
@@ -343,30 +301,41 @@ public class FishingActivity {
 
 		@Override
 		public void handle(MouseEvent e) {
-			// System.out.println("Extract fish action "
-			// + "triggered(fish caught)");
 			try {
-				// Something like this here?
-				player.addSeaCreatureToIceChest(shellfish);
 
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
-
-						gamePane.simpleFishingPane.getChildren().remove(shellfish.getBody());
-						if (shellfish.getSpecies() == ShellfishSpecies.CRAB)
-							clientSubOcean.currentPopulationCrab--;
-						if (shellfish.getSpecies() == ShellfishSpecies.LOBSTER)
+						player.addSeaCreatureToIceChest(shellfish);
+						simpleFishingPane.getChildren().remove(shellfish.getShellfishGraphic().getShellfishImageView());
+						switch (shellfish.getSpecies()) {
+						case LOBSTER:
+							ArrayListUtilities.removeObjectFromArrayList(
+									clientFishingActivityFishManager.lobsterPopulation, shellfish);
+							System.out.println("Lobster: " + clientFishingActivityFishManager.lobsterPopulation.size());
 							clientSubOcean.currentPopulationLobster--;
-						if (shellfish.getSpecies() == ShellfishSpecies.OYSTER)
-							clientSubOcean.currentPopulationOyster--;
+							break;
+						case CRAB:
+							ArrayListUtilities.removeObjectFromArrayList(
+									clientFishingActivityFishManager.crabPopulation, shellfish);
+							System.out.println("Crab: " + clientFishingActivityFishManager.crabPopulation.size());
+							clientSubOcean.currentPopulationCrab--;
+							break;
 
-						updateSeaCreaturesOnScreen();
+						case OYSTER:
+							ArrayListUtilities.removeObjectFromArrayList(
+									clientFishingActivityFishManager.oysterPopuliation, shellfish);
+							System.out.println("Oyster: " + clientFishingActivityFishManager.oysterPopuliation.size());
+
+							clientSubOcean.currentPopulationOyster--;
+							break;
+						}
 					}
 				});
 			} catch (Exception ex) {
 				System.out.println(ex.toString());
 			}
+			updateSeaCreaturesOnScreen();
 		};
 	}
 
@@ -376,17 +345,16 @@ public class FishingActivity {
 	class ClientSubOcean {
 
 		int currentPopulationCod = 0;
-		int maxPopulationCod = Constants.COD_MAX_POPULATION / 10;
+		int maxPopulationCod = Constants.COD_MAX_POPULATION / 100;
 		int currentPopulationSalmon = 0;
-		int maxPopulationSalmon = Constants.SALMON_MAX_POPULATION / 10;
+		int maxPopulationSalmon = Constants.SALMON_MAX_POPULATION / 100;
 		int currentPopulationTuna = 0;
-		int maxPopulationTuna = Constants.TUNA_MAX_POPULATION / 10;
+		int maxPopulationTuna = Constants.TUNA_MAX_POPULATION / 100;
 		int currentPopulationOyster = 0;
-		int maxPopulationOyster = Constants.OYSTER_MAX_POPULATION / 10;
+		int maxPopulationOyster = Constants.OYSTER_MAX_POPULATION / 100;
 		int currentPopulationLobster = 0;
-		int maxPopulationLobster = Constants.LOBSTER_MAX_POPULATION / 10;
+		int maxPopulationLobster = Constants.LOBSTER_MAX_POPULATION / 100;
 		int currentPopulationCrab = 0;
-		int maxPopulationCrab = Constants.CRAB_MAX_POPULATION / 10;
+		int maxPopulationCrab = Constants.CRAB_MAX_POPULATION / 100;
 	}
-
 }

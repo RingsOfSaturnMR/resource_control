@@ -76,7 +76,7 @@ public class GameControl
 
 	// for user interface
 	private GamePane gamePane;
-	FishingActivityV3 fishingActivityV3;
+	FishingActivity fishingActivityV3;
 	private Stage gameStage = new Stage();
 	private Scene gameScene;
 
@@ -538,7 +538,7 @@ public class GameControl
 		public void startFishingActivity()
 		{
 			
-			fishingActivityV3 = new FishingActivityV3(gamePane, toServer, fromServer, player);
+			fishingActivityV3 = new FishingActivity(gamePane, toServer, fromServer, player);
 		}
 	}
 

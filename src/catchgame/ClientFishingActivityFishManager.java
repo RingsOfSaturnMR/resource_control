@@ -150,8 +150,8 @@ private void makeFishAppearFromOffScreen(Fish fish){
 	}
 	//get a random height within proper range
 	fishImageView.setTranslateY(NumberUtilities.getRandomDouble(
-			125, 
-			simpleFishingPane.getHeight()-fishImageView.getFitHeight())-100);
+			Constants.DISTANCE_FROM_TOP, 
+			(int)simpleFishingPane.getHeight()*2/3-fishImageView.getFitHeight()-Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT));
 }
 
 private void makeShellfishAppearFromOffScreen(Shellfish shellfish){
@@ -182,7 +182,7 @@ private void makeShellfishAppearFromOffScreen(Shellfish shellfish){
 	}
 	//get a random height within proper range
 	shellfishImageView.setTranslateY(NumberUtilities.getRandomDouble(
-			450, 
-			simpleFishingPane.getHeight()-shellfishImageView.getFitHeight()-20));
+			(int)simpleFishingPane.getHeight()*2/3+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT,
+			(int)simpleFishingPane.getHeight()-shellfishImageView.getFitHeight()-Constants.DISTANCE_FROM_BOTTOM));
 }
 }

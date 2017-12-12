@@ -143,8 +143,13 @@ public class Constants
 		return null;
 	}
 	
-	//constants to multiple weight by to get pixel width (aspect is preserved)
+		//graphic constants
+		//constants to multiple weight by to get pixel width (aspect is preserved)
 		public final static short COD_WEIGHT_GRAPHIC_MULTIPLE = 10;
+		//1/2 fish/shellfish seperation constant
+		public final static int ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT = 25;
+		public final static int DISTANCE_FROM_TOP = 50;
+		public final static int DISTANCE_FROM_BOTTOM = 50;
 		public static final double IMG_THUMBNAIL_HEIGHT = 50;
 		public static final double IMG_THUMBNAIL_WDITH = 50;
 		public static final int NUM_HIGH_SCORES = 3;

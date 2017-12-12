@@ -13,7 +13,7 @@ public class AbstractSeaCreatureGraphic {
 		{
 			if(e == Constants.SUPPORTED_SPECIES[i])
 			{
-				return (new Image("img/" + Constants.SUPPORTED_SPECIES[i].toString().toLowerCase() + ".png"));
+				return (new Image("img/" + Constants.SUPPORTED_SPECIES[i].toString().toLowerCase() + "Small.png"));
 			}
 		}
 		
