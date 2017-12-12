@@ -42,12 +42,12 @@ public class Constants
 	public final static int NEW_USER_PANE_HEIGHT = 250;
 	public final static int INITIAL_SERVER_PANE_WIDTH = 400;
 	public final static int INITIAL_SERVER_PANE_HEIGHT = 400;
-	public final static int INITIAL_GAME_PANE_WIDTH = 500;
-	public final static int INITIAL_GAME_PANE_HEIGHT = 500;
+	public final static int INITIAL_GAME_PANE_WIDTH = 900;
+	public final static int INITIAL_GAME_PANE_HEIGHT = 725;
 	public final static int FREQUENCY_HISTOGRAM_PANE_WIDTH = 500;
 	public final static int FREQUENCY_HISTOGRAM_PANE_HEIGHT = 500;
-	public final static int INITIAL_SIMPLE_FISHING_PANE_WIDTH = 750;
-	public final static int INITIAL_SIMPLE_FISHING_PANE_HEIGHT = 600;
+	public final static int INITIAL_SIMPLE_FISHING_PANE_WIDTH = 900;
+	public final static int INITIAL_SIMPLE_FISHING_PANE_HEIGHT = 500;
 
 	// initial Market values of resources
 	public final static double TUNA_INITIAL_PRICE_PER_POUND = 6.40;
