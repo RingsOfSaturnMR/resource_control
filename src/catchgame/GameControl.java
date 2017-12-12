@@ -547,7 +547,7 @@ public class GameControl
 	 */
 	public class SeafoodPriceSetEventHandler
 	{
-		public void setPrices()
+		public void setPrices() throws Exception
 		{
 			for (int i = 0; i < Constants.SUPPORTED_SPECIES.length; i++)
 			{

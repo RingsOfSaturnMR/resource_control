@@ -1,5 +1,8 @@
 package userinterface;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
 import catchgame.Constants;
 import catchgame.GameControl.IsValidQuantityListener;
 import javafx.event.ActionEvent;
@@ -72,8 +75,8 @@ public class SeafoodMarketPane extends VBox
 			// get the name and add to pane
 			String curName = currentSpecies.toString();
 			priceGridPane.add(new Text(curName), 1, i+1);
-			
-			// init the price/lb text and add to pane
+		    
+		    // init the price/lb text and add to pane
 			Text curText = currentPricesTextArray[i] = new Text("Prices Not Set");
 			priceGridPane.add(currentPricesTextArray[i], 2, i+1);
 			
@@ -130,7 +133,15 @@ public class SeafoodMarketPane extends VBox
 
 	public void setCurrentPricesTextAt(int i, String str)
 	{
+		// I added a decimal obj so that the price would only have 2 decimal places
+		//	i.e. 12.463729479 will show, 12.46
+		// -caileigh
+	    //DecimalFormat df = new DecimalFormat("#.##");
+	    //df.setRoundingMode(RoundingMode.FLOOR);
+	    //double truncDouble = new Double(df.format(currentPricesTextArray[i]));
+	    
 		this.currentPricesTextArray[i].setText("$" + str + "/lb");
+	    //this.currentPricesTextArray[i].setText("$" + truncDouble + "/lb");
 	}
 
 	public Text[] getCurrentPricesTextArray()

@@ -56,7 +56,9 @@ public class Constants
 	public final static double OYSTER_INITIAL_PRICE_PER_POUND = 17.4;
 	public final static double CRAB_INITIAL_PRICE_PER_POUND = 11.0;
 	public final static double LOBSTER_INITIAL_PRICE_PER_POUND = 20.0;
-	
+	// for max and min rand time coeffient 
+	public final static int MIN_PRICE_FLUX = 1;
+	public final static int MAX_PRICE_FLUX = 5;
 
 	// initial population sizes for Ocean
 	public final static int COD_INITIAL_POPULATION = 1000;

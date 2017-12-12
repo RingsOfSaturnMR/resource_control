@@ -74,8 +74,7 @@ public class EquipmentMarket extends Market<Equipment, Enum>
 	@Override
 	public String getMarketType()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return "Equipment Market";
 	}
 
 	@Override
