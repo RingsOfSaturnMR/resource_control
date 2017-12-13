@@ -28,6 +28,10 @@ import java.net.Socket;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import authentication.BadLoginException;
 import authentication.BadLoginException.LoginError;
@@ -71,6 +75,10 @@ public class CatchServer
 	private int serverSocketPort;
 	private SimpleBooleanProperty listeningForNewClients = new SimpleBooleanProperty(false);
 	private Thread newClientThread = null;
+	
+	// to hold threads
+	private ConcurrentHashMap<String, HandleServerSideGameControl> threadMap = new ConcurrentHashMap<>();
+	private  Set<String> threadKeys = threadMap.keySet();
 
 	public Ocean ocean = new Ocean();
 
@@ -89,13 +97,29 @@ public class CatchServer
 			
 			serverStage.setOnCloseRequest(e ->
 			{
-				// TODO logic for shutdown of server goes here
-				System.out.println("Server Shutdown action fired");
+				if(threadKeys.size() == 0)
+				{
 				ocean.shutDownOcean();
-				// tell server to stop listening, maybe flush the streams somehow
 				listeningForNewClients.set(false);
 				newClientThread = null;
-				// get all the streams that are open to close somehow?
+				
+				for(String key: threadKeys)
+				{
+		            if(threadMap.get(key) != null)
+		            {
+		            	System.out.println("User Not Logged out, No Longer Serving " + key);
+		            	threadMap.get(key).closeStreams();
+		            }
+		            else 
+		            {
+		            	System.out.println("User Was Logged In");
+		            }
+		        }
+				}
+				else
+				{
+					return;
+				}		
 			});
 		}
 		catch (SQLException e)
@@ -187,8 +211,8 @@ public class CatchServer
 							
 							// start serving that user on a new thread
 							HandleServerSideGameControl handleServerSideGameControl = new HandleServerSideGameControl(toClient, fromClient, loginPacket.enteredName);
-							new Thread(handleServerSideGameControl).start();
-
+							threadMap.put(loginPacket.enteredName, handleServerSideGameControl);
+							new Thread(threadMap.get(loginPacket.enteredName)).start();		
 						}
 						catch (BadLoginException e)
 						{
@@ -244,7 +268,15 @@ public class CatchServer
 							userDAO.createUser(newUserPacket.enteredName, newUserPacket.enteredPassword, newUserPacket.enteredPasswordConfirm);
 							serverCode = Codes.NEW_USER_SUCESS_CODE;
 							HandleServerSideGameControl handleServerSideGameControl = new HandleServerSideGameControl(toClient, fromClient, newUserPacket.enteredName);
-							new Thread(handleServerSideGameControl).start();
+							
+							threadMap.put(newUserPacket.enteredName, handleServerSideGameControl);
+							new Thread(threadMap.get(newUserPacket.enteredName)).start();	
+							
+							//new Thread(handleServerSideGameControl).start();
+							
+							// start serving that user on a new thread
+							//clientThreadList.add(new Thread(handleServerSideGameControl));
+							//clientThreadList.get(clientThreadList.size()-1).start();
 
 						}
 						catch (NewUserException e)
@@ -356,6 +388,7 @@ public class CatchServer
 				{
 					// get object from client
 					Object recievedObject = fromClient.readObject();
+					
 
 					// if it is a player object, save it
 					if (recievedObject instanceof Player)
@@ -370,7 +403,6 @@ public class CatchServer
 					if(recievedObject instanceof LeaderBoardRow)
 					{
 						LeaderBoardRow row = (LeaderBoardRow) recievedObject;
-						System.out.println("Server Side: " + row.toString());
 						leaderBoardDAO.update(row);
 					}
 
@@ -446,6 +478,8 @@ public class CatchServer
 				{
 					e.printStackTrace();
 					Platform.runLater(() -> serverPane.appendToOutput(e.getMessage()));
+					break;
+					
 				}
 				catch (ClassNotFoundException e)
 				{
@@ -460,8 +494,26 @@ public class CatchServer
 			}
 
 			Platform.runLater(() -> serverPane.appendToOutput(username + " has logged out and is no longer being served."));
-			// to stop thread from running
+			
+			// remove this thread from the hashmap
+			threadMap.remove(username);
+			// stops the thread
 			return;
+		}
+		
+		public void closeStreams()
+		{
+			
+			try
+			{
+				toClient.close();
+				fromClient.close();
+			}
+			catch (IOException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	

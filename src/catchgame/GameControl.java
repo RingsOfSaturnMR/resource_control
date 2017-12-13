@@ -301,7 +301,7 @@ public class GameControl
 	{
 		// send login info to server
 		LoginPacket loginPacket = new LoginPacket(enteredName, enteredPassword);
-		toServer.writeObject(loginPacket);
+		sendToServer(loginPacket);
 
 		// get response
 		ResultPacket resultPacket = (ResultPacket) fromServer.readObject();
@@ -724,6 +724,9 @@ public class GameControl
 		}
 	}
 
+	/**
+	 * Updates the GUI display of player stats and the Leaderboard.
+	 */
 	private void updateStatsPane()
 	{
 		try
@@ -738,12 +741,14 @@ public class GameControl
 		}
 	}
 
+	/**
+	 * Call this method to update the leaderboard
+	 */
 	private void sendPlayerStats()
 	{
 		try
 		{
 			Packets.LeaderBoardRow packet = new Packets.LeaderBoardRow(player.getUsername(), player.getTotalEarned(), player.getCashOnHand(), player.getTotalCatches());
-			System.out.println("Client Side: " + packet.toString());
 			toServer.writeObject(packet);
 		}
 		catch (IOException ioe)
@@ -761,6 +766,18 @@ public class GameControl
 		public void send()
 		{
 			sendPlayerStats();
+		}
+	}
+	
+	private void sendToServer(Object obj) throws Exception
+	{
+		try
+		{
+			toServer.writeObject(obj);
+		}
+		catch(IOException ioe)
+		{
+			System.out.println("IOException. Game Must End.");
 		}
 	}
 }

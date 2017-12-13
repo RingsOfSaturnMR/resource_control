@@ -47,8 +47,16 @@ public class ClientFishingActivityFishManager {
     timeline.play();
 }
  
+ // I was getting a null pointer exception here, so I threw in a null check for the time being. Im not sure what to do here - Nils
  void stopAnimation(){
+	 if(timeline != null)
+	 {
 	 timeline.stop();
+	 }
+	 else
+	 {
+		 System.out.println("Timeline was null.");
+	 }
  }
 
  private void makeSeaCreaturesOnScreenGo(){
