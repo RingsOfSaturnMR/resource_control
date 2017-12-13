@@ -21,10 +21,13 @@ MarketsPane is in progress
 */
 
 import java.util.Random;
+
+import catchgame.Constants;
 import catchgame.GameControl;
 import catchgame.Player;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -78,7 +81,7 @@ public class GamePane extends VBox
 	private Button btnGoFishing = new Button("Go Fishing");
 	private Button btnGoToSeaFoodMarket = new Button("Sell Fish");
 	private Button btnGoToEquipMarket = new Button("Buy Equipment");
-	private Button btnCheckMyResources = new Button("View My Resouces");
+	private Button btnCheckScores = new Button("Score Board");
 	
 	private HBox buttonHBox = new HBox();
 
@@ -89,7 +92,11 @@ public class GamePane extends VBox
 
 		this.fishingActivityActions = fishingActivityActions;
 		this.updateStatsHandler = updateStatsHandler;
-	
+		
+		// makes it so the game doesnt resize when swapping different panes into primary pane
+		primaryPane.setPrefWidth(Constants.INITIAL_SIMPLE_FISHING_PANE_WIDTH);
+		primaryPane.setPrefHeight(Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT);
+		
 		seafoodMarketPane = new SeafoodMarketPane(seaFoodMarketName, sellFishAction);
 		equipmentMarketPane = new EquipmentMarketPane(equipMarketName);
 
@@ -126,7 +133,7 @@ public class GamePane extends VBox
 			}
 		});
 
-		btnCheckMyResources.setOnAction(e ->
+		btnCheckScores.setOnAction(e ->
 		{
 			primaryPane.getChildren().clear();
 			updateStatsHandler.fetch();
@@ -145,20 +152,25 @@ public class GamePane extends VBox
 			primaryPane.getChildren().add(equipmentMarketPane);
 		});
 		
+		// position buttons in box
+		buttonHBox.setAlignment(Pos.CENTER);
+		buttonHBox.setSpacing(10);
+		buttonHBox.setPadding(new Insets(5, 5, 5, 5));
+		
 		// put these buttons in a box
-		buttonHBox.getChildren().addAll(btnGoFishing, btnGoToSeaFoodMarket, btnGoToEquipMarket, btnCheckMyResources);
+		buttonHBox.getChildren().addAll(btnGoFishing, btnGoToSeaFoodMarket, btnGoToEquipMarket, btnCheckScores);
 		
 		// set up the TextArea for game output
-		taGameOutput.setMaxHeight(75);
+
 		taGameOutput.setEditable(false);
 		
-		
+
 		
 		// put children on the pane
 		this.getChildren().addAll(menuBar, primaryPane, buttonHBox, taGameOutput);
 		
-		// spacing, padding, etc
-		// set spacing and alignment elements
+		// paddin' and stuff
+		taGameOutput.setPadding(new Insets(5, 5, 5, 5));
 				
 	}
 

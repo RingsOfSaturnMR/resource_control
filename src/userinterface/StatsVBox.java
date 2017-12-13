@@ -43,6 +43,13 @@ public class StatsVBox extends VBox
 		myStatsGridPane.add(txtCashOnHand, 1, 2);
 		myStatsGridPane.add(lblNumCaught, 0, 3);
 		myStatsGridPane.add(txtNumCaught, 1, 3);
+		
+		myStatsGridPane.setHgap(5);
+		myStatsGridPane.setVgap(5);
+		myStatsGridPane.setAlignment(Pos.CENTER);
+		
+		this.setSpacing(15);
+		this.setAlignment(Pos.CENTER);
 				
 		this.getChildren().addAll(txtTitle, myStatsGridPane, txtLeaderBoard);
 	}
@@ -66,7 +73,10 @@ public class StatsVBox extends VBox
 		lbGridPane.add(new Label("Name"), 0, 0);
 		lbGridPane.add(new Label("Total Earnings"), 1, 0);
 		lbGridPane.add(new Label("Cash On Hand"), 2, 0);
-		lbGridPane.add(new Label("Total Catches"), 3, 0);	
+		lbGridPane.add(new Label("Total Catches"), 3, 0);
+		
+		
+
 		
 		int i = 0;
 		while(i < leaderBoard.rows.length && leaderBoard.rows[i] != null)
@@ -82,9 +92,6 @@ public class StatsVBox extends VBox
 		lbGridPane.setHgap(5);
 		lbGridPane.setVgap(5);
 		
-		this.setSpacing(5);
-		
-		this.setAlignment(Pos.CENTER);
 		lbGridPane.setAlignment(Pos.CENTER);
 		
 		this.getChildren().add(lbGridPane);
