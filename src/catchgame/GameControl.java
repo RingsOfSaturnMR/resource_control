@@ -126,7 +126,8 @@ public class GameControl
 		equipMarket = new EquipmentMarket("Ye 'Ol Fishin' Store", new SetCurrentEquipPricesHandler());
 
 		// Display GUI
-		gamePane = new GamePane(new SellFishAction(), player, new FishingActivityActions(), new DeleteAccountAction(), new SaveGameAction(), new ExitAction(), seafoodMarket.getName(), equipMarket.getName(), new FetchStatsHandler());
+		gamePane = new GamePane(new SellFishAction(), new FishingActivityActions(), new DeleteAccountAction(), 
+				new SaveGameAction(), new ExitAction(), seafoodMarket.getName(), equipMarket.getName(), new FetchStatsHandler());
 		gameScene = new Scene(gamePane, Constants.INITIAL_GAME_PANE_WIDTH, Constants.INITIAL_GAME_PANE_HEIGHT);
 		gameStage.setScene(gameScene);
 		gameStage.setTitle("Catch!");
@@ -135,7 +136,7 @@ public class GameControl
 
 		// tell user game is started, before you force a price update.
 		gamePane.appendOutput("Hello " + player.getUsername() +
-				". Welcome.");
+				". Welcome!");
 
 		// make the markets update its prices so the GUI can display them
 		seafoodMarket.forcePriceUpdate();
@@ -454,11 +455,11 @@ public class GameControl
 	{
 		try
 		{
-		player.prepareToSerialze();
-		toServer.writeObject(player);
-		gamePane.appendOutput("Game Saved.");
+			player.prepareToSerialze();
+			toServer.writeObject(player);
+			gamePane.appendOutput("Game Saved.");
 		}
-		catch(IOException ioe)
+		catch (IOException ioe)
 		{
 			gamePane.appendOutput("Game not saved, " + ioe.getMessage());
 			ioe.printStackTrace();
@@ -537,7 +538,7 @@ public class GameControl
 	{
 		public void startFishingActivity()
 		{
-			
+
 			fishingActivityV3 = new FishingActivity(gamePane, toServer, fromServer, player);
 		}
 	}
@@ -547,12 +548,26 @@ public class GameControl
 	 */
 	public class SeafoodPriceSetEventHandler
 	{
-		public void setPrices() throws Exception
+		public void setPrices()
 		{
-			for (int i = 0; i < Constants.SUPPORTED_SPECIES.length; i++)
+			if(gamePane != null)
 			{
-				double currentPrice = seafoodMarket.getCurrentPricePerPound(Constants.SUPPORTED_SPECIES[i]);
-				gamePane.seafoodMarketPane.setCurrentPricesTextAt(i, Double.toString(currentPrice));
+				for (int i = 0; i < Constants.SUPPORTED_SPECIES.length; i++)
+				{
+					try
+					{
+						double currentPrice = seafoodMarket.getCurrentPricePerPound(Constants.SUPPORTED_SPECIES[i]);
+						gamePane.seafoodMarketPane.setCurrentPricesTextAt(i, Double.toString(currentPrice));
+					}
+					catch (Exception e)
+					{
+						gamePane.appendOutput(e.getMessage());
+					}
+				}
+			}
+			else
+			{
+				System.out.println("Initial Seafood Market Prices Set");
 			}
 		}
 	}
@@ -695,7 +710,7 @@ public class GameControl
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Allows GUI button to trigger an update of the leaderboard
 	 */
@@ -706,7 +721,7 @@ public class GameControl
 			updateStatsPane();
 		}
 	}
-	
+
 	private void updateStatsPane()
 	{
 		try
@@ -720,7 +735,7 @@ public class GameControl
 			gamePane.appendOutput(e.getMessage());
 		}
 	}
-	
+
 	private void sendPlayerStats()
 	{
 		try
@@ -735,7 +750,7 @@ public class GameControl
 			ioe.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Allows other objects to send the stats to the server
 	 */

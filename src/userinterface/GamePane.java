@@ -47,22 +47,18 @@ import catchgame.GameControl.FishingActivityActions;
  */
 public class GamePane extends VBox
 {
-	// has player from GameControl to show the player's attributes
-	private Player player;
-
 	// pane to hold the main nodes for what the player is doing
-	private Pane primaryPane = new Pane();
-
-	// holds nodes which fire actions to change what nodes go in primaryPane
-	private ActionVBox actionHBox = new ActionVBox();
-
-	// pane to hold readout of players attributes.
-	public StatsVBox statsPane;
-
-	public SimpleFishingPane simpleFishingPane;
+	private StackPane primaryPane = new StackPane();		
+	
+	// panes that can go in pimary Pane
+	public SimpleFishingPane simpleFishingPane = new SimpleFishingPane();
 	public SeafoodMarketPane seafoodMarketPane;
 	public EquipmentMarketPane equipmentMarketPane;
+	public StatsVBox statsPane = new StatsVBox();
+	
+	// handler to start fishin'
 	private GameControl.FishingActivityActions fishingActivityActions;
+	
 	private boolean fishingStarted = false;
 
 	// for dropdown menu
@@ -74,25 +70,26 @@ public class GamePane extends VBox
 	
 	// to trigger updating leaderboard
 	private FetchStatsHandler updateStatsHandler;
+	
+	// general action output for user
+	public TextArea taGameOutput = new TextArea();
+	
+	// buttons
+	private Button btnGoFishing = new Button("Go Fishing");
+	private Button btnGoToSeaFoodMarket = new Button("Sell Fish");
+	private Button btnGoToEquipMarket = new Button("Buy Equipment");
+	private Button btnCheckMyResources = new Button("View My Resouces");
+	
+	private HBox buttonHBox = new HBox();
 
-	public GamePane(
-			EventHandler<ActionEvent> sellFishAction,
-			Player player,
-			FishingActivityActions fishingActivityActions,
-			EventHandler<ActionEvent> deleteAccountAction,
-			EventHandler<ActionEvent> saveAction,
-			EventHandler<ActionEvent> exitAction,
-			String seaFoodMarketName,
-			String equipMarketName,
-			FetchStatsHandler updateStatsHandler)
+	public GamePane(EventHandler<ActionEvent> sellFishAction, FishingActivityActions fishingActivityActions,	
+			EventHandler<ActionEvent> deleteAccountAction, EventHandler<ActionEvent> saveAction, EventHandler<ActionEvent> exitAction, 
+			String seaFoodMarketName, String equipMarketName, FetchStatsHandler updateStatsHandler)
 	{
-		this.player = player;
-		statsPane = new StatsVBox();
+
 		this.fishingActivityActions = fishingActivityActions;
 		this.updateStatsHandler = updateStatsHandler;
-		
-
-		simpleFishingPane = new SimpleFishingPane();
+	
 		seafoodMarketPane = new SeafoodMarketPane(seaFoodMarketName, sellFishAction);
 		equipmentMarketPane = new EquipmentMarketPane(equipMarketName);
 
@@ -101,8 +98,6 @@ public class GamePane extends VBox
 		menuBar.getMenus().add(fileMenu);
 
 		primaryPane.getChildren().add(statsPane);
-
-		this.getChildren().addAll(menuBar, primaryPane, actionHBox);
 
 		// set actions
 		accountDeleteMenuItem.setOnAction(deleteAccountAction);
@@ -113,87 +108,66 @@ public class GamePane extends VBox
 		seafoodMarketPane.prefWidthProperty().bind(this.widthProperty());
 		equipmentMarketPane.prefWidthProperty().bind(this.widthProperty());
 		statsPane.prefWidthProperty().bind(this.widthProperty());
-	}
-
-	// where user selects what they want to do
-	private class ActionVBox extends VBox
-	{
-		// title for pane
-		private Text txtTitle = new Text("Primary Actions - What would you like to do?");
-
-		// general action output for user
-		public TextArea taGameOutput = new TextArea();
-
-		// buttons
-		private Button btnGoFishing = new Button("Go Fishing");
-		private Button btnGoToSeaFoodMarket = new Button("Sell Fish");
-		private Button btnGoToEquipMarket = new Button("Buy Equipment");
-		private Button btnCheckMyResources = new Button("View My Resouces");
-
-		// containers
-		private HBox buttonHBox = new HBox();
-
-		public ActionVBox()
+		
+		
+		// define internal actions for swapping out panes
+		btnGoFishing.setOnAction(e ->
 		{
-			taGameOutput.setMaxHeight(75);
-			taGameOutput.setEditable(false);
-
-			// set button actions
-			btnGoFishing.setOnAction(e ->
+			primaryPane.getChildren().clear();
+			primaryPane.getChildren().add(simpleFishingPane);
+			if (fishingStarted)
 			{
-				primaryPane.getChildren().clear();
-				primaryPane.getChildren().add(simpleFishingPane);
-				if (fishingStarted)
-				{
-					// do nothing
-				}
-				else
-				{
-					fishingActivityActions.startFishingActivity();
-					fishingStarted = true;
-				}
-			});
-
-			btnCheckMyResources.setOnAction(e ->
+				// do nothing, keep fishin'!
+			}
+			else
 			{
-				primaryPane.getChildren().clear();
-				updateStatsHandler.fetch();
-				primaryPane.getChildren().add(statsPane);
-			});
+				fishingActivityActions.startFishingActivity();
+				fishingStarted = true;
+			}
+		});
 
-			btnGoToSeaFoodMarket.setOnAction(e ->
-			{
-				primaryPane.getChildren().clear();
-				primaryPane.getChildren().add(seafoodMarketPane);
-			});
+		btnCheckMyResources.setOnAction(e ->
+		{
+			primaryPane.getChildren().clear();
+			updateStatsHandler.fetch();
+			primaryPane.getChildren().add(statsPane);
+		});
 
-			btnGoToEquipMarket.setOnAction(e ->
-			{
-				primaryPane.getChildren().clear();
-				primaryPane.getChildren().add(equipmentMarketPane);
-			});
+		btnGoToSeaFoodMarket.setOnAction(e ->
+		{
+			primaryPane.getChildren().clear();
+			primaryPane.getChildren().add(seafoodMarketPane);
+		});
 
-			// put buttons in their container
-			buttonHBox.getChildren().addAll(btnGoFishing, btnGoToSeaFoodMarket, btnGoToEquipMarket, btnCheckMyResources);
-
-			// set spacing and alignment elements
-			this.setSpacing(10);
-			buttonHBox.setSpacing(10);
-			// this.setAlignment(Pos.CENTER);
-			buttonHBox.setAlignment(Pos.CENTER);
-
-			this.setAlignment(Pos.BOTTOM_CENTER);
-
-			this.getChildren().addAll(txtTitle, buttonHBox, taGameOutput);
-
-		}
+		btnGoToEquipMarket.setOnAction(e ->
+		{
+			primaryPane.getChildren().clear();
+			primaryPane.getChildren().add(equipmentMarketPane);
+		});
+		
+		// put these buttons in a box
+		buttonHBox.getChildren().addAll(btnGoFishing, btnGoToSeaFoodMarket, btnGoToEquipMarket, btnCheckMyResources);
+		
+		// set up the TextArea for game output
+		taGameOutput.setMaxHeight(75);
+		taGameOutput.setEditable(false);
+		
+		
+		
+		// put children on the pane
+		this.getChildren().addAll(menuBar, primaryPane, buttonHBox, taGameOutput);
+		
+		// spacing, padding, etc
+		// set spacing and alignment elements
+				
 	}
+
 
 	public void appendOutput(String str)
 	{
 		if (!str.equals(""))
 		{
-			this.actionHBox.taGameOutput.appendText(str + "\n");
+			this.taGameOutput.appendText(str + "\n");
 		}
 	}
 

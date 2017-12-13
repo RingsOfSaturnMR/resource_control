@@ -93,6 +93,7 @@ public class CatchServer
 				System.out.println("Server Shutdown action fired");
 				// tell server to stop listening, maybe flush the streams somehow
 				listeningForNewClients.set(false);
+				newClientThread = null;
 				// get all the streams that are open to close somehow?
 			});
 		}
