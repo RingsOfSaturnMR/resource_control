@@ -18,9 +18,8 @@ public abstract class SeaCreature <T> implements Serializable
 	private double weight;
 	private T species;
 	private double speed;
+	private double speedFactor;
 	private short direction=Constants.RIGHT;
-	private transient Circle GUICircle = null;
-	//protected transient AbstractSeaCreatureGraphic seaCreatureBody=null;
 
 	SeaCreature(){
 		
@@ -30,6 +29,15 @@ public abstract class SeaCreature <T> implements Serializable
 	{
 		setSpecies(species);
 		setWeight(weight);
+		totalPopulation++;
+	}
+	
+	protected SeaCreature(T species, double weight, double speedFactor)
+	{
+		setSpecies(species);
+		setWeight(weight);
+		setSpeedFactor(speedFactor);
+		calculateSpeed();
 		totalPopulation++;
 	}
 	
@@ -61,26 +69,6 @@ public abstract class SeaCreature <T> implements Serializable
 		return this.species;
 	}
 	
-	public Circle getBody()
-	{
-		return this.GUICircle;
-	}
-	
-	public void SetBodyByWeight()
-	{
-		this.GUICircle = new Circle(weight);
-	}
-	
-	public void setBodyColor(Color color){
-		this.GUICircle.setFill(color);
-	}
-	
-	// for serializing
-	public void setBodyToNull()
-	{
-		this.GUICircle = null;
-	}
-	
 	@Override
 	public String toString()
 	{
@@ -99,6 +87,22 @@ public abstract class SeaCreature <T> implements Serializable
 		else
 		{
 			speed = 1;
+		}
+	}
+	
+	public void calculateSpeed(){
+		speed=speedFactor*weight;
+	}
+	
+	public void setSpeedFactor(double speedFactor)
+	{
+		if (speedFactor > 0)
+		{
+			this.speedFactor = speedFactor;
+		}
+		else
+		{
+			speedFactor = 1;
 		}
 	}
 	

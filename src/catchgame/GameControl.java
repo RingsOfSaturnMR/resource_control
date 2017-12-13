@@ -280,6 +280,9 @@ public class GameControl
 				if (fishingActivityV3!=null){
 					fishingActivityV3.getClientFishingActivityFishManager().stopAnimation();
 				}
+				if (seafoodMarket!=null){
+					seafoodMarket.shutdownSeaFoodMarket();
+				}
 				toServer = null;
 				fromServer = null;
 				gameRunning.set(false);

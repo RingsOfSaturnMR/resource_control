@@ -94,6 +94,20 @@ public class Constants
 	public final static double LOBSTER_INITIAL_WEIGHT_MAX = 7;
 	public final static double OYSTER_INITIAL_WEIGHT_MIN = 1;
 	public final static double OYSTER_INITIAL_WEIGHT_MAX = 4;
+	
+	//speed factors for sea creatures
+	public final static double COD_MIN_SPEED_FACTOR = 1;
+	public final static double COD_MAX_SPEED_FACTOR = 1.2;
+	public final static double SALMON_MIN_SPEED_FACTOR = 0.8;
+	public final static double SALMON_MAX_SPEED_FACTOR = 1;
+	public final static double TUNA_MIN_SPEED_FACTOR = 1.8;
+	public final static double TUNA_MAX_SPEED_FACTOR = 2.6;
+	public final static double LOBSTER_MIN_SPEED_FACTOR = 0.4;
+	public final static double LOBSTER_MAX_SPEED_FACTOR = 0.6;
+	public final static double CRAB_MIN_SPEED_FACTOR = 0.2;
+	public final static double CRAB_MAX_SPEED_FACTOR = 0.4;
+	public final static double OYSTER_MIN_SPEED_FACTOR = 0.1;
+	public final static double OYSTER_MAX_SPEED_FACTOR = 0.2;
 
 	// Basics
 	public final static String APPLICATION_NAME = "Catch!! - By Caileigh, Matt, Nls, Thanh";

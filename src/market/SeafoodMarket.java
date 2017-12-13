@@ -29,6 +29,7 @@ import catchgame.GameControl.SeafoodPriceSetEventHandler;
  */
 public class SeafoodMarket extends Market<SeaCreature, Enum>
 {
+	
 	// handler to tell the rest of the program there are new prices
 	private SeafoodPriceSetEventHandler priceSetHandler;
 	
@@ -43,6 +44,8 @@ public class SeafoodMarket extends Market<SeaCreature, Enum>
 	
 	// for random number generator which creates market flux
 	private Random rand;
+	
+	private Timer timer;
 
 	public SeafoodMarket(String name, SeafoodPriceSetEventHandler updatePricePerPoundHandler)
 	{
@@ -130,7 +133,7 @@ public class SeafoodMarket extends Market<SeaCreature, Enum>
 	
 	public void marketFlux()  // this one will contain the thread for checking the time and updated price
 	{
-		Timer timer = new Timer();
+		timer = new Timer();
 		TimerTask task = new TimerTask()
 		{
 			@Override
@@ -143,6 +146,12 @@ public class SeafoodMarket extends Market<SeaCreature, Enum>
 			}
 		};
 		timer.schedule(task, 0, 30_000); // update every 30 seconds
+	}
+	
+	public void shutdownSeaFoodMarket(){
+		if (timer!=null){
+			timer.cancel();
+		}
 	}
 
 	public double getCurrentPricePerPound(Enum species) throws Exception 	// FOR NOW -caileigh

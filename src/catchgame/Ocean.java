@@ -559,7 +559,8 @@ public class Ocean implements Serializable
 	 */
 	private void addFish(ArrayList<Fish> fishPopulation, FishSpecies species)
 	{
-		fishPopulation.add(new Fish(species, getRandomWeightForFish(species)));
+		fishPopulation.add(new Fish(species, 
+				getRandomWeightForFish(species), getRandomSpeedFactorForFish(species)));
 	}
 
 	/**
@@ -570,7 +571,8 @@ public class Ocean implements Serializable
 	 */
 	private void addShellfish(ArrayList<Shellfish> shellfishPopulation, ShellfishSpecies species)
 	{
-		shellfishPopulation.add(new Shellfish(species, getRandomWeightForShellfish(species)));
+		shellfishPopulation.add(new Shellfish(species, 
+				getRandomWeightForShellfish(species), getRandomSpeedFactorForShellFish(species)));
 	}
 	
 	/**
@@ -691,6 +693,68 @@ public class Ocean implements Serializable
 	{
 		return NumberUtilities.getRandomDouble(Constants.OYSTER_INITIAL_WEIGHT_MIN, Constants.OYSTER_INITIAL_WEIGHT_MAX);
 		
+	}
+	
+	private double getRandomSpeedFactorForFish(FishSpecies species)
+	{
+		double speedFactor = 0;
+		switch (species)
+		{
+		case COD:
+			speedFactor = getRandomSpeedFactorForCod();
+			break;
+		case SALMON:
+			speedFactor = getRandomSpeedFactorForSalmon();
+			break;
+		case TUNA:
+			speedFactor = getRandomSpeedFactorForTuna();
+			break;
+
+		}
+		return speedFactor;
+	}
+	
+	private double getRandomSpeedFactorForShellFish(ShellfishSpecies species)
+	{
+		double speedFactor = 0;
+		switch (species)
+		{
+		case OYSTER:
+			speedFactor = getRandomSpeedFactorForOyster();
+			break;
+		case LOBSTER:
+			speedFactor = getRandomSpeedFactorForLobster();
+			break;
+		case CRAB:
+			speedFactor = getRandomSpeedFactorForCrab();
+			break;
+
+		}
+		return speedFactor;
+	}
+	
+	private double getRandomSpeedFactorForCod(){
+		return NumberUtilities.getRandomDouble(Constants.COD_MIN_SPEED_FACTOR, Constants.COD_MAX_SPEED_FACTOR);
+	}
+	
+	private double getRandomSpeedFactorForSalmon(){
+		return NumberUtilities.getRandomDouble(Constants.SALMON_MIN_SPEED_FACTOR, Constants.SALMON_MAX_SPEED_FACTOR);
+	}
+	
+	private double getRandomSpeedFactorForTuna(){
+		return NumberUtilities.getRandomDouble(Constants.TUNA_MIN_SPEED_FACTOR, Constants.TUNA_MAX_SPEED_FACTOR);
+	}
+	
+	private double getRandomSpeedFactorForLobster(){
+		return NumberUtilities.getRandomDouble(Constants.LOBSTER_MIN_SPEED_FACTOR, Constants.LOBSTER_MAX_SPEED_FACTOR);
+	}
+	
+	private double getRandomSpeedFactorForCrab(){
+		return NumberUtilities.getRandomDouble(Constants.CRAB_MIN_SPEED_FACTOR, Constants.CRAB_MAX_SPEED_FACTOR);
+	}
+	
+	private double getRandomSpeedFactorForOyster(){
+		return NumberUtilities.getRandomDouble(Constants.OYSTER_MIN_SPEED_FACTOR, Constants.OYSTER_MAX_SPEED_FACTOR);
 	}
 	
 	/**
