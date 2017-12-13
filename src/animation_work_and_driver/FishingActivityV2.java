@@ -76,10 +76,10 @@ public class FishingActivityV2 {
 	private Player player;
 
 	private ClientSubOcean clientSubOcean;
-	private ClientFishingActivityFishManagerV2 clientFishingActivityFishManager;
+	ClientFishingActivityFishManagerV2 clientFishingActivityFishManager;
 
 	// for debugging
-	private Ocean ocean = new Ocean();
+	Ocean ocean = new Ocean();
 
 	/**
 	 * This constructs a FishingActivity by putting SeaCreatures on the screen.
@@ -199,18 +199,14 @@ public class FishingActivityV2 {
 	 *            the color the fish should be given
 	 */
 	public void addFishToScreen(Fish fish, int topOffset, int bottomOffset) {
-		// fish.SetBodyByWeight();
-		// fish.setBodyColor(color);
 		fish.setFishBodyByWeight();
 		System.out.println("set FishBody");
-		// System.out.print(fish.getBody().toString());
 		double width = simpleFishingPane.getMinWidth();
 		double height = simpleFishingPane.getMinHeight();
 		fish.getFishGraphic().getFishImageView().setTranslateX(
 				NumberUtilities.getRandomDouble(0, width - fish.getFishGraphic().getFishImageView().getFitWidth()));
 		fish.getFishGraphic().getFishImageView().setTranslateY(NumberUtilities.getRandomDouble(topOffset,
 				height - bottomOffset - fish.getFishGraphic().getFishImageView().getFitHeight()));
-		// System.out.print(fish.getBody().toString());
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
@@ -235,73 +231,22 @@ public class FishingActivityV2 {
 	 */
 	public void addShellfishToScreen(Shellfish shellfish, int topOffset, int bottomOffset) {
 		shellfish.setShellfishBodyByWeight();
-		// shellfish.setBodyColor(color);
-		// System.out.print(fish.getBody().toString());
 		double width = simpleFishingPane.getMinWidth();
 		double height = simpleFishingPane.getMinHeight();
 		shellfish.getShellfishGraphic().getShellfishImageView().setTranslateX(NumberUtilities.getRandomDouble(0,
 				width - shellfish.getShellfishGraphic().getShellfishImageView().getFitWidth()));
 		shellfish.getShellfishGraphic().getShellfishImageView().setTranslateY(NumberUtilities.getRandomDouble(topOffset,
 				height - bottomOffset - shellfish.getShellfishGraphic().getShellfishImageView().getFitHeight()));
-		// System.out.print(fish.getBody().toString());
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
 				simpleFishingPane.getChildren().add(shellfish.getShellfishGraphic().getShellfishImageView());
 				shellfish.getShellfishGraphic().getShellfishImageView().setOnMouseClicked(new ExtractShellfishAction(shellfish));
-				// shellfish.getBody().setOnMouseClicked(new
-				// ExtractShellfishAction(shellfish));
 			}
 		});
 	}
 
-	/**
-	 * Action that occurs when a fish is caught.
-	 */
-	private class OldExtractFishAction implements EventHandler<MouseEvent> {
-		Fish fish;
-
-		OldExtractFishAction(Fish fish) {
-			this.fish = fish;
-		}
-
-		@Override
-		public void handle(MouseEvent e) {
-			// System.out.println("Extract fish action "
-			// + "triggered(fish caught)");
-			try {
-				// Something like this here?
-				player.addSeaCreatureToIceChest(fish);
-
-				Platform.runLater(new Runnable() {
-					@Override
-					public void run() {
-
-						simpleFishingPane.getChildren().remove(fish.getBody());
-						if (fish.getSpecies() == FishSpecies.COD) {
-							// System.out.println("It's a cod");
-							clientSubOcean.currentPopulationCod--;
-						}
-						if (fish.getSpecies() == FishSpecies.SALMON) {
-							// System.out.println("It's a salmon");
-							clientSubOcean.currentPopulationSalmon--;
-						}
-						if (fish.getSpecies() == FishSpecies.TUNA) {
-							// System.out.println("");
-							clientSubOcean.currentPopulationTuna--;
-						}
-
-						// updateSeaCreaturesOnScreen();
-					}
-				});
-			} catch (Exception ex) {
-				System.out.println(ex.toString());
-			}
-		};
-	}
-	/*
-	 * takes a fishimageview removes node finds object remove fish
-	 */
+	
 
 	/**
 	 * Action that occurs when a fish is caught.
@@ -315,11 +260,7 @@ public class FishingActivityV2 {
 
 		@Override
 		public void handle(MouseEvent e) {
-			// System.out.println("Extract fish action "
-			// + "triggered(fish caught)");
 			try {
-				// Something like this here?
-				// player.addSeaCreatureToIceChest(fish);
 
 				Platform.runLater(new Runnable() {
 					@Override
@@ -347,18 +288,7 @@ public class FishingActivityV2 {
 							clientSubOcean.currentPopulationTuna--;
 							break;
 						}
-						/*
-						 * if (fish.getSpecies() == FishSpecies.COD) {
-						 * //System.out.println("It's a cod");
-						 * clientSubOcean.currentPopulationCod--; } if
-						 * (fish.getSpecies() == FishSpecies.SALMON) {
-						 * //System.out.println("It's a salmon");
-						 * clientSubOcean.currentPopulationSalmon--; } if
-						 * (fish.getSpecies() == FishSpecies.TUNA) {
-						 * //System.out.println("");
-						 * clientSubOcean.currentPopulationTuna--; }
-						 */
-						// updateSeaCreaturesOnScreen();
+						
 					}
 				});
 			} catch (Exception ex) {
@@ -379,11 +309,7 @@ public class FishingActivityV2 {
 
 		@Override
 		public void handle(MouseEvent e) {
-			// System.out.println("Extract fish action "
-			// + "triggered(fish caught)");
 			try {
-				// Something like this here?
-				//player.addSeaCreatureToIceChest(shellfish);
 
 				Platform.runLater(new Runnable() {
 					@Override
@@ -413,16 +339,6 @@ public class FishingActivityV2 {
 							break;
 						}
 						
-						/*
-						simpleFishingPane.getChildren().remove(shellfish.getBody());
-						if (shellfish.getSpecies() == ShellfishSpecies.CRAB)
-							clientSubOcean.currentPopulationCrab--;
-						if (shellfish.getSpecies() == ShellfishSpecies.LOBSTER)
-							clientSubOcean.currentPopulationLobster--;
-						if (shellfish.getSpecies() == ShellfishSpecies.OYSTER)
-							clientSubOcean.currentPopulationOyster--;
-						*/
-						// updateSeaCreaturesOnScreen();
 					}
 				});
 			} catch (Exception ex) {

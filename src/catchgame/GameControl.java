@@ -273,11 +273,13 @@ public class GameControl
 			}
 			catch (Exception e1)
 			{
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			finally
 			{
+				if (fishingActivityV3!=null){
+					fishingActivityV3.getClientFishingActivityFishManager().stopAnimation();
+				}
 				toServer = null;
 				fromServer = null;
 				gameRunning.set(false);

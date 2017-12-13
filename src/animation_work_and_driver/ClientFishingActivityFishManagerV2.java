@@ -28,13 +28,15 @@ public class ClientFishingActivityFishManagerV2 {
 		ArrayList<Shellfish>oysterPopuliation = new ArrayList<>();
 		
 		ArrayList<Fish>offScreenCod= new ArrayList<>();
+		
+		Timeline timeline;
 	
 		ClientFishingActivityFishManagerV2(SimpleFishingPane simpleFishingPane){
 			this.simpleFishingPane=simpleFishingPane;
 		}
 
 	 void doBasicClientSubOceanAnimation(){
-		Timeline timeline = new Timeline();
+		timeline = new Timeline();
 		//KeyFrame[] keyFrames=new KeyFrame[1];
 		//for (int i=0; i<1; i++){
 		KeyFrame keyFrame/*[i]*/ = new KeyFrame(Duration.seconds(0.05),event->{
@@ -47,6 +49,10 @@ public class ClientFishingActivityFishManagerV2 {
 		
         timeline.play();
 	}
+	 
+	 void stopAnimation(){
+		 timeline.stop();
+	 }
 	
 	 private void makeSeaCreaturesOnScreenGo(){
 		 makeFishOnScreenGo(codPopulation);

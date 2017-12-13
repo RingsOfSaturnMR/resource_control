@@ -56,6 +56,7 @@ public class Constants
 	public final static double OYSTER_INITIAL_PRICE_PER_POUND = 17.4;
 	public final static double CRAB_INITIAL_PRICE_PER_POUND = 11.0;
 	public final static double LOBSTER_INITIAL_PRICE_PER_POUND = 20.0;
+	
 	// for max and min rand time coeffient 
 	public final static int MIN_PRICE_FLUX = 1;
 	public final static int MAX_PRICE_FLUX = 5;
@@ -96,8 +97,10 @@ public class Constants
 
 	// Basics
 	public final static String APPLICATION_NAME = "Catch!! - By Caileigh, Matt, Nls, Thanh";
+	public static final int NUM_HIGH_SCORES = 3;
 	public final static short LEFT = -1;
 	public final static short RIGHT = 1;
+	
 	/**
 	 * An array of SeaCreature Species the game supports
 	 */
@@ -145,15 +148,16 @@ public class Constants
 	
 		//graphic constants
 		//constants to multiple weight by to get pixel width (aspect is preserved)
-		public final static short COD_WEIGHT_GRAPHIC_MULTIPLE = 10;
-		//1/2 fish/shellfish seperation constant
+		public final static short SEACREATURE_WEIGHT_GRAPHIC_MULTIPLE = 10;
+		
+		//constants for placing sea creatures in simple fishing pane
 		public final static int ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT = 13;
 		public final static int DISTANCE_FROM_TOP = 50;
 		public final static int DISTANCE_FROM_BOTTOM = 50;
 		public final static double BOTTOM_COEFFICIENT = 0.2;
 		public final static double TOP_COEFFICIENT = 1-BOTTOM_COEFFICIENT;
 		
+		//thumbnail dimensions
 		public static final double IMG_THUMBNAIL_HEIGHT = 50;
 		public static final double IMG_THUMBNAIL_WDITH = 50;
-		public static final int NUM_HIGH_SCORES = 3;
 }
