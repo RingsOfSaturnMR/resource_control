@@ -97,8 +97,6 @@ public class CatchServer
 			
 			serverStage.setOnCloseRequest(e ->
 			{
-				if(threadKeys.size() == 0)
-				{
 				ocean.shutDownOcean();
 				listeningForNewClients.set(false);
 				newClientThread = null;
@@ -115,11 +113,6 @@ public class CatchServer
 		            	System.out.println("User Was Logged In");
 		            }
 		        }
-				}
-				else
-				{
-					return;
-				}		
 			});
 		}
 		catch (SQLException e)

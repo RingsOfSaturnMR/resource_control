@@ -458,13 +458,13 @@ public class GameControl
 		try
 		{
 			player.prepareToSerialze();
-			toServer.writeObject(player);
+			sendToServer(player);
 			gamePane.appendOutput("Game Saved.");
 		}
-		catch (IOException ioe)
+		catch (Exception e)
 		{
-			gamePane.appendOutput("Game not saved, " + ioe.getMessage());
-			ioe.printStackTrace();
+			gamePane.appendOutput(e.getMessage());
+			
 		}
 	}
 
@@ -486,13 +486,12 @@ public class GameControl
 			{
 				try
 				{
-					toServer.writeObject(new RequestPacket(Codes.DELETE_ACCOUNT_CODE));
+					sendToServer(new RequestPacket(Codes.DELETE_ACCOUNT_CODE));
 					accountDeleted = true;
 					gameStage.fireEvent(new WindowEvent(gameStage, WindowEvent.WINDOW_CLOSE_REQUEST));
 				}
-				catch (IOException e1)
+				catch (Exception e1)
 				{
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -522,7 +521,7 @@ public class GameControl
 	private void logOut() throws Exception
 	{
 		gamePane.appendOutput("Logging Out");
-		toServer.writeObject(new RequestPacket(Codes.LOGOUT_CODE));
+		sendToServer(new RequestPacket(Codes.LOGOUT_CODE));
 	}
 
 	/**
@@ -731,11 +730,11 @@ public class GameControl
 	{
 		try
 		{
-			toServer.writeObject(new RequestPacket(Codes.GET_LEADER_BOARD_CODE));
+			sendToServer(new RequestPacket(Codes.GET_LEADER_BOARD_CODE));
 			LeaderBoardPacket packet = (LeaderBoardPacket) fromServer.readObject();
 			gamePane.statsPane.setPlayerStats(player.getUsername(), player.getTotalEarned(), player.getCashOnHand(), player.getTotalCatches(), packet);
 		}
-		catch (IOException | ClassNotFoundException e)
+		catch (Exception e)
 		{
 			gamePane.appendOutput(e.getMessage());
 		}
@@ -749,12 +748,12 @@ public class GameControl
 		try
 		{
 			Packets.LeaderBoardRow packet = new Packets.LeaderBoardRow(player.getUsername(), player.getTotalEarned(), player.getCashOnHand(), player.getTotalCatches());
-			toServer.writeObject(packet);
+			sendToServer(packet);
 		}
-		catch (IOException ioe)
+		catch (Exception e)
 		{
-			gamePane.appendOutput(ioe.getMessage());
-			ioe.printStackTrace();
+			gamePane.appendOutput(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
@@ -769,6 +768,9 @@ public class GameControl
 		}
 	}
 	
+	/**
+	 * Single method for sending info, in case of an IOException
+	 */
 	private void sendToServer(Object obj) throws Exception
 	{
 		try
@@ -778,6 +780,15 @@ public class GameControl
 		catch(IOException ioe)
 		{
 			System.out.println("IOException. Game Must End.");
+			ioe.printStackTrace();
+			
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Connection Error");
+			alert.setHeaderText("Game Must End");
+			String str = "Connection Error.";
+			alert.setContentText(str);
+			alert.showAndWait();
+			System.exit(1);
 		}
 	}
 }
