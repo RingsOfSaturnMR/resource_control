@@ -105,12 +105,8 @@ public class CatchServer
 				{
 		            if(threadMap.get(key) != null)
 		            {
-		            	System.out.println("User Not Logged out, No Longer Serving " + key);
+		            	System.out.println("Disconnecting user: " + key);
 		            	threadMap.get(key).closeStreams();
-		            }
-		            else 
-		            {
-		            	System.out.println("User Was Logged In");
 		            }
 		        }
 			});

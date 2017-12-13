@@ -66,7 +66,6 @@ public class EquipmentMarketPane extends VBox
 			saleGridPane.add(numOnHandTextArray[i], 4, i+1);
 		}
 
-
 		this.getChildren().addAll(txtMarketName, saleGridPane);
 		
 		// center stuff

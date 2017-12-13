@@ -35,6 +35,12 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -51,17 +57,17 @@ import catchgame.GameControl.FishingActivityActions;
 public class GamePane extends VBox
 {
 	// pane to hold the main nodes for what the player is doing
-	private StackPane primaryPane = new StackPane();		
-	
+	private StackPane primaryPane = new StackPane();
+
 	// panes that can go in pimary Pane
 	public SimpleFishingPane simpleFishingPane = new SimpleFishingPane();
 	public SeafoodMarketPane seafoodMarketPane;
 	public EquipmentMarketPane equipmentMarketPane;
 	public StatsVBox statsPane = new StatsVBox();
-	
+
 	// handler to start fishin'
 	private GameControl.FishingActivityActions fishingActivityActions;
-	
+
 	private boolean fishingStarted = false;
 
 	// for dropdown menu
@@ -70,19 +76,19 @@ public class GamePane extends VBox
 	private MenuItem accountDeleteMenuItem = new MenuItem("Delete Account");
 	private MenuItem saveMenuItem = new MenuItem("Save");
 	private MenuItem exitMenuItem = new MenuItem("Exit");
-	
+
 	// to trigger updating leaderboard
 	private FetchStatsHandler updateStatsHandler;
-	
+
 	// general action output for user
 	public TextArea taGameOutput = new TextArea();
-	
+
 	// buttons
 	private Button btnGoFishing = new Button("Go Fishing");
 	private Button btnGoToSeaFoodMarket = new Button("Sell Fish");
 	private Button btnGoToEquipMarket = new Button("Buy Equipment");
 	private Button btnCheckScores = new Button("Score Board");
-	
+
 	private HBox buttonHBox = new HBox();
 
 	public GamePane(EventHandler<ActionEvent> sellFishAction, FishingActivityActions fishingActivityActions,	
@@ -103,6 +109,9 @@ public class GamePane extends VBox
 		// set up menu
 		fileMenu.getItems().addAll(accountDeleteMenuItem, saveMenuItem, exitMenuItem);
 		menuBar.getMenus().add(fileMenu);
+		
+		// give stats pane initial image
+		primaryPane.setBackground(new Background(new BackgroundImage(new Image("img/seafood_market.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 
 		primaryPane.getChildren().add(statsPane);
 
@@ -116,10 +125,10 @@ public class GamePane extends VBox
 		equipmentMarketPane.prefWidthProperty().bind(this.widthProperty());
 		statsPane.prefWidthProperty().bind(this.widthProperty());
 		
-		
 		// define internal actions for swapping out panes
 		btnGoFishing.setOnAction(e ->
 		{
+			primaryPane.setBackground(null);
 			primaryPane.getChildren().clear();
 			primaryPane.getChildren().add(simpleFishingPane);
 			if (fishingStarted)
@@ -136,6 +145,11 @@ public class GamePane extends VBox
 		btnCheckScores.setOnAction(e ->
 		{
 			primaryPane.getChildren().clear();
+			
+			Image img = new Image("img/leaderboard.png");
+			BackgroundImage background = new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+		
+			primaryPane.setBackground(new Background(background));
 			updateStatsHandler.fetch();
 			primaryPane.getChildren().add(statsPane);
 		});
@@ -143,12 +157,22 @@ public class GamePane extends VBox
 		btnGoToSeaFoodMarket.setOnAction(e ->
 		{
 			primaryPane.getChildren().clear();
+			
+			Image img = new Image("img/seafood_market.png");
+			BackgroundImage background = new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+		
+			primaryPane.setBackground(new Background(background));
 			primaryPane.getChildren().add(seafoodMarketPane);
 		});
 
 		btnGoToEquipMarket.setOnAction(e ->
 		{
 			primaryPane.getChildren().clear();
+			
+			Image img = new Image("img/equip_market.png");
+			BackgroundImage background = new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+		
+			primaryPane.setBackground(new Background(background));
 			primaryPane.getChildren().add(equipmentMarketPane);
 		});
 		
@@ -170,10 +194,8 @@ public class GamePane extends VBox
 		this.getChildren().addAll(menuBar, primaryPane, buttonHBox, taGameOutput);
 		
 		// paddin' and stuff
-		taGameOutput.setPadding(new Insets(5, 5, 5, 5));
-				
+		taGameOutput.setPadding(new Insets(5, 5, 5, 5));		
 	}
-
 
 	public void appendOutput(String str)
 	{
