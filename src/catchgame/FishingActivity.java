@@ -27,6 +27,10 @@ public class FishingActivity {
 	private ClientSubOcean clientSubOcean;
 	private ClientFishingActivityFishManager clientFishingActivityFishManager;
 
+	
+	public ClientFishingActivityFishManager getClientFishingActivityFishManager(){
+		return clientFishingActivityFishManager;
+	}
 	/**
 	 * This constructs a FishingActivity by putting SeaCreatures on the screen.
 	 * 

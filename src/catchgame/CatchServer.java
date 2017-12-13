@@ -91,6 +91,7 @@ public class CatchServer
 			{
 				// TODO logic for shutdown of server goes here
 				System.out.println("Server Shutdown action fired");
+				ocean.shutDownOcean();
 				// tell server to stop listening, maybe flush the streams somehow
 				listeningForNewClients.set(false);
 				// get all the streams that are open to close somehow?

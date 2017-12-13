@@ -21,17 +21,17 @@ public class FishGraphic extends AbstractSeaCreatureGraphic{
 		short WEIGHT_GRAPHIC_MULTIPLE=10;
 		switch (fish.getSpecies()){
 		case COD:
-			WEIGHT_GRAPHIC_MULTIPLE=Constants.COD_WEIGHT_GRAPHIC_MULTIPLE;
+			WEIGHT_GRAPHIC_MULTIPLE=Constants.SEACREATURE_WEIGHT_GRAPHIC_MULTIPLE;
 			break;
 		case SALMON:
-			WEIGHT_GRAPHIC_MULTIPLE=Constants.COD_WEIGHT_GRAPHIC_MULTIPLE;
+			WEIGHT_GRAPHIC_MULTIPLE=Constants.SEACREATURE_WEIGHT_GRAPHIC_MULTIPLE;
 			break;
 		case TUNA:
-			WEIGHT_GRAPHIC_MULTIPLE=Constants.COD_WEIGHT_GRAPHIC_MULTIPLE;
+			WEIGHT_GRAPHIC_MULTIPLE=Constants.SEACREATURE_WEIGHT_GRAPHIC_MULTIPLE;
 			break;
 		}
 		//double fishImageViewWidth=fish.getWeight()*Constants.COD_WEIGHT_GRAPHIC_MULTIPLE;
-		fishImageView.setFitWidth(fish.getWeight()*Constants.COD_WEIGHT_GRAPHIC_MULTIPLE);
+		fishImageView.setFitWidth(fish.getWeight()*WEIGHT_GRAPHIC_MULTIPLE);
 		//fishImageView.setPreserveRatio(true);
 		fishImageView.setFitHeight(this.seaCreatureImage.getHeight()*fishImageView.getFitWidth()/this.seaCreatureImage.getWidth());
 		fishImageView.setSmooth(true);
