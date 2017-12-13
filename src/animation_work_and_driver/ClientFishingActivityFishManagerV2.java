@@ -154,7 +154,7 @@ public class ClientFishingActivityFishManagerV2 {
 		//get a random height within proper range
 		fishImageView.setTranslateY(NumberUtilities.getRandomDouble(
 				Constants.DISTANCE_FROM_TOP, 
-				(int)simpleFishingPane.getHeight()*2/3-fishImageView.getFitHeight()-Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT));
+				(int)simpleFishingPane.getHeight()*3/4-fishImageView.getFitHeight()-Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT));
 		System.out.println("fish max translateY: "+(simpleFishingPane.getHeight()-fishImageView.getFitHeight()-200));
 	}
 	
@@ -185,7 +185,7 @@ public class ClientFishingActivityFishManagerV2 {
 			shellfish.setDirecTion(false);
 		}
 		//get a random height within proper range
-		shellfishImageView.setTranslateY(NumberUtilities.getRandomDouble((int)simpleFishingPane.getHeight()*2/3+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT,
+		shellfishImageView.setTranslateY(NumberUtilities.getRandomDouble((int)simpleFishingPane.getHeight()*3/4+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT,
 				(int)simpleFishingPane.getHeight()-shellfishImageView.getFitHeight()-Constants.DISTANCE_FROM_BOTTOM));
 		System.out.println("shellFish max translateY: "+(simpleFishingPane.getHeight()-shellfishImageView.getFitHeight()-20));
 	}

@@ -96,6 +96,12 @@ public class FishingActivityV2 {
 	 */
 	public FishingActivityV2(SimpleFishingPane simpleFishingPane, 
 			Player player) {
+		/*
+		ImageView iv=new ImageView();
+		Image i=new Image("img/cod.png");
+		iv.setImage(i);
+		iv.setFitWidth(300);
+		*/
 		clientSubOcean = new ClientSubOcean();
 		clientFishingActivityFishManager = new ClientFishingActivityFishManagerV2(simpleFishingPane);
 		this.simpleFishingPane = simpleFishingPane;
@@ -104,6 +110,7 @@ public class FishingActivityV2 {
 		this.fromServer = fromServer;
 		testAddFishToFishingActivity();
 		clientFishingActivityFishManager.doBasicClientSubOceanAnimation();
+		//simpleFishingPane.getChildren().add(iv);
 	}
 	 
 	public void testAddFishToFishingActivity() {
@@ -127,14 +134,14 @@ public class FishingActivityV2 {
 					(clientSubOcean.currentPopulationOyster + 40), clientSubOcean.maxPopulationOyster);
 			clientFishingActivityFishManager.oysterPopuliation.addAll(sampleOysters);
 			addFishPacketToScreen(sampleCod, Constants.DISTANCE_FROM_TOP, 
-					(int)simpleFishingPane.getHeight()/3+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT);
+					(int)simpleFishingPane.getHeight()/4+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT);
 			addFishPacketToScreen(sampleSalmon, Constants.DISTANCE_FROM_TOP, 
-					(int)simpleFishingPane.getHeight()/3+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT);
+					(int)simpleFishingPane.getHeight()/4+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT);
 			addFishPacketToScreen(sampleTuna, Constants.DISTANCE_FROM_TOP, 
-					(int)simpleFishingPane.getHeight()/3+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT);
-			addShellfishPacketToScreen(sampleLobsters, (int)simpleFishingPane.getHeight()*2/3+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT, Constants.DISTANCE_FROM_BOTTOM);
-			addShellfishPacketToScreen(sampleCrab, (int)simpleFishingPane.getHeight()*2/3+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT, Constants.DISTANCE_FROM_BOTTOM);
-			addShellfishPacketToScreen(sampleOysters, (int)simpleFishingPane.getHeight()*2/3+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT, Constants.DISTANCE_FROM_BOTTOM);
+					(int)simpleFishingPane.getHeight()/4+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT);
+			addShellfishPacketToScreen(sampleLobsters, (int)simpleFishingPane.getHeight()*3/4+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT, Constants.DISTANCE_FROM_BOTTOM);
+			addShellfishPacketToScreen(sampleCrab, (int)simpleFishingPane.getHeight()*3/4+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT, Constants.DISTANCE_FROM_BOTTOM);
+			addShellfishPacketToScreen(sampleOysters, (int)simpleFishingPane.getHeight()*3/4+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT, Constants.DISTANCE_FROM_BOTTOM);
 		} catch (Exception e) {
 
 		}
