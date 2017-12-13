@@ -75,29 +75,29 @@ public class FishingActivity {
 		seaCreaturesPacket = getUpdateSeaCreaturesPacketFromServer();
 
 		clientSubOcean.currentPopulationCod += seaCreaturesPacket.codPopulation.size();
-		addFishPacketToScreen(seaCreaturesPacket.codPopulation, 
-				Constants.DISTANCE_FROM_TOP, (int)Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT/3+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT);
+		addFishPacketToScreen(seaCreaturesPacket.codPopulation, Constants.DISTANCE_FROM_TOP, 
+				(int)(Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT*Constants.BOTTOM_COEFFICIENT)+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT);
 
 		clientSubOcean.currentPopulationSalmon += seaCreaturesPacket.salmonPopulation.size();
 		addFishPacketToScreen(seaCreaturesPacket.salmonPopulation, Constants.DISTANCE_FROM_TOP, 
-				(int)Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT/3+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT);
+				(int)(Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT*Constants.BOTTOM_COEFFICIENT)+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT);
 
 		clientSubOcean.currentPopulationTuna += seaCreaturesPacket.tunaPopulation.size();
 		addFishPacketToScreen(seaCreaturesPacket.tunaPopulation, Constants.DISTANCE_FROM_TOP, 
-				(int)Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT/3+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT);
+				(int)(Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT*Constants.BOTTOM_COEFFICIENT)+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT);
 
 		clientSubOcean.currentPopulationOyster += seaCreaturesPacket.oysterPopulation.size();
 		addShellfishPacketToScreen(seaCreaturesPacket.oysterPopulation, 
-				(int)Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT*2/3+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT, Constants.DISTANCE_FROM_BOTTOM);
+				(int)(Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT*Constants.TOP_COEFFICIENT)+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT, Constants.DISTANCE_FROM_BOTTOM);
 
 		clientSubOcean.currentPopulationLobster += seaCreaturesPacket.lobsterPopulation.size();
 		addShellfishPacketToScreen(seaCreaturesPacket.lobsterPopulation, 
-				(int)Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT*2/3+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT, Constants.DISTANCE_FROM_BOTTOM);
+				(int)(Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT*Constants.TOP_COEFFICIENT)+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT, Constants.DISTANCE_FROM_BOTTOM);
 
 		System.out.println("Adding crab to subocean: " + seaCreaturesPacket.crabPopulation.size());
 		clientSubOcean.currentPopulationCrab += seaCreaturesPacket.crabPopulation.size();
 		addShellfishPacketToScreen(seaCreaturesPacket.crabPopulation, 
-				(int)Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT*2/3+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT, Constants.DISTANCE_FROM_BOTTOM);
+				(int)(Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT*Constants.TOP_COEFFICIENT)+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT, Constants.DISTANCE_FROM_BOTTOM);
 
 		clientFishingActivityFishManager.codPopulation.addAll(seaCreaturesPacket.codPopulation);
 		clientFishingActivityFishManager.salmonPopulation.addAll(seaCreaturesPacket.salmonPopulation);

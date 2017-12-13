@@ -150,6 +150,9 @@ public class Constants
 		public final static int ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT = 13;
 		public final static int DISTANCE_FROM_TOP = 50;
 		public final static int DISTANCE_FROM_BOTTOM = 50;
+		public final static double BOTTOM_COEFFICIENT = 0.2;
+		public final static double TOP_COEFFICIENT = 1-BOTTOM_COEFFICIENT;
+		
 		public static final double IMG_THUMBNAIL_HEIGHT = 50;
 		public static final double IMG_THUMBNAIL_WDITH = 50;
 		public static final int NUM_HIGH_SCORES = 3;

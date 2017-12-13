@@ -61,6 +61,9 @@ public class Ocean implements Serializable
 	private double relativeGrowthRate = 0.02;
 	//also for determining population growth
 	private double regenerationTimeInterval=10;
+	
+	//for timed calls to rgenerateOcean function
+	private Timer oceanRegenerationTimer;
 
 	/**
 	 * If it is a new game, fills the Ocean to max population;
@@ -284,9 +287,9 @@ public class Ocean implements Serializable
 	 */
 	private void regenerateOcean()
 	{
-		Timer timer = new Timer();
-		TimerTask task;
-		task = new TimerTask()
+		oceanRegenerationTimer = new Timer();
+		TimerTask oceanRegenerationTask;
+		oceanRegenerationTask = new TimerTask()
 		{
 
 			@Override
@@ -296,7 +299,11 @@ public class Ocean implements Serializable
 			}
 
 		};
-		timer.schedule(task, 0, 5_000);
+		oceanRegenerationTimer.schedule(oceanRegenerationTask, 0, 5_000);
+	}
+	
+	public void shutDownOcean(){
+		oceanRegenerationTimer.cancel();
 	}
 	
 	/**
