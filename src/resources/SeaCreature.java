@@ -91,7 +91,7 @@ public abstract class SeaCreature <T> implements Serializable
 	}
 	
 	public void calculateSpeed(){
-		speed=speedFactor*weight;
+		speed=speedFactor*weight*Constants.SPEED_ADJUSTMENT_CONSTANT;
 	}
 	
 	public void setSpeedFactor(double speedFactor)

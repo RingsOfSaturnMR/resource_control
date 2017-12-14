@@ -108,6 +108,10 @@ public class Constants
 	public final static double CRAB_MAX_SPEED_FACTOR = 0.4;
 	public final static double OYSTER_MIN_SPEED_FACTOR = 0.1;
 	public final static double OYSTER_MAX_SPEED_FACTOR = 0.2;
+	
+	//speed adjustment constant
+	
+	public final static double SPEED_ADJUSTMENT_CONSTANT = 0.5;
 
 	// Basics
 	public final static String APPLICATION_NAME = "Catch!! - By Caileigh, Matt, Nls, Thanh";
