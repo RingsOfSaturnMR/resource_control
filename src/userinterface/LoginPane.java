@@ -22,6 +22,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -40,12 +41,12 @@ public class LoginPane extends VBox
 	private Label lblName = new Label("Username: ");
 	private Label lblPassword = new Label("Password: ");
 	private Label lblServerIp = new Label("Server ip: ");
-	private Label lblClientPort = new Label("Client Port: ");
+	private Label lblServerPort = new Label("Server Port: ");
 
 	// TextFields for user entry
 	private TextField tfName = new TextField();
-	private TextField pfPassword = new TextField();
-	private TextField tfServerIp = new TextField("localhost");
+	private PasswordField pfPassword = new PasswordField();
+	private TextField tfServerIp = new TextField();
 	private TextField tfClientPort = new TextField();
 	
 	// containers
@@ -71,7 +72,7 @@ public class LoginPane extends VBox
 		// node, col, row
 		loginGridPane.add(lblServerIp, 0, 0);
 		loginGridPane.add(tfServerIp, 1, 0);
-		loginGridPane.add(lblClientPort, 0, 1);
+		loginGridPane.add(lblServerPort, 0, 1);
 		loginGridPane.add(tfClientPort, 1, 1);
 		loginGridPane.add(lblName, 0, 2);
 		loginGridPane.add(tfName, 1, 2);

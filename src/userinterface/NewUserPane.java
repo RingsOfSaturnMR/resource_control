@@ -60,14 +60,14 @@ public class NewUserPane extends VBox
 
 	// labels
 	private Label lblServerIp = new Label("Server ip: ");
-	private Label lblClientPort = new Label("Client Port: ");
+	private Label lblServerPort = new Label("Server Port: ");
 	private Label lblUsername = new Label("Desired Username: ");
 	private Label lblPassword = new Label("Password: ");
 	private Label lblPwconfirm = new Label("Confirm: ");
 
 	// textfields
-	private TextField tfServerIp = new TextField("localhost");
-	private TextField tfClientPort = new TextField("8000");
+	private TextField tfServerIp = new TextField();
+	private TextField tfClientPort = new TextField();
 	public TextField tfName = new TextField();
 	public TextField pfPassword = new PasswordField();
 	public TextField pfPasswordConfirm = new PasswordField();
@@ -92,7 +92,7 @@ public class NewUserPane extends VBox
 		// node, col, row
 		entryGridPane.add(lblServerIp, 0, 0);
 		entryGridPane.add(tfServerIp, 1, 0);
-		entryGridPane.add(lblClientPort, 0, 1);
+		entryGridPane.add(lblServerPort, 0, 1);
 		entryGridPane.add(tfClientPort, 1, 1);
 		entryGridPane.add(lblUsername, 0, 2);
 		entryGridPane.add(tfName, 1, 2);
@@ -145,10 +145,10 @@ public class NewUserPane extends VBox
 			}
 		}
 
-		class usernameChangeListener implements ChangeListener
+		class usernameChangeListener implements ChangeListener<Object>
 		{
 			@Override
-			public void changed(ObservableValue observable, Object oldValue, Object newValue)
+			public void changed(ObservableValue<?> observable, Object oldValue, Object newValue)
 			{
 				// minLengthTxt, specialTxt, maxLengthTxt
 				if (isSetForPwEntry)
@@ -378,12 +378,12 @@ public class NewUserPane extends VBox
 
 	public String getDesiredPassword()
 	{
-		return pfPassword.getText();
+		return pfPassword.getText().trim();
 	}
 
 	public String getDesiredPasswordConfirm()
 	{
-		return pfPasswordConfirm.getText();
+		return pfPasswordConfirm.getText().trim();
 	}
 
 	public String getDesiredName()
@@ -391,7 +391,7 @@ public class NewUserPane extends VBox
 		return tfName.getText().trim();
 	}
 
-	public int getClientPort()
+	public int getServerPort()
 	{
 		return Integer.parseInt(tfClientPort.getText());
 	}
@@ -401,7 +401,7 @@ public class NewUserPane extends VBox
 		return tfServerIp.getText().trim();
 	}
 
-	public void setClientPortNum(int portNum)
+	public void setServerPortNum(int portNum)
 	{
 		tfClientPort.setText(Integer.toString(portNum));
 	}

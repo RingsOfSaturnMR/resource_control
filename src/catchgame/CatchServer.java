@@ -23,8 +23,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -168,6 +170,15 @@ public class CatchServer
 				{
 					serverPane.appendToOutput("Server Started at: " + new Date());
 					serverPane.appendToOutput("Open to clients on port " + serverSocketPort );
+					try
+					{
+						serverPane.appendToOutput("Server IP Adress: " + InetAddress.getLocalHost().getHostAddress());
+					}
+					catch (UnknownHostException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				});
 				
 				// set server to listen
