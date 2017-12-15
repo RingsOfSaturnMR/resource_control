@@ -3,22 +3,16 @@ package catchgame;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import catchgame.GameControl.SendStatsHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-<<<<<<< HEAD
-=======
 import javafx.scene.image.Image;
 import resources.BoatTypes;
->>>>>>> nils_branch
 import resources.Equipment;
 import resources.FishSpecies;
 import resources.SeaCreature;
 import resources.ShellfishSpecies;
-<<<<<<< HEAD
-=======
-import resources.SimpleFishingItem;
 import resources.SimpleFishingItemType;
->>>>>>> nils_branch
 
 /**
  * @author Nils
@@ -26,8 +20,9 @@ import resources.SimpleFishingItemType;
 public class Player extends authentication.User implements Serializable
 {
 	// general stats
-	double cashOnHand;
-	private int skillLevel;
+	private double cashOnHand;
+	private double totalEarned;
+	private int totalCatches;;
 
 	// arrays to hold resources, when serializing
 	private SeaCreature[] iceChestArray = null;
@@ -39,40 +34,34 @@ public class Player extends authentication.User implements Serializable
 
 	// flag to mark if the arrays need to be copied to the observable lists
 	private boolean observableListsLoaded = false;
-<<<<<<< HEAD
+	
+	// allows the player to send stats to the server
+	private transient SendStatsHandler sendStatsHandler = null;
 
 	public Player(String username)
 	{
 		super(username);
 		this.cashOnHand = 0;
-		this.skillLevel = 0;
+		this.totalEarned = 0;
+		this.totalCatches = 0;
 	}
 
 	public void addSeaCreatureToIceChest(SeaCreature item)
 	{
-=======
-
-	public Player(String username)
-	{
-		super(username);
-		this.cashOnHand = 0;
-		this.skillLevel = 0;
-	}
-
-	public void addSeaCreatureToIceChest(SeaCreature item)
-	{
->>>>>>> nils_branch
 		if (!observableListsLoaded)
 		{
 			loadObservableLists();
 		}
 
 		iceChest.add(item);
+		totalCatches++;
+		sendStatsToServer();
 	}
 
 	public void removeSeaCreatureFromIceChest(int i)
 	{
 		iceChest.remove(i);
+		sendStatsToServer();
 	}
 
 	public void addItemToToolChest(Equipment item)
@@ -83,6 +72,7 @@ public class Player extends authentication.User implements Serializable
 		}
 
 		toolChest.add(item);
+		sendStatsToServer();
 	}
 
 	public double getCashOnHand()
@@ -90,31 +80,20 @@ public class Player extends authentication.User implements Serializable
 		return this.cashOnHand;
 	}
 
-	public int getSkillLevel()
-	{
-		return skillLevel;
-	}
-
 	public void addMoney(double amount)
 	{
 		cashOnHand += amount;
+		totalEarned += amount;
+		sendStatsToServer();
 	}
 
-<<<<<<< HEAD
-	public void subtractMoney(int amount)
-	{
-		cashOnHand -= amount;
-	}
-
-	public SeaCreature getSeaCreatureAt(int index)
-=======
 	public void subtractMoney(double d)
 	{
 		cashOnHand -= d;
+		sendStatsToServer();
 	}
 
 	public SeaCreature<?> getSeaCreatureAt(int index)
->>>>>>> nils_branch
 	{
 		return this.iceChest.get(index);
 	}
@@ -144,8 +123,6 @@ public class Player extends authentication.User implements Serializable
 				iceChestArray[i] = iceChest.get(i);
 			}
 		}
-<<<<<<< HEAD
-=======
 		
 		if (toolChest != null)
 		{
@@ -156,16 +133,11 @@ public class Player extends authentication.User implements Serializable
 				toolChestArray[i] = toolChest.get(i);
 			}
 		}
->>>>>>> nils_branch
 
 		observableListsLoaded = false;
 	}
 
-<<<<<<< HEAD
-	// TODO - make work with equipment
-=======
 	// TODO - make work with equipment, done, cleanup though!
->>>>>>> nils_branch
 	private void loadObservableLists()
 	{
 		// if iceChest is null and the iceChestArray is not null, it means that this
@@ -181,8 +153,6 @@ public class Player extends authentication.User implements Serializable
 		{
 			iceChest = FXCollections.observableArrayList();
 		}
-<<<<<<< HEAD
-=======
 		
 		if (toolChest == null && toolChestArray != null)
 		{
@@ -194,23 +164,17 @@ public class Player extends authentication.User implements Serializable
 		{
 			toolChest = FXCollections.observableArrayList();
 		}
->>>>>>> nils_branch
 
 		// set the object to not do this again, until it gets serialized
 		observableListsLoaded = false;
 	}
 
-<<<<<<< HEAD
-	public int getNumOf(Enum<?> species)
-	{
-=======
 	// TODO holy shit nils, fix this up
 	// see Constants -> public static final Image getImage(final Enum<?> desiredResourceType) for ideas
 	public int getNumOf(Enum<?> species)
 	{
 		// GET RID OF THIS in a refactor
 		loadObservableLists();
->>>>>>> nils_branch
 		// counter
 		int numOfSpecies = 0;
 
@@ -237,86 +201,6 @@ public class Player extends authentication.User implements Serializable
 					}
 				}
 				return numOfSpecies;
-<<<<<<< HEAD
-
-			case TUNA:
-				for (int i = 0; i < iceChest.size(); i++)
-				{
-					if (iceChest.get(i).getSpecies() == FishSpecies.TUNA)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;
-
-			// TODO - handle this a little better
-			default:
-				return 0;
-			}
-		}
-		if (species instanceof ShellfishSpecies)
-		{
-			switch ((ShellfishSpecies) species)
-			{
-			case CRAB:
-				for (int i = 0; i < iceChest.size(); i++)
-				{
-					if (iceChest.get(i).getSpecies() == ShellfishSpecies.CRAB)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;
-
-			case LOBSTER:
-				for (int i = 0; i < iceChest.size(); i++)
-				{
-					if (iceChest.get(i).getSpecies() == ShellfishSpecies.LOBSTER)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;
-
-			case OYSTER:
-				for (int i = 0; i < iceChest.size(); i++)
-				{
-					if (iceChest.get(i).getSpecies() == ShellfishSpecies.OYSTER)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;
-
-			// TODO - handle this a little better
-			default:
-				return 0;
-			}
-		}
-		return 0;
-	}
-
-	public SeaCreature<?> getSeaNextSeaCreature(Enum<?> species)
-	{
-		boolean creatureFound = false;
-		int i = 0;
-		SeaCreature<?> creature = null;
-		
-		while(!creatureFound && i < iceChest.size())
-		{
-			if(iceChest.get(i).getSpecies() == species)
-			{
-				creature = iceChest.get(i);
-				creatureFound = true;
-				iceChest.remove(i);
-			}
-			i++;
-		}
-		
-		return creature;
-	}
-=======
->>>>>>> nils_branch
 
 			case TUNA:
 				for (int i = 0; i < iceChest.size(); i++)
@@ -427,6 +311,16 @@ public class Player extends authentication.User implements Serializable
 					}
 				}
 				return numOfSpecies;
+				
+			case BEER:
+				for (int i = 0; i < toolChest.size(); i++)
+				{
+					if (toolChest.get(i).getType() == SimpleFishingItemType.BEER)
+					{
+						numOfSpecies++;
+					}
+				}
+				return numOfSpecies;		
 
 
 			// TODO - handle this a little better
@@ -464,5 +358,29 @@ public class Player extends authentication.User implements Serializable
 		// move this or something, do this intuitively 
 		loadObservableLists();
 		return this.toolChest;
+	}
+
+	public double getTotalEarned()
+	{
+		return this.totalEarned;
+	}
+	
+
+	public int getTotalCatches()
+	{
+		return totalCatches;
+	}
+
+	public void setStatSendHandler(SendStatsHandler sendStatsHandler)
+	{
+		this.sendStatsHandler = sendStatsHandler;
+	}
+	
+	private void sendStatsToServer()
+	{
+		if(sendStatsHandler != null)
+		{
+			sendStatsHandler.send();
+		}
 	}
 }

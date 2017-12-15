@@ -53,14 +53,14 @@ public class Ocean implements Serializable
 	private ArrayList<Shellfish> lobsterPopulation = new ArrayList<>();
 	private ArrayList<Shellfish> crabPopulation = new ArrayList<>();
 	private ArrayList<Shellfish> oysterPopulation = new ArrayList<>();
-
-	// for randomly generating weights of SeaCreatures
-	private Random rand = new Random();
 	
 	//for determining population growth
 	private double relativeGrowthRate = 0.02;
 	//also for determining population growth
 	private double regenerationTimeInterval=10;
+	
+	//for timed calls to rgenerateOcean function
+	private Timer oceanRegenerationTimer;
 
 	/**
 	 * If it is a new game, fills the Ocean to max population;
@@ -284,9 +284,9 @@ public class Ocean implements Serializable
 	 */
 	private void regenerateOcean()
 	{
-		Timer timer = new Timer();
-		TimerTask task;
-		task = new TimerTask()
+		oceanRegenerationTimer = new Timer();
+		TimerTask oceanRegenerationTask;
+		oceanRegenerationTask = new TimerTask()
 		{
 
 			@Override
@@ -296,7 +296,11 @@ public class Ocean implements Serializable
 			}
 
 		};
-		timer.schedule(task, 0, 5_000);
+		oceanRegenerationTimer.schedule(oceanRegenerationTask, 0, 5_000);
+	}
+	
+	public void shutDownOcean(){
+		oceanRegenerationTimer.cancel();
 	}
 	
 	/**
@@ -552,7 +556,8 @@ public class Ocean implements Serializable
 	 */
 	private void addFish(ArrayList<Fish> fishPopulation, FishSpecies species)
 	{
-		fishPopulation.add(new Fish(species, getRandomWeightForFish(species)));
+		fishPopulation.add(new Fish(species, 
+				getRandomWeightForFish(species), getRandomSpeedFactorForFish(species)));
 	}
 
 	/**
@@ -563,7 +568,8 @@ public class Ocean implements Serializable
 	 */
 	private void addShellfish(ArrayList<Shellfish> shellfishPopulation, ShellfishSpecies species)
 	{
-		shellfishPopulation.add(new Shellfish(species, getRandomWeightForShellfish(species)));
+		shellfishPopulation.add(new Shellfish(species, 
+				getRandomWeightForShellfish(species), getRandomSpeedFactorForShellFish(species)));
 	}
 	
 	/**
@@ -686,6 +692,68 @@ public class Ocean implements Serializable
 		
 	}
 	
+	private double getRandomSpeedFactorForFish(FishSpecies species)
+	{
+		double speedFactor = 0;
+		switch (species)
+		{
+		case COD:
+			speedFactor = getRandomSpeedFactorForCod();
+			break;
+		case SALMON:
+			speedFactor = getRandomSpeedFactorForSalmon();
+			break;
+		case TUNA:
+			speedFactor = getRandomSpeedFactorForTuna();
+			break;
+
+		}
+		return speedFactor;
+	}
+	
+	private double getRandomSpeedFactorForShellFish(ShellfishSpecies species)
+	{
+		double speedFactor = 0;
+		switch (species)
+		{
+		case OYSTER:
+			speedFactor = getRandomSpeedFactorForOyster();
+			break;
+		case LOBSTER:
+			speedFactor = getRandomSpeedFactorForLobster();
+			break;
+		case CRAB:
+			speedFactor = getRandomSpeedFactorForCrab();
+			break;
+
+		}
+		return speedFactor;
+	}
+	
+	private double getRandomSpeedFactorForCod(){
+		return NumberUtilities.getRandomDouble(Constants.COD_MIN_SPEED_FACTOR, Constants.COD_MAX_SPEED_FACTOR);
+	}
+	
+	private double getRandomSpeedFactorForSalmon(){
+		return NumberUtilities.getRandomDouble(Constants.SALMON_MIN_SPEED_FACTOR, Constants.SALMON_MAX_SPEED_FACTOR);
+	}
+	
+	private double getRandomSpeedFactorForTuna(){
+		return NumberUtilities.getRandomDouble(Constants.TUNA_MIN_SPEED_FACTOR, Constants.TUNA_MAX_SPEED_FACTOR);
+	}
+	
+	private double getRandomSpeedFactorForLobster(){
+		return NumberUtilities.getRandomDouble(Constants.LOBSTER_MIN_SPEED_FACTOR, Constants.LOBSTER_MAX_SPEED_FACTOR);
+	}
+	
+	private double getRandomSpeedFactorForCrab(){
+		return NumberUtilities.getRandomDouble(Constants.CRAB_MIN_SPEED_FACTOR, Constants.CRAB_MAX_SPEED_FACTOR);
+	}
+	
+	private double getRandomSpeedFactorForOyster(){
+		return NumberUtilities.getRandomDouble(Constants.OYSTER_MIN_SPEED_FACTOR, Constants.OYSTER_MAX_SPEED_FACTOR);
+	}
+	
 	/**
 	 * Getter for the size of the cod array list.
 	 * @return An int of the size of the current cod population 
@@ -738,7 +806,5 @@ public class Ocean implements Serializable
 	public int getCurrentOysterPopulation()
 	{
 		return oysterPopulation.size();
-		//int random = getRandomInt(0, Constants.OYSTER_INITIAL_POPULATION);
-		//return random;
 	}
 }

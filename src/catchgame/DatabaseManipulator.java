@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import authentication.BadPasswordException;
 import authentication.BadUsernameException;
 import authentication.NewUserException;
-import javafx.beans.value.ObservableDoubleValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;

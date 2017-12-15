@@ -22,6 +22,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -40,13 +41,12 @@ public class LoginPane extends VBox
 	private Label lblName = new Label("Username: ");
 	private Label lblPassword = new Label("Password: ");
 	private Label lblServerIp = new Label("Server ip: ");
-	private Label lblClientPort = new Label("Client Port: ");
+	private Label lblServerPort = new Label("Server Port: ");
 
-	// fields for entry, filled with default values for easy testing
-
+	// TextFields for user entry
 	private TextField tfName = new TextField();
-	private TextField pfPassword = new TextField();
-	private TextField tfServerIp = new TextField("localhost");
+	private PasswordField pfPassword = new PasswordField();
+	private TextField tfServerIp = new TextField();
 	private TextField tfClientPort = new TextField();
 	
 	// containers
@@ -61,12 +61,9 @@ public class LoginPane extends VBox
 	
 	// text to display errors
 	private Text txtError = new Text();
-<<<<<<< HEAD
-=======
 	
 	// to display logo
 	private Image logoImage = new Image("img/catch_logo.png");
->>>>>>> nils_branch
 
 	public LoginPane(EventHandler<ActionEvent> loginAction, EventHandler<ActionEvent> newUserAction, EventHandler<ActionEvent> newServerAction)
 	{		
@@ -75,7 +72,7 @@ public class LoginPane extends VBox
 		// node, col, row
 		loginGridPane.add(lblServerIp, 0, 0);
 		loginGridPane.add(tfServerIp, 1, 0);
-		loginGridPane.add(lblClientPort, 0, 1);
+		loginGridPane.add(lblServerPort, 0, 1);
 		loginGridPane.add(tfClientPort, 1, 1);
 		loginGridPane.add(lblName, 0, 2);
 		loginGridPane.add(tfName, 1, 2);
@@ -91,9 +88,6 @@ public class LoginPane extends VBox
 		buttonHBox.setAlignment(Pos.CENTER);
 		buttonHBox.setSpacing(10);
 		
-		// setup the image
-		
-		
 		ImageView logoImageView = new ImageView(logoImage);
 		
 		logoImageView.setFitWidth(250);
@@ -104,24 +98,12 @@ public class LoginPane extends VBox
 		// add everything to its appropriate node
 		titleStackPane.getChildren().add(txtTitle);
 		buttonHBox.getChildren().addAll(btnLogin, btnNewUser, btnNewServer);
-<<<<<<< HEAD
-		this.getChildren().addAll(titleStackPane, loginGridPane, txtError, buttonHBox);
-=======
 		this.getChildren().addAll(stackPane, titleStackPane, loginGridPane, txtError, buttonHBox);
->>>>>>> nils_branch
 		
 		// set actions
 		btnLogin.setOnAction(loginAction);
 		btnNewUser.setOnAction(newUserAction);
 		btnNewServer.setOnAction(newServerAction);
-		
-		this.widthProperty().addListener(e -> {
-			System.out.println("this.width: " + this.getWidth());
-		});
-		this.heightProperty().addListener(e -> {
-			System.out.println("this.height: " + this.getHeight());
-		});
-		
 	}
 	
 	public String getPlayerName()
@@ -129,14 +111,6 @@ public class LoginPane extends VBox
 		return tfName.getText();
 	}
 	
-<<<<<<< HEAD
-	public String getPlayerName()
-	{
-		return tfName.getText();
-	}
-	
-=======
->>>>>>> nils_branch
 	public String getPlayerPassword()
 	{
 		return pfPassword.getText();

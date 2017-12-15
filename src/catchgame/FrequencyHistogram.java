@@ -13,13 +13,9 @@ that occurs in the FrequencyHistogramPane itself
 Modification info:
 new
 */
-import catchgame.Catch.LoginHandler;
-import catchgame.Catch.NewUserHandler;
-import catchgame.Catch.NewServerHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import userinterface.FrequencyHistogramPane;
-import userinterface.LoginPane;
 /**
  * 
  * @author Matt Roberts

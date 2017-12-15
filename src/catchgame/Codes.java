@@ -8,11 +8,9 @@ Date: 11-27-2017
 Purpose: to have int values for all server/client request and response codes,
 all in one class (like a c++ struct)
 
-Modification info:
-added LOGOUT_REQUEST_CODE
 */
 /**
- * Constant values that represent requests and responses
+ * Constant values that represent requests or responses
  */
 public class Codes
 {
@@ -31,10 +29,8 @@ public class Codes
 	public final static int NEW_USER_ERR_ILLEGAL_NAME_CODE = 13; 
 	public final static int NEW_USER_ERR_UNKNOWN_CODE = 13; 
 
-	
 	// client request codes
-	public static final int LOGOUT_REQUEST_CODE = 20;
+	public static final int LOGOUT_CODE = 20;
 	public static final int DELETE_ACCOUNT_CODE = 21;
-	
-	
+	public static final int GET_LEADER_BOARD_CODE = 0;
 }

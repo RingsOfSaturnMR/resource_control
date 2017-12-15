@@ -28,7 +28,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import resources.Fish;
-import resources.SeaCreature;
 import resources.Shellfish;
 /**
  * This class defines various packets for client/server communication used throughout the program. 
@@ -168,6 +167,44 @@ public class Packets
 			this.currentPopulationCrab=currentPopulationCrab;
 			this.maxPopulationCrab=maxPopulationCrab;
 			
+		}
+	}
+	
+	/**
+	 * Holds values for an entry of the leaderboard.
+	 */
+	public static class LeaderBoardRow implements Serializable
+	{
+		public String name;
+		public double totalMoneyEarned;
+		public double cashOnHand;
+		public int totalCatches;
+		
+		public LeaderBoardRow(String name, double totalMoneyEarned, double cashOnHand, int totalCatches)
+		{
+			this.name = name;
+			this.totalMoneyEarned = totalMoneyEarned;
+			this.cashOnHand = cashOnHand;
+			this.totalCatches = totalCatches;
+		}
+		
+		@Override
+		public String toString()
+		{
+			return "Row: Name = " + name + ", totalEarned = " + totalMoneyEarned + ", cashOnHand = " + cashOnHand + ", totalCatches = " + totalCatches;
+		}
+	}
+	
+	/**
+	 * Used to send the high scores from the server to the client
+	 */
+	public static class LeaderBoardPacket implements Serializable
+	{
+		public LeaderBoardRow[] rows;
+		
+		public LeaderBoardPacket(LeaderBoardRow[] rows)
+		{
+			this.rows = rows;
 		}
 	}
 }

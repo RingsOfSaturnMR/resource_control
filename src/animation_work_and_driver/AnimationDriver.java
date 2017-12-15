@@ -22,6 +22,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import userinterface.LoginPane;
 import userinterface.NewUserPane;
+import userinterface.SimpleFishingPane;
 
 public class AnimationDriver extends Application{
 
@@ -45,6 +46,15 @@ public class AnimationDriver extends Application{
 		primaryStage.setScene(simpleFishingScene);
 		primaryStage.setTitle("Fishing Activity");
 		FishingActivityV2 fishingActivityV2=new FishingActivityV2(simpleFishingPane, new Player("JaneFisher"));
+		primaryStage.setOnCloseRequest(e ->
+		{
+			
+			System.out.println("shutting down animation driver");
+			fishingActivityV2.ocean.shutDownOcean();
+			fishingActivityV2.clientFishingActivityFishManager.stopAnimation();
+			System.out.println("animation driver shut down");
+			
+		});
 		primaryStage.show();
 		primaryStage.requestFocus();
 		

@@ -17,6 +17,9 @@ no changes known
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import authentication.BadLoginException;
 import authentication.NewUserException;
@@ -32,14 +35,15 @@ import authentication.User;
  */
 public interface IUserDAO
 {
+	// methods to override
 	void createUser(String userName, String enteredPassword, String enteredPasswordConfirm) throws NewUserException, FileNotFoundException, IOException;
 	
 	void deleteUser(String username);
 	
 	User getUser(String enteredUserName, String enteredPassword) throws BadLoginException, FileNotFoundException, IOException;
-	
+
 	boolean usernameIsAvailable(String enteredUserName);
-	
+
 	int getNumberOfUsers();
 }
 

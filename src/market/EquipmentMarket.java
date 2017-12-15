@@ -9,17 +9,6 @@ import resources.Equipment;
 import resources.SimpleFishingItem;
 import resources.SimpleFishingItemType;
 
-<<<<<<< HEAD
-
-/*
- fill in all these methods.
- Notice there is no method to buy an item. That is because Equipment resources are unlimited, and then can just be made
- in the event handler for when a player purchases something. This class just determines the values.  
- */
-public class EquipmentMarket extends Market<Equipment, Enum>
-{
-=======
->>>>>>> nils_branch
 
 /*
  fill in all these methods.
@@ -37,17 +26,12 @@ public class EquipmentMarket extends Market<Equipment, Enum>
 		this.updatePriceHandler = updatePriceHandler;
 	}
 
-<<<<<<< HEAD
-	// price for purchasing new equipment
-	@Override
-	public double getCurrentPricePerPound(Enum item)
-=======
 	public void forcUpdate()
 	{
 		updatePriceHandler.setPrices();
 	}
 	
-	// TODO refactor
+	// TODO refactor, use a loop based of of Constants.SUPPORTED_EQUIPMENT[] to get each type
 	public Object buyItem(Enum<?> desiredItem)
 	{
 		// boats
@@ -69,6 +53,10 @@ public class EquipmentMarket extends Market<Equipment, Enum>
 		{
 			return new SimpleFishingItem(SimpleFishingItemType.FISHING_POLE);
 		}
+		if(desiredItem == SimpleFishingItemType.BEER)
+		{
+			return new SimpleFishingItem(SimpleFishingItemType.BEER);
+		}
 
 		else
 		{
@@ -78,7 +66,6 @@ public class EquipmentMarket extends Market<Equipment, Enum>
 	
 	// price for purchasing new equipment
 	public double getCurrentPrice(Enum item)
->>>>>>> nils_branch
 	{
 		// TODO Auto-generated method stub
 		return 12.3;
@@ -87,8 +74,7 @@ public class EquipmentMarket extends Market<Equipment, Enum>
 	@Override
 	public String getMarketType()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return "Equipment Market";
 	}
 
 	@Override

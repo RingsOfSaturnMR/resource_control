@@ -2,16 +2,12 @@ package resources;
 
 import java.io.Serializable;
 
-<<<<<<< HEAD
 import catchgame.Constants;
-import graphicclasses.AbstractSeaCreatureGraphic;
-=======
-
->>>>>>> nils_branch
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 import javafx.scene.shape.Circle;
+import utilities.NumberUtilities;
 
 /**
  */
@@ -21,14 +17,9 @@ public abstract class SeaCreature <T> implements Serializable
 	
 	private double weight;
 	private T species;
-<<<<<<< HEAD
-	private double speed=10;
+	private double speed;
+	private double speedFactor;
 	private short direction=Constants.RIGHT;
-	private transient Circle GUICircle = null;
-	//protected transient AbstractSeaCreatureGraphic seaCreatureBody=null;
-=======
-	private transient Circle GUICircle = null;
->>>>>>> nils_branch
 
 	SeaCreature(){
 		
@@ -41,6 +32,15 @@ public abstract class SeaCreature <T> implements Serializable
 		totalPopulation++;
 	}
 	
+	protected SeaCreature(T species, double weight, double speedFactor)
+	{
+		setSpecies(species);
+		setWeight(weight);
+		setSpeedFactor(speedFactor);
+		calculateSpeed();
+		totalPopulation++;
+	}
+	
 	private void setSpecies(T species)
 	{
 		this.species = species;	
@@ -50,6 +50,7 @@ public abstract class SeaCreature <T> implements Serializable
 	{
 		if (weight > 0)
 		{
+			weight = NumberUtilities.round(weight, 2);
 			this.weight = weight;
 		}
 		else
@@ -68,32 +69,11 @@ public abstract class SeaCreature <T> implements Serializable
 		return this.species;
 	}
 	
-	public Circle getBody()
-	{
-		return this.GUICircle;
-	}
-	
-	public void SetBodyByWeight()
-	{
-		this.GUICircle = new Circle(weight);
-	}
-	
-	public void setBodyColor(Color color){
-		this.GUICircle.setFill(color);
-	}
-	
-	// for serializing
-	public void setBodyToNull()
-	{
-		this.GUICircle = null;
-	}
-	
 	@Override
 	public String toString()
 	{
 		return this.getSpecies().toString() + ", " + this.getWeight() + " pounds";
 	}
-<<<<<<< HEAD
 	
 	public double getSpeed(){
 		return speed;
@@ -107,6 +87,22 @@ public abstract class SeaCreature <T> implements Serializable
 		else
 		{
 			speed = 1;
+		}
+	}
+	
+	public void calculateSpeed(){
+		speed=speedFactor*weight*Constants.SPEED_ADJUSTMENT_CONSTANT;
+	}
+	
+	public void setSpeedFactor(double speedFactor)
+	{
+		if (speedFactor > 0)
+		{
+			this.speedFactor = speedFactor;
+		}
+		else
+		{
+			speedFactor = 1;
 		}
 	}
 	
@@ -124,6 +120,4 @@ public abstract class SeaCreature <T> implements Serializable
 			this.direction = Constants.LEFT;
 		}
 	}
-=======
->>>>>>> nils_branch
 }

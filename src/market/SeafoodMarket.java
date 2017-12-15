@@ -8,19 +8,28 @@ import resources.SeaCreature;
 import resources.ShellfishSpecies;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import catchgame.Constants;
 import catchgame.GameControl.SeafoodPriceSetEventHandler;
 
-/*
- 
- -Make prices change at a set interval of time. (Example: Every 10 minutes, make the price for any item go up or down percentage, depending on how stable the market is.)
- 
- - Use the Constants class to get the market fluctuation value, and how long before prices expire.
- 
+/**
+ * Seafood market sets up the market with inventory and prices
+ * It also regulates the prices.
+ * 
+ *  Make prices change at a set interval of time. 
+ *  (Example: Every 10 minutes, make the price for any 
+ *  item go up or down percentage, depending on how stable the market is.)
+ *  Use the Constants class to get the market fluctuation value, and how long before prices expire.
+ * 
+ * @author caileighfitzgerald
+ *
  */
 public class SeafoodMarket extends Market<SeaCreature, Enum>
 {
+	
 	// handler to tell the rest of the program there are new prices
 	private SeafoodPriceSetEventHandler priceSetHandler;
 	
@@ -29,20 +38,21 @@ public class SeafoodMarket extends Market<SeaCreature, Enum>
 	// Iterator of traversing hashmap
 	private Iterator<Enum> keySetIterator;
 
-	// for keeping track of time
-	private long previousTime;
-	private long currentTime;
+	// for keeping track of time ** ended up using thread with constant delta time
+//	private long previousTime;
+//	private long currentTime;
+	
+	// for random number generator which creates market flux
+	private Random rand;
+	
+	private Timer timer;
 
 	public SeafoodMarket(String name, SeafoodPriceSetEventHandler updatePricePerPoundHandler)
 	{
 		super(name);
 		// set the handler
 		priceSetHandler = updatePricePerPoundHandler;
-<<<<<<< HEAD
-		
-=======
 	
->>>>>>> nils_branch
 		// populate hashmap with inventory
 		inventory = new HashMap<Enum, Double>();
 		// for fish species
@@ -57,80 +67,128 @@ public class SeafoodMarket extends Market<SeaCreature, Enum>
 		// initialize iterator for traversal
 		this.keySetIterator = inventory.keySet().iterator();
 
-		// set up clock
-		currentTime = System.nanoTime();
-		previousTime = System.nanoTime();
-<<<<<<< HEAD
-	}
-	
-	//temp for testing
-	public void forcePriceUpdate()
-	{
-		// do this after a price change to tell the program there are new prices
-		priceSetHandler.setPrices();
-=======
+//		// set up clock
+//		currentTime = System.nanoTime();
+//		previousTime = System.nanoTime();
 		
->>>>>>> nils_branch
+		// initialize rand
+		this.rand = new Random();
+		
+		// call marketflux() to start a timer thread
+		this.marketFlux();
 	}
 	
-	//temp for testing
-
-<<<<<<< HEAD
-	public void getRandTimeCoefficient() {}
-	public void getDeltaTime() {} // will check time
-	public void marketFlux() {} // this one will contain the thread for checking the time and updated price
-
-	@Override
-	public double getCurrentPricePerPound(Enum species)
-	{
-=======
-	public void forcePriceUpdate()
+	public void forcePriceUpdate() throws Exception
 	{
 		// do this after a price change to tell the program there are new prices
 		priceSetHandler.setPrices();
 	}
 
-
-
-	public void getRandTimeCoefficient() {}
-	public void getDeltaTime() {} // will check time
-	public void marketFlux() {} // this one will contain the thread for checking the time and updated price
-
-
-	public double getCurrentPricePerPound(Enum species)
+	public double getRandPriceCoefficient() 
 	{
->>>>>>> nils_branch
+		double tempVal;	// this will be multiplied by the price and added
+		while ((tempVal = rand.nextDouble()) != 0.0) 
+		{
+			return tempVal;
+		}
+		return tempVal; // Eclipse forces a return outside loop
+	}
+	
+//	public long getDeltaTime()  // will check time
+//	{
+//		// update previous time 
+//		this.previousTime = this.currentTime;
+//		// update current time with System clock
+//		this.currentTime = System.nanoTime();
+//		// return the difference in time from previous to current.
+//		return (this.currentTime - this.previousTime);
+//	}
+	
+	public double adjustPrice(double currentPrice)
+	{
+		if (rand.nextBoolean()) {	// if true, price flux is positive
+			return (currentPrice += (currentPrice * getRandPriceCoefficient()));
+		}
+		else {						// if false, price flux is negative UNLESS it would make the price 0
+									// then it will add
+			if (currentPrice - (currentPrice * getRandPriceCoefficient()) <= 0.0) {
+				return (currentPrice += (currentPrice * getRandPriceCoefficient()));
+			}
+			else {
+				return (currentPrice -= (currentPrice * getRandPriceCoefficient()));
+			}
+		}
+	}
+	
+	public void updatePrices() throws Exception // this is called in the run() method. Iterates through map
+	{
+		// update prices for inventory using rand
+		for (Enum key : this.inventory.keySet())
+		{	// replaces price with (old price * rand co eff)
+			this.inventory.replace(key, adjustPrice(this.inventory.get(key)));
+		}
+		// now let the GUI know the prices are updated
+		forcePriceUpdate();
+	}
+	
+	public void marketFlux()  // this one will contain the thread for checking the time and updated price
+	{
+		timer = new Timer();
+		TimerTask task = new TimerTask()
+		{
+			@Override
+			public void run() {
+				try {
+					updatePrices();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		timer.schedule(task, 0, 30_000); // update every 30 seconds
+	}
+	
+	public void shutdownSeaFoodMarket(){
+		if (timer!=null){
+			timer.cancel();
+		}
+	}
+
+	public double getCurrentPricePerPound(Enum species) throws Exception 	// FOR NOW -caileigh
+	{
 		if (this.inventory.containsKey(species)) {
 			return this.inventory.get(species); // returns the value which is the current price per pound
 		}
 		else {
 			// throw because input is not in hashmap
 			// requires return added '0' for now - Nils
-			return 0;
+			// 
+			// throw statement added. will make custom exception class -caileigh
+			throw new Exception("We do not have this species in our current inventory");
 		}
 	}
 
 	@Override
 	public String getMarketType()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return "Seafood Market";
 	}
 
 	@Override
 	public double sellItem(SeaCreature item)
 	{
-		if(item.getSpecies() == FishSpecies.SALMON)
-		{
-			// its a salmon!
-		}
-		return 2;
+		if(this.inventory.containsKey(item.getSpecies()))  	// Hash maps rule -caileigh
+			return (this.inventory.get(item.getSpecies()));
+		else 
+			return 0.0; // possibly worth making market exception class -caileigh
 	}
 	
-	public Date getNextPriceChange()
-	{
-		return new Date();
-	}
+	//  Don't think we need a getNextPriceChange()
+//	
+//	public Date getNextPriceChange()
+//	{
+//		return new Date();
+//	}
 
 
 }
