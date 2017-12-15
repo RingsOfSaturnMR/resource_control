@@ -666,7 +666,7 @@ public class GameControl
 			{
 				if (player.getCashOnHand() >= equipMarket.getCurrentPrice(itemType))
 				{
-					player.addItemToToolChest((Equipment<?>) equipMarket.buyItem(itemType));
+					player.addItemToToolChest(equipMarket.buyItem(itemType));
 					player.subtractMoney(equipMarket.getCurrentPrice(itemType));
 
 					gamePane.appendOutput("New Fishing Gear Purchased: " + itemType.toString());

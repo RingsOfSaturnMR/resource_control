@@ -13,6 +13,8 @@ import resources.FishSpecies;
 import resources.ShellfishSpecies;
 import resources.SimpleFishingItem;
 import resources.SimpleFishingItemType;
+import resources.Usage;
+
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -54,12 +56,43 @@ public class EquipmentMarket extends Market<Equipment, Enum>
 		updatePriceHandler.setPrices();
 	}
 	
-	public Object buyItem(Enum<?> desiredItem) throws Exception
+	public Equipment<?> buyItem(Enum<?> desiredItem) throws Exception
 	{
-		if (this.inventory.containsKey(desiredItem)) {
+		/*if (this.inventory.containsKey(desiredItem)) {
 			return this.inventory.get(desiredItem); // returns the value which is the price
 		}
 		else {
+			throw new Exception("We do not have this equipment in our current inventory");
+		}*/
+		
+		
+		if(desiredItem == BoatTypes.COMMERCIAL_TRAWLER)
+		{
+			return new Boat(BoatTypes.COMMERCIAL_TRAWLER);
+		}
+		
+		if(desiredItem == BoatTypes.TRAWLER)
+		{
+			return new Boat(BoatTypes.TRAWLER);
+		}
+		
+		if(desiredItem == BoatTypes.FISHING_SKIFF)
+		{
+			return new Boat(BoatTypes.FISHING_SKIFF);
+		}
+		
+		if(desiredItem == SimpleFishingItemType.BEER)
+		{
+			return new SimpleFishingItem(SimpleFishingItemType.BEER);
+		}
+		
+		if(desiredItem == SimpleFishingItemType.FISHING_POLE)
+		{
+			return new SimpleFishingItem(SimpleFishingItemType.FISHING_POLE);
+		}
+		
+		else
+		{
 			throw new Exception("We do not have this equipment in our current inventory");
 		}
 	}

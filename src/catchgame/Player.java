@@ -35,7 +35,7 @@ public class Player extends authentication.User implements Serializable
 
 	// flag to mark if the arrays need to be copied to the observable lists
 	private boolean observableListsLoaded = false;
-	
+
 	// allows the player to send stats to the server
 	private transient SendStatsHandler sendStatsHandler = null;
 
@@ -124,7 +124,7 @@ public class Player extends authentication.User implements Serializable
 				iceChestArray[i] = iceChest.get(i);
 			}
 		}
-		
+
 		if (toolChest != null)
 		{
 			toolChestArray = new Equipment[toolChest.size()];
@@ -138,7 +138,7 @@ public class Player extends authentication.User implements Serializable
 		observableListsLoaded = false;
 	}
 
-	// TODO - make work with equipment, done, cleanup though!
+	// TODO - make work with equipment, done, cleanup though!af
 	private void loadObservableLists()
 	{
 		// if iceChest is null and the iceChestArray is not null, it means that this
@@ -154,7 +154,7 @@ public class Player extends authentication.User implements Serializable
 		{
 			iceChest = FXCollections.observableArrayList();
 		}
-		
+
 		if (toolChest == null && toolChestArray != null)
 		{
 			toolChest = FXCollections.observableArrayList(toolChestArray);
@@ -167,7 +167,7 @@ public class Player extends authentication.User implements Serializable
 		}
 
 		// set the object to not do this again, until it gets serialized
-		observableListsLoaded = false;
+		observableListsLoaded = true;
 	}
 
 	/**
@@ -183,12 +183,26 @@ public class Player extends authentication.User implements Serializable
 
 		int numSpecies = 0;
 
-		for (SeaCreature<?> creature : iceChest)
+		if (species instanceof FishSpecies || species instanceof ShellfishSpecies)
 		{
-			if (creature.getSpecies() == species)
+			for (SeaCreature<?> creature : iceChest)
 			{
+				if (creature.getSpecies() == species)
+				{
 
-				numSpecies++;
+					numSpecies++;
+				}
+			}
+		}
+		else
+		{
+			for (Equipment<?> equip : toolChest)
+			{
+				if (equip.getType() == species)
+				{
+
+					numSpecies++;
+				}
 			}
 		}
 		return numSpecies;
@@ -199,10 +213,10 @@ public class Player extends authentication.User implements Serializable
 		boolean creatureFound = false;
 		int i = 0;
 		SeaCreature<?> creature = null;
-		
-		while(!creatureFound && i < iceChest.size())
+
+		while (!creatureFound && i < iceChest.size())
 		{
-			if(iceChest.get(i).getSpecies() == species)
+			if (iceChest.get(i).getSpecies() == species)
 			{
 				creature = iceChest.get(i);
 				creatureFound = true;
@@ -210,14 +224,13 @@ public class Player extends authentication.User implements Serializable
 			}
 			i++;
 		}
-		
+
 		return creature;
 	}
 
-	
 	public ObservableList<?> getToolChest()
 	{
-		// move this or something, do this intuitively 
+		// move this or something, do this intuitively
 		loadObservableLists();
 		return this.toolChest;
 	}
@@ -226,11 +239,10 @@ public class Player extends authentication.User implements Serializable
 	{
 		return NumberUtilities.round(totalEarned, 2);
 	}
-	
 
 	public int getTotalCatches()
 	{
-		
+
 		return totalCatches;
 	}
 
@@ -238,10 +250,10 @@ public class Player extends authentication.User implements Serializable
 	{
 		this.sendStatsHandler = sendStatsHandler;
 	}
-	
+
 	private void sendStatsToServer()
 	{
-		if(sendStatsHandler != null)
+		if (sendStatsHandler != null)
 		{
 			sendStatsHandler.send();
 		}
