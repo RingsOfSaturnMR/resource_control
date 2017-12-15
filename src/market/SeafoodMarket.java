@@ -29,7 +29,6 @@ import catchgame.GameControl.SeafoodPriceSetEventHandler;
  */
 public class SeafoodMarket extends Market<SeaCreature, Enum>
 {
-	
 	// handler to tell the rest of the program there are new prices
 	private SeafoodPriceSetEventHandler priceSetHandler;
 	
@@ -37,14 +36,9 @@ public class SeafoodMarket extends Market<SeaCreature, Enum>
 	private HashMap<Enum, Double> inventory; // type : price
 	// Iterator of traversing hashmap
 	private Iterator<Enum> keySetIterator;
-
-	// for keeping track of time ** ended up using thread with constant delta time
-//	private long previousTime;
-//	private long currentTime;
 	
 	// for random number generator which creates market flux
 	private Random rand;
-	
 	private Timer timer;
 
 	public SeafoodMarket(String name, SeafoodPriceSetEventHandler updatePricePerPoundHandler)
@@ -66,10 +60,6 @@ public class SeafoodMarket extends Market<SeaCreature, Enum>
 
 		// initialize iterator for traversal
 		this.keySetIterator = inventory.keySet().iterator();
-
-//		// set up clock
-//		currentTime = System.nanoTime();
-//		previousTime = System.nanoTime();
 		
 		// initialize rand
 		this.rand = new Random();
@@ -93,16 +83,6 @@ public class SeafoodMarket extends Market<SeaCreature, Enum>
 		}
 		return tempVal; // Eclipse forces a return outside loop
 	}
-	
-//	public long getDeltaTime()  // will check time
-//	{
-//		// update previous time 
-//		this.previousTime = this.currentTime;
-//		// update current time with System clock
-//		this.currentTime = System.nanoTime();
-//		// return the difference in time from previous to current.
-//		return (this.currentTime - this.previousTime);
-//	}
 	
 	public double adjustPrice(double currentPrice)
 	{
@@ -160,10 +140,6 @@ public class SeafoodMarket extends Market<SeaCreature, Enum>
 			return this.inventory.get(species); // returns the value which is the current price per pound
 		}
 		else {
-			// throw because input is not in hashmap
-			// requires return added '0' for now - Nils
-			// 
-			// throw statement added. will make custom exception class -caileigh
 			throw new Exception("We do not have this species in our current inventory");
 		}
 	}
@@ -182,13 +158,5 @@ public class SeafoodMarket extends Market<SeaCreature, Enum>
 		else 
 			return 0.0; // possibly worth making market exception class -caileigh
 	}
-	
-	//  Don't think we need a getNextPriceChange()
-//	
-//	public Date getNextPriceChange()
-//	{
-//		return new Date();
-//	}
-
 
 }

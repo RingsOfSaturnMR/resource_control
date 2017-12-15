@@ -1,14 +1,20 @@
 package market;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
+import catchgame.Constants;
 import catchgame.GameControl.SetCurrentEquipPricesHandler;
 import resources.Boat;
 import resources.BoatTypes;
 import resources.Equipment;
+import resources.FishSpecies;
+import resources.ShellfishSpecies;
 import resources.SimpleFishingItem;
 import resources.SimpleFishingItemType;
-
+import java.util.HashMap;
+import java.util.Iterator;
 
 /*
  fill in all these methods.
@@ -19,11 +25,28 @@ public class EquipmentMarket extends Market<Equipment, Enum>
 {	
 	public SetCurrentEquipPricesHandler updatePriceHandler;
 	
+	// Dictionary to hold merch and prices
+	private HashMap<Enum, Double> inventory; // type : price
+	// Iterator of traversing hashmap
+	private Iterator<Enum> keySetIterator;
+	
 	public EquipmentMarket(String name, SetCurrentEquipPricesHandler updatePriceHandler)
 	{
 		super(name);
-		// TODO Auto-generated constructor stub
+		// set the handler
 		this.updatePriceHandler = updatePriceHandler;
+		
+		// populate hashmap with inventory
+		inventory = new HashMap<Enum, Double>();
+		// for fish species
+		inventory.put(BoatTypes.COMMERCIAL_TRAWLER, Constants.COMMERCIAL_TRAWLER_PRICE);
+		inventory.put(BoatTypes.TRAWLER, Constants.TRAWLER_PRICE);
+		inventory.put(BoatTypes.FISHING_SKIFF, Constants.FISHING_SKIFF_PRICE);
+		inventory.put(SimpleFishingItemType.BEER, Constants.BEER_PRICE);
+		inventory.put(SimpleFishingItemType.FISHING_POLE, Constants.FISHING_POLE_PRICE);
+		
+		// initialize iterator for traversal
+		this.keySetIterator = inventory.keySet().iterator();
 	}
 
 	public void forcUpdate()
@@ -31,44 +54,25 @@ public class EquipmentMarket extends Market<Equipment, Enum>
 		updatePriceHandler.setPrices();
 	}
 	
-	// TODO refactor, use a loop based of of Constants.SUPPORTED_EQUIPMENT[] to get each type
-	public Object buyItem(Enum<?> desiredItem)
+	public Object buyItem(Enum<?> desiredItem) throws Exception
 	{
-		// boats
-		if(desiredItem == BoatTypes.COMMERCIAL_TRAWLER)
-		{
-			return new Boat(BoatTypes.COMMERCIAL_TRAWLER);
+		if (this.inventory.containsKey(desiredItem)) {
+			return this.inventory.get(desiredItem); // returns the value which is the price
 		}
-		if(desiredItem == BoatTypes.FISHING_SKIFF)
-		{
-			return new Boat(BoatTypes.FISHING_SKIFF);
-		}
-		if(desiredItem == BoatTypes.TRAWLER)
-		{
-			return new Boat(BoatTypes.TRAWLER);
-		}
-		
-		// other stuff
-		if(desiredItem == SimpleFishingItemType.FISHING_POLE)
-		{
-			return new SimpleFishingItem(SimpleFishingItemType.FISHING_POLE);
-		}
-		if(desiredItem == SimpleFishingItemType.BEER)
-		{
-			return new SimpleFishingItem(SimpleFishingItemType.BEER);
-		}
-
-		else
-		{
-			return null;
+		else {
+			throw new Exception("We do not have this equipment in our current inventory");
 		}
 	}
 	
 	// price for purchasing new equipment
-	public double getCurrentPrice(Enum item)
+	public double getCurrentPrice(Enum item) throws Exception
 	{
-		// TODO Auto-generated method stub
-		return 12.3;
+		if (this.inventory.containsKey(item)) {
+			return this.inventory.get(item); // returns the value which is the price
+		}
+		else {
+			throw new Exception("We do not have this equipment in our current inventory");
+		}
 	}
 
 	@Override
@@ -80,14 +84,19 @@ public class EquipmentMarket extends Market<Equipment, Enum>
 	@Override
 	public double sellItem(Equipment item)
 	{
-		// TODO Auto-generated method stub
+		// At this time the equipment market has an "unlimited inventory"
+		// If the inventory was limited, this method would decrement the count for the item
 		return 0;
 	}
 	
-	// amount of money you recieve when you sell old equip
-	public double getItemValue(Equipment item)
+	// amount of money you receive when you sell old equip
+	public double getItemValue(Equipment item)throws Exception
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		if (this.inventory.containsKey(item)) {
+			return this.inventory.get(item); // returns the value which is the price
+		}
+		else {
+			throw new Exception("We do not have this equipment in our current inventory");
+		}
 	}
 }
