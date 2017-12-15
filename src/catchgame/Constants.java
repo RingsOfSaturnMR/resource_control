@@ -110,13 +110,20 @@ public class Constants
 	public final static double SPEED_ADJUSTMENT_CONSTANT = 0.5;
 
 	// Basics
+<<<<<<< HEAD
 	public final static String APPLICATION_NAME = "Catch!! - By Caileigh, Matt, Nils, Thanh";
+=======
+	public final static String APPLICATION_NAME = "Catch!! - By Caileigh, Matt, Nls, Thanh";
+>>>>>>> master
 	public static final int NUM_HIGH_SCORES = 3;
 	public final static short LEFT = -1;
 	public final static short RIGHT = 1;
 	
+<<<<<<< HEAD
 	
 	//species and equipment enum arrays
+=======
+>>>>>>> master
 	/**
 	 * An array of SeaCreature Species the game supports
 	 */

@@ -16,7 +16,7 @@ import authentication.NewUserException.UsernameError;
 public class Authenticator
 {
 	public static final char[] LEGAL_PW_SPECIAL_CHARACTER =
-	{ '!', '@', '#', '$', '^', '&', '*' };
+	{ '!', '@', '#', '$', '%', '^', '&', '*' };
 	// if setting MIN_PW_LENGTH higher, verify that current users will not be
 	// refused login - see UserDAO.getUser
 	public static final int MIN_PW_LENGTH = 4;

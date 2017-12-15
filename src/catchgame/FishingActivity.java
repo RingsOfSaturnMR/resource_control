@@ -25,10 +25,17 @@ public class FishingActivity {
 	private Player player;
 
 	private ClientSubOcean clientSubOcean;
+<<<<<<< HEAD
 	private ClientSubOceanAnimator clientFishingActivityFishManager;
 
 	
 	public ClientSubOceanAnimator getClientFishingActivityFishManager(){
+=======
+	private ClientFishingActivityFishManager clientFishingActivityFishManager;
+
+	
+	public ClientFishingActivityFishManager getClientFishingActivityFishManager(){
+>>>>>>> master
 		return clientFishingActivityFishManager;
 	}
 	/**
@@ -48,7 +55,11 @@ public class FishingActivity {
 			ObjectInputStream fromServer, Player player) {
 		this.simpleFishingPane = gamepane.simpleFishingPane;
 		clientSubOcean = new ClientSubOcean();
+<<<<<<< HEAD
 		clientFishingActivityFishManager = new ClientSubOceanAnimator(simpleFishingPane);
+=======
+		clientFishingActivityFishManager = new ClientFishingActivityFishManager(simpleFishingPane);
+>>>>>>> master
 		this.player = player;
 		this.toServer = toServer;
 		this.fromServer = fromServer;

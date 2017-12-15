@@ -27,11 +27,15 @@ import javafx.scene.text.TextAlignment;
 public class SeafoodMarketPane extends VBox
 {
 	// for titles
-	private Label lblPrices = new Label("Current Prices");
-	private Label lblMyResources = new Label("My Sea Creatures");
-	private Label lblToSell = new Label("Resources To Sell");
+	private final Label lblPrices = new Label("Current Prices");
+	private final Label lblMyResources = new Label("My Sea Creatures");
+	private final Label lblToSell = new Label("Resources To Sell");
 
+<<<<<<< HEAD
 	// for the name dispayed at top of the market
+=======
+	// for the name displayed at top of the market
+>>>>>>> master
 	public Text txtMarketName;
 
 	// to display current prices and entry for transaction

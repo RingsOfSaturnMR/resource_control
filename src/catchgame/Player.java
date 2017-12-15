@@ -2,9 +2,16 @@ package catchgame;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+<<<<<<< HEAD
 
 import catchgame.GameControl.SendStatsHandler;
+=======
+import authentication.User;
+import catchgame.GameControl.SendStatsHandler;
+import javafx.beans.value.ChangeListener;
+>>>>>>> master
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import resources.BoatTypes;
@@ -16,8 +23,10 @@ import resources.SimpleFishingItemType;
 
 /**
  * @author Nils
+ * This class contains all of the resources and stats that belong to the player.
+ * It extends authentication.User so that a Player can be authenticated.
  */
-public class Player extends authentication.User implements Serializable
+public class Player extends User implements Serializable
 {
 	// general stats
 	private double cashOnHand;
@@ -35,6 +44,9 @@ public class Player extends authentication.User implements Serializable
 	// flag to mark if the arrays need to be copied to the observable lists
 	private boolean observableListsLoaded = false;
 	
+	// allows the player to send stats to the server
+	private transient SendStatsHandler sendStatsHandler = null;
+
 	// allows the player to send stats to the server
 	private transient SendStatsHandler sendStatsHandler = null;
 
@@ -56,12 +68,15 @@ public class Player extends authentication.User implements Serializable
 		iceChest.add(item);
 		totalCatches++;
 		sendStatsToServer();
+<<<<<<< HEAD
 	}
 
 	public void removeSeaCreatureFromIceChest(int i)
 	{
 		iceChest.remove(i);
 		sendStatsToServer();
+=======
+>>>>>>> master
 	}
 
 	public void addItemToToolChest(Equipment item)
@@ -87,8 +102,9 @@ public class Player extends authentication.User implements Serializable
 		sendStatsToServer();
 	}
 
-	public void subtractMoney(double d)
+	public void subtractMoney(double amount)
 	{
+<<<<<<< HEAD
 		cashOnHand -= d;
 		sendStatsToServer();
 	}
@@ -106,6 +122,10 @@ public class Player extends authentication.User implements Serializable
 		}
 
 		return iceChest;
+=======
+		cashOnHand -= amount;
+		sendStatsToServer();
+>>>>>>> master
 	}
 
 	/**
@@ -123,7 +143,7 @@ public class Player extends authentication.User implements Serializable
 				iceChestArray[i] = iceChest.get(i);
 			}
 		}
-		
+
 		if (toolChest != null)
 		{
 			toolChestArray = new Equipment[toolChest.size()];
@@ -137,7 +157,10 @@ public class Player extends authentication.User implements Serializable
 		observableListsLoaded = false;
 	}
 
-	// TODO - make work with equipment, done, cleanup though!
+	/**
+	 * Copies primitive arrays to observable Lists. Will get called if an
+	 * observable is null because this object was recently deserialized.
+	 */
 	private void loadObservableLists()
 	{
 		// if iceChest is null and the iceChestArray is not null, it means that this
@@ -153,155 +176,39 @@ public class Player extends authentication.User implements Serializable
 		{
 			iceChest = FXCollections.observableArrayList();
 		}
-		
+
+		// follows the same pattern as iceChest and iceChestArray
 		if (toolChest == null && toolChestArray != null)
 		{
 			toolChest = FXCollections.observableArrayList(toolChestArray);
 		}
-		// if both are null, it means no SeaCreatures have ever been caught. Set the
-		// iceChest to be empty;
+
 		else if (toolChest == null && toolChestArray == null)
 		{
 			toolChest = FXCollections.observableArrayList();
 		}
 
-		// set the object to not do this again, until it gets serialized
-		observableListsLoaded = false;
+		observableListsLoaded = true;
 	}
 
-	// TODO holy shit nils, fix this up
-	// see Constants -> public static final Image getImage(final Enum<?> desiredResourceType) for ideas
+	/**
+	 * @param species that you wish to know how many the player has.
+	 * @return the number of that species the player has.
+	 */
 	public int getNumOf(Enum<?> species)
 	{
-		// GET RID OF THIS in a refactor
-		loadObservableLists();
-		// counter
-		int numOfSpecies = 0;
-
-		if (species instanceof FishSpecies)
+		if (!observableListsLoaded)
 		{
-			switch ((FishSpecies) species)
-			{
-			case COD:
-				for (int i = 0; i < iceChest.size(); i++)
-				{
-					if (iceChest.get(i).getSpecies() == FishSpecies.COD)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;
-
-			case SALMON:
-				for (int i = 0; i < iceChest.size(); i++)
-				{
-					if (iceChest.get(i).getSpecies() == FishSpecies.SALMON)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;
-
-			case TUNA:
-				for (int i = 0; i < iceChest.size(); i++)
-				{
-					if (iceChest.get(i).getSpecies() == FishSpecies.TUNA)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;
-
-			// TODO - handle this a little better
-			default:
-				return 0;
-			}
-		}
-		if (species instanceof ShellfishSpecies)
-		{
-			switch ((ShellfishSpecies) species)
-			{
-			case CRAB:
-				for (int i = 0; i < iceChest.size(); i++)
-				{
-					if (iceChest.get(i).getSpecies() == ShellfishSpecies.CRAB)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;
-
-			case LOBSTER:
-				for (int i = 0; i < iceChest.size(); i++)
-				{
-					if (iceChest.get(i).getSpecies() == ShellfishSpecies.LOBSTER)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;
-
-			case OYSTER:
-				for (int i = 0; i < iceChest.size(); i++)
-				{
-					if (iceChest.get(i).getSpecies() == ShellfishSpecies.OYSTER)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;
-
-			// TODO - handle this a little better
-			default:
-				return 0;
-			}
+			loadObservableLists();
 		}
 		
-		// for Simple Fishing items
-		if (species instanceof BoatTypes)
-		{
-			switch ((BoatTypes) species)
-			{
-			case FISHING_SKIFF:
-				for (int i = 0; i < toolChest.size(); i++)
-				{
-					if (toolChest.get(i).getType() == BoatTypes.FISHING_SKIFF)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;
-
-			case TRAWLER:
-				for (int i = 0; i < toolChest.size(); i++)
-				{
-					if (toolChest.get(i).getType() == BoatTypes.TRAWLER)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;
-
-			case COMMERCIAL_TRAWLER:
-				for (int i = 0; i < toolChest.size(); i++)
-				{
-					if (toolChest.get(i).getType() == BoatTypes.COMMERCIAL_TRAWLER)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;
-			// TODO - handle this a little better
-			default:
-				return 0;
-			}
-		}
+		int numSpecies = 0;
 		
-		// For SimpleFishingTypes
-		if (species instanceof SimpleFishingItemType)
+		for(SeaCreature<?> creature: iceChest)
 		{
-			switch ((SimpleFishingItemType) species)
+			if (creature.getSpecies() == species)
 			{
+<<<<<<< HEAD
 			case FISHING_POLE:
 				for (int i = 0; i < toolChest.size(); i++)
 				{
@@ -326,10 +233,12 @@ public class Player extends authentication.User implements Serializable
 			// TODO - handle this a little better
 			default:
 				return 0;
+=======
+				numSpecies++;
+>>>>>>> master
 			}
-	
 		}
-		return 0;
+		return numSpecies;
 	}
 
 	public SeaCreature<?> getSeaNextSeaCreature(Enum<?> species)
@@ -337,10 +246,10 @@ public class Player extends authentication.User implements Serializable
 		boolean creatureFound = false;
 		int i = 0;
 		SeaCreature<?> creature = null;
-		
-		while(!creatureFound && i < iceChest.size())
+
+		while (!creatureFound && i < iceChest.size())
 		{
-			if(iceChest.get(i).getSpecies() == species)
+			if (iceChest.get(i).getSpecies() == species)
 			{
 				creature = iceChest.get(i);
 				creatureFound = true;
@@ -348,16 +257,61 @@ public class Player extends authentication.User implements Serializable
 			}
 			i++;
 		}
-		
+
 		return creature;
 	}
 
-	
-	public ObservableList<?> getToolChest()
+	/**
+	 * @return the total ammont earned
+	 */
+	public double getTotalEarned()
 	{
-		// move this or something, do this intuitively 
-		loadObservableLists();
-		return this.toolChest;
+		return this.totalEarned;
+	}
+
+	/**
+	 * @return the total SeaCreatures caught
+	 */
+	public int getTotalCatches()
+	{
+		return totalCatches;
+	}
+
+	/**
+	 * Sends information about players stats to server
+	 */
+	public void setStatSendHandler(SendStatsHandler sendStatsHandler)
+	{
+		this.sendStatsHandler = sendStatsHandler;
+	}
+
+	/**
+	 * will send information to server if the handler is set
+	 */
+	private void sendStatsToServer()
+	{
+		if (sendStatsHandler != null)
+		{
+			sendStatsHandler.send();
+		}
+	}
+
+	/**
+	 * Puts a listener on the iceChest List
+	 * @param iceChestChangeListener, the listener to be attached
+	 */
+	public void addIceChestListner(ListChangeListener<? super SeaCreature> iceChestChangeListener)
+	{
+		this.iceChest.addListener(iceChestChangeListener);
+	}
+	
+	/**
+	 * Puts a listener on the toolChest List
+	 * @param toolChestChangeListner, the listener to be attached
+	 */
+	public void addToolChestListner(ListChangeListener<? super Equipment> toolChestChangeListner)
+	{
+		this.toolChest.addListener(toolChestChangeListner);
 	}
 
 	public double getTotalEarned()
