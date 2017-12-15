@@ -1,6 +1,13 @@
 package catchgametest;
 
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import catchgame.Ocean;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 import resources.Boat;
 import resources.BoatTypes;
 import resources.Fish;
@@ -95,7 +102,34 @@ public class ResourceTest
         System.out.println("'ocean.ocean.getCurrentLobsterPopulation()': " + ocean.getCurrentLobsterPopulation());
         System.out.println("'ocean.getCurrentOysterPopulation()': " + ocean.getCurrentOysterPopulation());
         
+       
+      /*  URI uri;
+		try
+		{
+			uri = new URI("water.wav");
+	
         
+		Media media = new Media(uri.toString());
+
+		MediaPlayer a = new MediaPlayer(media);
+		a.setOnEndOfMedia(new Runnable()
+		{
+			public void run()
+			{
+				a.seek(Duration.ZERO);
+			}
+		});
+		a.play();
+		}
+		catch (URISyntaxException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+        
+        
+        
+        /**/
 	}
 
 }

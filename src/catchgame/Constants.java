@@ -16,20 +16,11 @@ added frequency histogram height and width
 added application name
 */
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-<<<<<<< HEAD
-import resources.FishSpecies;
-import resources.ShellfishSpecies;
-=======
 import resources.BoatTypes;
 import resources.FishSpecies;
 import resources.ShellfishSpecies;
 import resources.SimpleFishingItemType;
->>>>>>> nils_branch
 
 /**
  * Constants for initial values used throughout the program.
@@ -41,26 +32,18 @@ public class Constants
 	public static final int TIME_BEFORE_PRICE_EXPIRATION = 1_000_000;// milliseconds?
 
 	// window sizes
-<<<<<<< HEAD
-	public final static int LOGIN_PANE_WIDTH = 355;
-	public final static int LOGIN_PANE_HEIGHT = 275;
-=======
 	public final static int LOGIN_PANE_WIDTH = 325;
 	public final static int LOGIN_PANE_HEIGHT = 500;
->>>>>>> nils_branch
-	public final static int NEW_USER_PANE_WIDTH = 500;
-	public final static int NEW_USER_PANE_HEIGHT = 300;
+	public final static int NEW_USER_PANE_WIDTH = 460;
+	public final static int NEW_USER_PANE_HEIGHT = 250;
 	public final static int INITIAL_SERVER_PANE_WIDTH = 400;
 	public final static int INITIAL_SERVER_PANE_HEIGHT = 400;
-	public final static int INITIAL_GAME_PANE_WIDTH = 500;
-	public final static int INITIAL_GAME_PANE_HEIGHT = 500;
+	public final static int INITIAL_GAME_PANE_WIDTH = 900;
+	public final static int INITIAL_GAME_PANE_HEIGHT = 725;
 	public final static int FREQUENCY_HISTOGRAM_PANE_WIDTH = 500;
 	public final static int FREQUENCY_HISTOGRAM_PANE_HEIGHT = 500;
-<<<<<<< HEAD
-	public final static int INITIAL_SIMPLE_FISHING_PANE_WIDTH = 500;
-	public final static int INITIAL_SIMPLE_FISHING_PANE_HEIGHT = 400;
-=======
->>>>>>> nils_branch
+	public final static int INITIAL_SIMPLE_FISHING_PANE_WIDTH = 900;
+	public final static int INITIAL_SIMPLE_FISHING_PANE_HEIGHT = 500;
 
 	// initial Market values of resources
 	public final static double TUNA_INITIAL_PRICE_PER_POUND = 6.40;
@@ -70,6 +53,9 @@ public class Constants
 	public final static double CRAB_INITIAL_PRICE_PER_POUND = 11.0;
 	public final static double LOBSTER_INITIAL_PRICE_PER_POUND = 20.0;
 	
+	// for max and min rand time coeffient 
+	public final static int MIN_PRICE_FLUX = 1;
+	public final static int MAX_PRICE_FLUX = 5;
 
 	// initial population sizes for Ocean
 	public final static int COD_INITIAL_POPULATION = 1000;
@@ -104,26 +90,46 @@ public class Constants
 	public final static double LOBSTER_INITIAL_WEIGHT_MAX = 7;
 	public final static double OYSTER_INITIAL_WEIGHT_MIN = 1;
 	public final static double OYSTER_INITIAL_WEIGHT_MAX = 4;
+	
+	//speed factors for sea creatures
+	public final static double COD_MIN_SPEED_FACTOR = 1;
+	public final static double COD_MAX_SPEED_FACTOR = 1.2;
+	public final static double SALMON_MIN_SPEED_FACTOR = 0.8;
+	public final static double SALMON_MAX_SPEED_FACTOR = 1;
+	public final static double TUNA_MIN_SPEED_FACTOR = 1.8;
+	public final static double TUNA_MAX_SPEED_FACTOR = 2.6;
+	public final static double LOBSTER_MIN_SPEED_FACTOR = 0.4;
+	public final static double LOBSTER_MAX_SPEED_FACTOR = 0.6;
+	public final static double CRAB_MIN_SPEED_FACTOR = 0.2;
+	public final static double CRAB_MAX_SPEED_FACTOR = 0.4;
+	public final static double OYSTER_MIN_SPEED_FACTOR = 0.1;
+	public final static double OYSTER_MAX_SPEED_FACTOR = 0.2;
+	
+	//speed adjustment constant
+	
+	public final static double SPEED_ADJUSTMENT_CONSTANT = 0.5;
 
 	// Basics
-	public final static String APPLICATION_NAME = "Catch!! - By Caileigh, Matt, Nls, Thanh";
-<<<<<<< HEAD
+	public final static String APPLICATION_NAME = "Catch!! - By Caileigh, Matt, Nils, Thanh";
+	public static final int NUM_HIGH_SCORES = 3;
 	public final static short LEFT = -1;
 	public final static short RIGHT = 1;
-=======
-
+	
+	
+	//species and equipment enum arrays
 	/**
 	 * An array of SeaCreature Species the game supports
 	 */
-	public final static Enum[] SUPPORTED_SPECIES =
+	public final static Enum<?>[] SUPPORTED_SPECIES =
 	{ FishSpecies.COD, FishSpecies.SALMON, FishSpecies.TUNA, ShellfishSpecies.CRAB, ShellfishSpecies.LOBSTER, ShellfishSpecies.OYSTER };
 
 	/**
 	 * An array of Equipment types the game supports
 	 */
-	public static Enum[] SUPPORTED_EQUIPMENT =
-	{ BoatTypes.COMMERCIAL_TRAWLER, BoatTypes.FISHING_SKIFF, BoatTypes.TRAWLER, SimpleFishingItemType.FISHING_POLE };
+	public static Enum<?>[] SUPPORTED_EQUIPMENT =
+	{ BoatTypes.COMMERCIAL_TRAWLER, BoatTypes.FISHING_SKIFF, BoatTypes.TRAWLER, SimpleFishingItemType.BEER, SimpleFishingItemType.FISHING_POLE };
 
+	//images based on enums
 	/**
 	 * 
 	 * @param desiredResourceType species of SeaCreature
@@ -157,32 +163,18 @@ public class Constants
 		return null;
 	}
 	
->>>>>>> nils_branch
-
-	/**
-	 * A list of the SeaCreature Species the program supports
-	 */
-	public final static Enum[] SUPPORTED_SPECIES =
-	{ FishSpecies.COD, FishSpecies.SALMON, FishSpecies.TUNA, ShellfishSpecies.CRAB, ShellfishSpecies.LOBSTER, ShellfishSpecies.OYSTER };
-	
-	/**
-	 * 
-	 * @param e species of SeaCreature
-	 * @return Image of SeaCreature or null if it can't find the image.
-	 */
-	public static final Image getImage(final Enum<?> e)
-	{
-		for(int i = 0; i < SUPPORTED_SPECIES.length; i++ )
-		{
-			if(e == SUPPORTED_SPECIES[i])
-			{
-				return (new Image("img/" + SUPPORTED_SPECIES[i].toString().toLowerCase() + ".png"));
-			}
-		}
+		//graphic constants
+		//constants to multiple weight by to get pixel width (aspect is preserved)
+		public final static short SEACREATURE_WEIGHT_GRAPHIC_MULTIPLE = 10;
 		
-		return null;	
-	}
-	
-	//constants to multiple weight by to get pixel width (aspect is preserved)
-	public final static short COD_WEIGHT_GRAPHIC_MULTIPLE = 10;
+		//constants for placing sea creatures in simple fishing pane
+		public final static int ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT = 13;
+		public final static int DISTANCE_FROM_TOP = 50;
+		public final static int DISTANCE_FROM_BOTTOM = 50;
+		public final static double BOTTOM_COEFFICIENT = 0.2;
+		public final static double TOP_COEFFICIENT = 1-BOTTOM_COEFFICIENT;
+		
+		//thumbnail dimensions
+		public static final double IMG_THUMBNAIL_HEIGHT = 50;
+		public static final double IMG_THUMBNAIL_WDITH = 50;
 }

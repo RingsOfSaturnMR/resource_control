@@ -2,5 +2,6 @@ package resources;
 
 public enum SimpleFishingItemType
 {
-	FISHING_POLE
+	FISHING_POLE,
+	BEER
 }

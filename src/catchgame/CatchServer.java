@@ -23,12 +23,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
-
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import authentication.BadLoginException;
 import authentication.BadLoginException.LoginError;
 import authentication.BadPasswordException;
@@ -36,12 +39,12 @@ import authentication.BadUsernameException;
 import authentication.NewUserException;
 import authentication.NewUserException.UsernameError;
 import catchgame.Packets.ClientSubOceanSeaCreatureStatePacket;
+import catchgame.Packets.LeaderBoardRow;
 import catchgame.Packets.LoginPacket;
 import catchgame.Packets.NewUserPacket;
 import catchgame.Packets.ResultPacket;
 import catchgame.Packets.RequestPacket;
 import catchgame.Packets.SeaCreaturesPacket;
-
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
@@ -70,6 +73,10 @@ public class CatchServer
 	private int serverSocketPort;
 	private SimpleBooleanProperty listeningForNewClients = new SimpleBooleanProperty(false);
 	private Thread newClientThread = null;
+	
+	// to hold threads
+	private ConcurrentHashMap<String, HandleServerSideGameControl> threadMap = new ConcurrentHashMap<>();
+	private  Set<String> threadKeys = threadMap.keySet();
 
 	public Ocean ocean = new Ocean();
 
@@ -88,11 +95,18 @@ public class CatchServer
 			
 			serverStage.setOnCloseRequest(e ->
 			{
-				// TODO logic for shutdown of server goes here
-				System.out.println("Server Shutdown action fired");
-				// tell server to stop listening, maybe flush the streams somehow
+				ocean.shutDownOcean();
 				listeningForNewClients.set(false);
-				// get all the streams that are open to close somehow?
+				newClientThread = null;
+				
+				for(String key: threadKeys)
+				{
+		            if(threadMap.get(key) != null)
+		            {
+		            	System.out.println("Disconnecting user: " + key);
+		            	threadMap.get(key).closeStreams();
+		            }
+		        }
 			});
 		}
 		catch (SQLException e)
@@ -144,7 +158,7 @@ public class CatchServer
 		{
 			try
 			{
-				// let it decide for itself
+				// let it decide for itself, set to '0'
 				ServerSocket serverSocket = new ServerSocket(0);
 				serverSocketPort = serverSocket.getLocalPort();
 				
@@ -152,6 +166,15 @@ public class CatchServer
 				{
 					serverPane.appendToOutput("Server Started at: " + new Date());
 					serverPane.appendToOutput("Open to clients on port " + serverSocketPort );
+					try
+					{
+						serverPane.appendToOutput("Server IP Adress: " + InetAddress.getLocalHost().getHostAddress());
+					}
+					catch (UnknownHostException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				});
 				
 				// set server to listen
@@ -184,8 +207,8 @@ public class CatchServer
 							
 							// start serving that user on a new thread
 							HandleServerSideGameControl handleServerSideGameControl = new HandleServerSideGameControl(toClient, fromClient, loginPacket.enteredName);
-							new Thread(handleServerSideGameControl).start();
-
+							threadMap.put(loginPacket.enteredName, handleServerSideGameControl);
+							new Thread(threadMap.get(loginPacket.enteredName)).start();		
 						}
 						catch (BadLoginException e)
 						{
@@ -241,7 +264,15 @@ public class CatchServer
 							userDAO.createUser(newUserPacket.enteredName, newUserPacket.enteredPassword, newUserPacket.enteredPasswordConfirm);
 							serverCode = Codes.NEW_USER_SUCESS_CODE;
 							HandleServerSideGameControl handleServerSideGameControl = new HandleServerSideGameControl(toClient, fromClient, newUserPacket.enteredName);
-							new Thread(handleServerSideGameControl).start();
+							
+							threadMap.put(newUserPacket.enteredName, handleServerSideGameControl);
+							new Thread(threadMap.get(newUserPacket.enteredName)).start();	
+							
+							//new Thread(handleServerSideGameControl).start();
+							
+							// start serving that user on a new thread
+							//clientThreadList.add(new Thread(handleServerSideGameControl));
+							//clientThreadList.get(clientThreadList.size()-1).start();
 
 						}
 						catch (NewUserException e)
@@ -256,13 +287,17 @@ public class CatchServer
 
 								for (int i = 0; i < exception.getErrorList().size(); i++)
 								{
+									// if the name is unavailable, return that code. Dont continue checking.
 									if (exception.getErrorList().get(i) == UsernameError.UNAVAILABLE)
 									{
 										serverCode = Codes.NEW_USER_ERR_NAME_TAKEN_CODE;
+										break;
 									}
-									else if (exception.getErrorList().get(i) == UsernameError.HAS_ILLEGAL_CHAR)
+									// if any other BadUserName exception, just return generic code, dont continue checking;
+									else 
 									{
 										serverCode = Codes.NEW_USER_ERR_ILLEGAL_NAME_CODE;
+										break;
 									}
 								}
 							}
@@ -321,12 +356,22 @@ public class CatchServer
 		private ObjectInputStream fromClient;
 		private String username;
 		private boolean loggedIn = true;
+		private LeaderBoardDAO leaderBoardDAO;
 
 		HandleServerSideGameControl(ObjectOutputStream toClient, ObjectInputStream fromClient, String username)
 		{
 			this.toClient = toClient;
 			this.fromClient = fromClient;
 			this.username = username;
+			
+			try
+			{
+				leaderBoardDAO = new LeaderBoardDAO();
+			}
+			catch(SQLException sqlE)
+			{
+				sqlE.printStackTrace();
+			}
 		}
 
 		public void run()
@@ -339,6 +384,7 @@ public class CatchServer
 				{
 					// get object from client
 					Object recievedObject = fromClient.readObject();
+					
 
 					// if it is a player object, save it
 					if (recievedObject instanceof Player)
@@ -348,6 +394,13 @@ public class CatchServer
 						Platform.runLater(() -> serverPane.appendToOutput(username + " Saved their game."));
 						continue;
 					}
+					
+					// if it is an entry for the leaderboard, add it to the leaderboard
+					if(recievedObject instanceof LeaderBoardRow)
+					{
+						LeaderBoardRow row = (LeaderBoardRow) recievedObject;
+						leaderBoardDAO.update(row);
+					}
 
 					if (recievedObject instanceof RequestPacket)
 					{
@@ -356,8 +409,7 @@ public class CatchServer
 
 						switch (code)
 						{
-						case Codes.LOGOUT_REQUEST_CODE:
-							Platform.runLater(() -> serverPane.appendToOutput(username + " sent a logout request."));
+						case Codes.LOGOUT_CODE:
 							loggedIn = false;
 							continue;
 							
@@ -365,6 +417,10 @@ public class CatchServer
 							Platform.runLater(() -> serverPane.appendToOutput(username + " sent an account delete request."));
 							loggedIn = false;
 							userDAO.deleteUser(username);
+							continue;
+							
+						case Codes.GET_LEADER_BOARD_CODE:
+							toClient.writeObject(leaderBoardDAO.getLeaderBoard());
 							continue;
 							
 						default:
@@ -376,10 +432,6 @@ public class CatchServer
 					if (recievedObject instanceof ClientSubOceanSeaCreatureStatePacket)
 					{
 						ClientSubOceanSeaCreatureStatePacket clientSubOceanSeaCreatureStatePacket = (ClientSubOceanSeaCreatureStatePacket) recievedObject;
-						//System.out.println("clientSubOcean.currentPopulationCod: "+clientSubOcean.currentPopulationCod);
-						//System.out.println("clientSubOcean.maxPopulationCod: "+clientSubOcean.maxPopulationCod);
-						//System.out.println("subocean crab: "+clientSubOceanSeaCreatureStatePacket.currentPopulationCrab);
-						//System.out.println("subocean crab: "+clientSubOceanSeaCreatureStatePacket.maxPopulationCrab);
 						ArrayList<Fish> codPacket = ocean.extractAndReturnABunchOfFish(FishSpecies.COD, 
 								clientSubOceanSeaCreatureStatePacket.currentPopulationCod, 
 								clientSubOceanSeaCreatureStatePacket.maxPopulationCod);
@@ -398,12 +450,6 @@ public class CatchServer
 						ArrayList<Shellfish> crabPacket = ocean.ecxtractAndReturnABunchOfShellfish(ShellfishSpecies.CRAB, 
 								clientSubOceanSeaCreatureStatePacket.currentPopulationCrab, 
 								clientSubOceanSeaCreatureStatePacket.maxPopulationCrab);
-						//System.out.println("crabPacket size: "+crabPacket.size());
-						 //System.out.println("cod cuurent population: "
-						 //+clientSubOceanSeaCreatureStatePacket.currentPopulationCod);
-						 //System.out.println("cod max population: "
-						 //+clientSubOceanSeaCreatureStatePacket.maxPopulationCod);
-						// System.out.println("Num cod in packet:"+codPacket.size());
 						toClient.writeObject(new SeaCreaturesPacket(codPacket, salmonPacket, tunaPacket,
 								oysterPacket,lobsterPacket,crabPacket));
 					}
@@ -418,6 +464,8 @@ public class CatchServer
 				{
 					e.printStackTrace();
 					Platform.runLater(() -> serverPane.appendToOutput(e.getMessage()));
+					break;
+					
 				}
 				catch (ClassNotFoundException e)
 				{
@@ -429,12 +477,29 @@ public class CatchServer
 					e.printStackTrace();
 					Platform.runLater(() -> serverPane.appendToOutput(e.getMessage()));
 				}
-
 			}
 
 			Platform.runLater(() -> serverPane.appendToOutput(username + " has logged out and is no longer being served."));
-			// to stop thread from running
+			
+			// remove this thread from the hashmap
+			threadMap.remove(username);
+			// stops the thread
 			return;
+		}
+		
+		public void closeStreams()
+		{
+			
+			try
+			{
+				toClient.close();
+				fromClient.close();
+			}
+			catch (IOException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	

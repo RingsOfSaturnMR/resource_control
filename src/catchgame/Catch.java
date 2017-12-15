@@ -20,17 +20,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-<<<<<<< HEAD
-=======
-
-import javax.security.auth.login.LoginException;
-
->>>>>>> nils_branch
 import catchgame.Packets.NewUserPacket;
 import catchgame.Packets.ResultPacket;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -120,7 +113,7 @@ public class Catch extends Application
 					// set sockets and streams
 					try
 					{
-						socket = new Socket(newUserPane.getServerIpAddress(), newUserPane.getClientPort());
+						socket = new Socket(newUserPane.getServerIpAddress(), newUserPane.getServerPort());
 						ObjectOutputStream toServer = new ObjectOutputStream(socket.getOutputStream());
 						ObjectInputStream fromServer = new ObjectInputStream(socket.getInputStream());
 
@@ -130,7 +123,7 @@ public class Catch extends Application
 						// makes it so that user doesnt have to re-enter information if connecting to same server again
 						if(lastPort != null && lastIp != null)
 						{
-							newUserPane.setClientPortNum(lastPort);
+							newUserPane.setServerPortNum(lastPort);
 							newUserPane.setServerIpAddress(lastIp);
 						}
 						
@@ -154,7 +147,7 @@ public class Catch extends Application
 							case Codes.NEW_USER_SUCESS_CODE:
 								newUserStage.close();
 								loginStage.close();
-								launchGameControl(newUserPane.getServerIpAddress(), newUserPane.getClientPort(), newUserPane.getDesiredName(), newUserPane.getDesiredPassword());
+								launchGameControl(newUserPane.getServerIpAddress(), newUserPane.getServerPort(), newUserPane.getDesiredName(), newUserPane.getDesiredPassword());
 								break;
 							}
 						}
@@ -185,7 +178,7 @@ public class Catch extends Application
 			newUserPane = new NewUserPane(new CreateNewUser(), new CancelHandler());
 			if (catchServer != null)
 			{
-				newUserPane.setClientPortNum(catchServer.getServerSocketPort());
+				newUserPane.setServerPortNum(catchServer.getServerSocketPort());
 			}
 			Scene newUserScene = new Scene(newUserPane, Constants.NEW_USER_PANE_WIDTH, Constants.NEW_USER_PANE_HEIGHT);
 			newUserStage.setScene(newUserScene);
@@ -226,10 +219,7 @@ public class Catch extends Application
 		{
 			GameControl gameControl = new GameControl(serverIpAddress, clientPort, playerName, playerPassword);
 			
-<<<<<<< HEAD
-=======
 			// shuts down loginPane if gameControl launches successfully
->>>>>>> nils_branch
 			gameControl.getGameRunning().addListener(ov -> {
 				loadLoginPane();
 				loginPane.setClientPortNum(catchServer.getServerSocketPort());
@@ -241,18 +231,10 @@ public class Catch extends Application
 			lastPort = clientPort;
 			
 		}
-<<<<<<< HEAD
-		catch (Exception e1)
-		{
-			loginPane.setErrorText(e1.getMessage());
-			System.out.println(e1.getMessage());
-			e1.printStackTrace();
-=======
 		catch(Exception exception)
 		{
 			loginPane.setErrorText(exception.getMessage());
 			exception.printStackTrace();
->>>>>>> nils_branch
 		}
 	}
 	

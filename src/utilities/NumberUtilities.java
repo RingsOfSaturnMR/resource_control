@@ -25,11 +25,7 @@ public class NumberUtilities {
 	 */
 	public static int getRandomInt(int min, int max)
 	{
-<<<<<<< HEAD
 		int randomInt = rand.nextInt(max+1) + min;
-=======
-		int randomInt = rand.nextInt(max) + min;
->>>>>>> nils_branch
 		return randomInt;
 	}
 
@@ -43,5 +39,11 @@ public class NumberUtilities {
 	{
 		double randomDouble = (max - min) * rand.nextDouble() + min;
 		return randomDouble;
+	}
+	
+	public static double round(double value, int places)
+	{
+		double scale = Math.pow(10, places);
+		return Math.round(value * scale) / scale;
 	}
 }

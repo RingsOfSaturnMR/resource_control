@@ -18,33 +18,23 @@ import authentication.EncryptionFilter;
 import authentication.NewUserException;
 import authentication.NewUserException.PasswordError;
 import authentication.NewUserException.UsernameError;
-import authentication.User;
 import authentication.BadLoginException.LoginError;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
  * 
  * @author Nils Johnson
  */
 // TODO - Try with resources for each call, instead of try-catch-finally
-public class UserDAO implements IUserDAO
+public class UserDAO extends DAO implements IUserDAO
 {
-	// Max allowed length of path to user file
-	private static final String FILE_PATH_LENGTH = "50";
-
 	// allows monitoring or online users
 	private ObservableList<String> onlineUserList = FXCollections.observableArrayList();
-
-	private static String url = "jdbc:sqlite:users.db";
-	private static Connection connection = null;
 
 	/**
 	 * This constructor will make a table of Users if it does not exist.
@@ -53,23 +43,7 @@ public class UserDAO implements IUserDAO
 	 */
 	public UserDAO() throws SQLException
 	{
-		String createQuery = "CREATE TABLE IF NOT EXISTS Users (\n" + "userName varchar(" +
-				Authenticator.MAX_NAME_LENGTH +
-				") not null, \n" +
-				"passwordCipher varchar(" +
-				Authenticator.MAX_PW_LENGTH +
-				") not null, \n" +
-				"filePath varchar(" +
-				FILE_PATH_LENGTH +
-				") not null, \n" +
-				"isOnline bit not null," +
-				"PRIMARY KEY (userName)" +
-				");";
-
-		try (Connection conn = DriverManager.getConnection(url); Statement stmt = conn.createStatement())
-		{
-			stmt.execute(createQuery);
-		}
+		super();
 	}
 
 	/**
@@ -81,7 +55,7 @@ public class UserDAO implements IUserDAO
 	@Override
 	public void createUser(String enteredUsername, String enteredPassword, String enteredPwConfirm) throws NewUserException, FileNotFoundException, IOException
 	{
-		// verifiy a legally formatted name is entered
+		// verify a legally formatted name is entered
 		ArrayList<UsernameError> usernameErrorList = Authenticator.checkUsernameLegality(enteredUsername);
 
 		// if there is an error list, throw an exception with that list
@@ -390,49 +364,8 @@ public class UserDAO implements IUserDAO
 		}
 	}
 
-
 	public ObservableList<String> getOnlinePlayerList()
 	{
 		return this.onlineUserList;
 	}
-	
-	
-	/**
-	 * use to open connection prior to accessing database
-	 */
-	private static void openConnection()
-	{
-		try
-		{
-			if (connection == null || connection.isClosed())
-			{
-				connection = DriverManager.getConnection(url);
-			}
-		}
-		catch (SQLException e)
-		{
-			System.out.print(e.getMessage());
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * use to close connection after accessing database
-	 */
-	private static void closeConnection()
-	{
-		try
-		{
-			if (connection != null)
-			{
-				connection.close();
-			}
-		}
-		catch (SQLException e)
-		{
-			System.out.print(e.getMessage());
-			e.printStackTrace();
-		}
-	}
-	
 }

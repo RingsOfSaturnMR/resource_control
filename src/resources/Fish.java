@@ -2,18 +2,13 @@ package resources;
 
 import java.io.Serializable;
 
-<<<<<<< HEAD
 import graphicclasses.FishGraphic;
 
 public class Fish extends SeaCreature<FishSpecies> implements Serializable
 {
 	
-	FishGraphic fishGraphic=null;
-	
-=======
-public class Fish extends SeaCreature<FishSpecies> implements Serializable
-{
->>>>>>> nils_branch
+	transient FishGraphic fishGraphic=null;
+
 	public Fish(){
 		super();
 	}
@@ -21,6 +16,12 @@ public class Fish extends SeaCreature<FishSpecies> implements Serializable
 	public Fish(FishSpecies species, double weight)
 	{
 		super(species, weight);
+		super.setSpeed(10);
+	}
+	
+	public Fish(FishSpecies species, double weight, double speedFactor)
+	{
+		super(species, weight, speedFactor);
 	}
 	
 	public void setFishBodyByWeight(){
