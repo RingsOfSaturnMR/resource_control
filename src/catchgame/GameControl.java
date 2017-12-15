@@ -177,8 +177,8 @@ public class GameControl
 		}
 
 		// add the listeners of this scope
-		player.getIceChest().addListener(new IceChestChangeListener());
-		player.getToolChest().addListener(new ToolChestChangeListener());
+		player.addIceChestListner(new IceChestChangeListener());
+		player.addToolChestListner(new ToolChestChangeListener());
 		// give player a way to send stats to server after change
 		player.setStatSendHandler(new SendStatsHandler());
 
