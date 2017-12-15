@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 import catchgame.Packets.LeaderBoardPacket;
 import catchgame.Packets.LeaderBoardRow;
+import utilities.NumberUtilities;
 
 public class LeaderBoardDAO extends DAO
 {
@@ -38,12 +39,12 @@ public class LeaderBoardDAO extends DAO
 			while (rSet.next())
 			{
 				name = rSet.getString(1);
-				totalMoneyEarned = Double.parseDouble(rSet.getString(2));
-				cashOnHand = Double.parseDouble(rSet.getString(3));
+				totalMoneyEarned = NumberUtilities.round(Double.parseDouble(rSet.getString(2)), 2);
+				cashOnHand = NumberUtilities.round(Double.parseDouble(rSet.getString(3)), 2);
 				numCreaturesCaught = Integer.parseInt((rSet.getString(4)));
 
 				scores[i] = new LeaderBoardRow(name, totalMoneyEarned, cashOnHand, numCreaturesCaught);
-
+				
 				i++;
 			}
 		}

@@ -179,6 +179,7 @@ public class Catch extends Application
 			if (catchServer != null)
 			{
 				newUserPane.setServerPortNum(catchServer.getServerSocketPort());
+				newUserPane.setServerIpAddress(catchServer.getIpAddress());
 			}
 			Scene newUserScene = new Scene(newUserPane, Constants.NEW_USER_PANE_WIDTH, Constants.NEW_USER_PANE_HEIGHT);
 			newUserStage.setScene(newUserScene);
@@ -201,6 +202,7 @@ public class Catch extends Application
 			catchServer.isListeningForClients().addListener(ov -> {
 				if(loginPane != null)
 				{
+					loginPane.setServerIpAddress(catchServer.getIpAddress());
 					loginPane.setClientPortNum(catchServer.getServerSocketPort());
 				}});
 		}
@@ -223,6 +225,7 @@ public class Catch extends Application
 			gameControl.getGameRunning().addListener(ov -> {
 				loadLoginPane();
 				loginPane.setClientPortNum(catchServer.getServerSocketPort());
+				loginPane.setServerIpAddress(catchServer.getIpAddress());
 			});
 			
 			loginStage.close();

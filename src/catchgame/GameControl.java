@@ -547,7 +547,12 @@ public class GameControl
 					try
 					{
 						double currentPrice = seafoodMarket.getCurrentPricePerPound(Constants.SUPPORTED_SPECIES[i]);
+						// round to 2 decimal places
+						currentPrice = NumberUtilities.round(currentPrice, 2);
 						gamePane.seafoodMarketPane.setCurrentPricesTextAt(i, Double.toString(currentPrice));
+						
+						//double currentPrice = seafoodMarket.getCurrentPricePerPound(Constants.SUPPORTED_SPECIES[i]);
+						//gamePane.seafoodMarketPane.setCurrentPricesTextAt(i, Double.toString(currentPrice));
 					}
 					catch (Exception e)
 					{

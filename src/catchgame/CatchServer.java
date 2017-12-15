@@ -73,6 +73,7 @@ public class CatchServer
 	private int serverSocketPort;
 	private SimpleBooleanProperty listeningForNewClients = new SimpleBooleanProperty(false);
 	private Thread newClientThread = null;
+	private String ipAddress;
 	
 	// to hold threads
 	private ConcurrentHashMap<String, HandleServerSideGameControl> threadMap = new ConcurrentHashMap<>();
@@ -161,11 +162,13 @@ public class CatchServer
 				// let it decide for itself, set to '0'
 				ServerSocket serverSocket = new ServerSocket(0);
 				serverSocketPort = serverSocket.getLocalPort();
+				ipAddress = InetAddress.getLocalHost().getHostAddress();
 				
 				Platform.runLater(() ->
 				{
 					serverPane.appendToOutput("Server Started at: " + new Date());
 					serverPane.appendToOutput("Open to clients on port " + serverSocketPort );
+				
 					try
 					{
 						serverPane.appendToOutput("Server IP Adress: " + InetAddress.getLocalHost().getHostAddress());
@@ -267,13 +270,6 @@ public class CatchServer
 							
 							threadMap.put(newUserPacket.enteredName, handleServerSideGameControl);
 							new Thread(threadMap.get(newUserPacket.enteredName)).start();	
-							
-							//new Thread(handleServerSideGameControl).start();
-							
-							// start serving that user on a new thread
-							//clientThreadList.add(new Thread(handleServerSideGameControl));
-							//clientThreadList.get(clientThreadList.size()-1).start();
-
 						}
 						catch (NewUserException e)
 						{
@@ -541,5 +537,10 @@ public class CatchServer
 		{
 			new DatabaseManipulator();
 		}
+	}
+	
+	public String getIpAddress()
+	{
+		return this.ipAddress;
 	}
 }

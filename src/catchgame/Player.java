@@ -13,6 +13,7 @@ import resources.FishSpecies;
 import resources.SeaCreature;
 import resources.ShellfishSpecies;
 import resources.SimpleFishingItemType;
+import utilities.NumberUtilities;
 
 /**
  * @author Nils
@@ -77,7 +78,7 @@ public class Player extends authentication.User implements Serializable
 
 	public double getCashOnHand()
 	{
-		return this.cashOnHand;
+		return NumberUtilities.round(cashOnHand, 2);
 	}
 
 	public void addMoney(double amount)
@@ -169,167 +170,28 @@ public class Player extends authentication.User implements Serializable
 		observableListsLoaded = false;
 	}
 
-	// TODO holy shit nils, fix this up
-	// see Constants -> public static final Image getImage(final Enum<?> desiredResourceType) for ideas
+	/**
+	 * @param species that you wish to know how many the player has.
+	 * @return the number of that species the player has.
+	 */
 	public int getNumOf(Enum<?> species)
 	{
-		// GET RID OF THIS in a refactor
-		loadObservableLists();
-		// counter
-		int numOfSpecies = 0;
-
-		if (species instanceof FishSpecies)
+		if (!observableListsLoaded)
 		{
-			switch ((FishSpecies) species)
+			loadObservableLists();
+		}
+
+		int numSpecies = 0;
+
+		for (SeaCreature<?> creature : iceChest)
+		{
+			if (creature.getSpecies() == species)
 			{
-			case COD:
-				for (int i = 0; i < iceChest.size(); i++)
-				{
-					if (iceChest.get(i).getSpecies() == FishSpecies.COD)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;
 
-			case SALMON:
-				for (int i = 0; i < iceChest.size(); i++)
-				{
-					if (iceChest.get(i).getSpecies() == FishSpecies.SALMON)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;
-
-			case TUNA:
-				for (int i = 0; i < iceChest.size(); i++)
-				{
-					if (iceChest.get(i).getSpecies() == FishSpecies.TUNA)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;
-
-			// TODO - handle this a little better
-			default:
-				return 0;
+				numSpecies++;
 			}
 		}
-		if (species instanceof ShellfishSpecies)
-		{
-			switch ((ShellfishSpecies) species)
-			{
-			case CRAB:
-				for (int i = 0; i < iceChest.size(); i++)
-				{
-					if (iceChest.get(i).getSpecies() == ShellfishSpecies.CRAB)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;
-
-			case LOBSTER:
-				for (int i = 0; i < iceChest.size(); i++)
-				{
-					if (iceChest.get(i).getSpecies() == ShellfishSpecies.LOBSTER)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;
-
-			case OYSTER:
-				for (int i = 0; i < iceChest.size(); i++)
-				{
-					if (iceChest.get(i).getSpecies() == ShellfishSpecies.OYSTER)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;
-
-			// TODO - handle this a little better
-			default:
-				return 0;
-			}
-		}
-		
-		// for Simple Fishing items
-		if (species instanceof BoatTypes)
-		{
-			switch ((BoatTypes) species)
-			{
-			case FISHING_SKIFF:
-				for (int i = 0; i < toolChest.size(); i++)
-				{
-					if (toolChest.get(i).getType() == BoatTypes.FISHING_SKIFF)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;
-
-			case TRAWLER:
-				for (int i = 0; i < toolChest.size(); i++)
-				{
-					if (toolChest.get(i).getType() == BoatTypes.TRAWLER)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;
-
-			case COMMERCIAL_TRAWLER:
-				for (int i = 0; i < toolChest.size(); i++)
-				{
-					if (toolChest.get(i).getType() == BoatTypes.COMMERCIAL_TRAWLER)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;
-			// TODO - handle this a little better
-			default:
-				return 0;
-			}
-		}
-		
-		// For SimpleFishingTypes
-		if (species instanceof SimpleFishingItemType)
-		{
-			switch ((SimpleFishingItemType) species)
-			{
-			case FISHING_POLE:
-				for (int i = 0; i < toolChest.size(); i++)
-				{
-					if (toolChest.get(i).getType() == SimpleFishingItemType.FISHING_POLE)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;
-				
-			case BEER:
-				for (int i = 0; i < toolChest.size(); i++)
-				{
-					if (toolChest.get(i).getType() == SimpleFishingItemType.BEER)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;		
-
-
-			// TODO - handle this a little better
-			default:
-				return 0;
-			}
-	
-		}
-		return 0;
+		return numSpecies;
 	}
 
 	public SeaCreature<?> getSeaNextSeaCreature(Enum<?> species)
@@ -362,12 +224,13 @@ public class Player extends authentication.User implements Serializable
 
 	public double getTotalEarned()
 	{
-		return this.totalEarned;
+		return NumberUtilities.round(totalEarned, 2);
 	}
 	
 
 	public int getTotalCatches()
 	{
+		
 		return totalCatches;
 	}
 
