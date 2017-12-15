@@ -2,10 +2,8 @@ package graphicclasses;
 
 import catchgame.Constants;
 import javafx.scene.image.Image;
-<<<<<<< HEAD
-=======
 import javafx.scene.image.ImageView;
->>>>>>> master
+
 
 public class AbstractSeaCreatureGraphic {
 	protected Image seaCreatureImage;

@@ -180,10 +180,7 @@ public class Catch extends Application
 			if (catchServer != null)
 			{
 				newUserPane.setServerPortNum(catchServer.getServerSocketPort());
-<<<<<<< HEAD
-=======
 				newUserPane.setServerIpAddress(catchServer.getServerIp());
->>>>>>> master
 			}
 			Scene newUserScene = new Scene(newUserPane, Constants.NEW_USER_PANE_WIDTH, Constants.NEW_USER_PANE_HEIGHT);
 			newUserStage.setScene(newUserScene);

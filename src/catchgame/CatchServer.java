@@ -30,16 +30,14 @@ import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
-<<<<<<< HEAD
+
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-=======
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
->>>>>>> master
 import authentication.BadLoginException;
 import authentication.BadLoginException.LoginError;
 import authentication.BadPasswordException;

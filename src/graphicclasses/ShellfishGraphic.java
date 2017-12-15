@@ -1,13 +1,11 @@
 package graphicclasses;
 
 import catchgame.Constants;
-<<<<<<< HEAD
-=======
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import resources.Fish;
 import resources.FishSpecies;
->>>>>>> master
 import resources.Shellfish;
 
 public class ShellfishGraphic extends AbstractSeaCreatureGraphic{
@@ -38,44 +36,9 @@ public class ShellfishGraphic extends AbstractSeaCreatureGraphic{
 		shellfishImageView.setPreserveRatio(true);
 		shellfishImageView.setSmooth(true);
 		shellfishImageView.setCache(true);
-		
-<<<<<<< HEAD
-=======
-		/*
-		seaCreatureImage=getImage(fish.getSpecies());
-		System.out.println("got image");
-		seaCreatureImageView.setImage(seaCreatureImage);
-		System.out.println("set image");
-		*/
->>>>>>> master
 	}
 	
 	public ShellfishImageView getShellfishImageView(){
 		return shellfishImageView;
 	}
-	
-<<<<<<< HEAD
-=======
-	/*
-	protected ImageView seaCreatureImageView=new ImageView();
-	protected Image seaCreatureImage;
-	
-	public static final Image getImage(final Enum<?> e)
-	{
-		for(int i = 0; i < Constants.SUPPORTED_SPECIES.length; i++ )
-		{
-			if(e == Constants.SUPPORTED_SPECIES[i])
-			{
-				return (new Image("img/" + Constants.SUPPORTED_SPECIES[i].toString().toLowerCase() + ".png"));
-			}
-		}
-		
-		return null;	
-	}
-	
-	public ImageView getSeaCreatureImageView(){
-		return seaCreatureImageView;
-	}
-	*/
->>>>>>> master
 }

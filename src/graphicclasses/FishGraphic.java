@@ -1,14 +1,8 @@
 package graphicclasses;
 
 import catchgame.Constants;
-<<<<<<< HEAD
 import resources.Fish;
-=======
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import resources.Fish;
-import resources.FishSpecies;
->>>>>>> master
+
 
 public class FishGraphic extends AbstractSeaCreatureGraphic{
 	private Fish fish;
@@ -34,34 +28,21 @@ public class FishGraphic extends AbstractSeaCreatureGraphic{
 			WEIGHT_GRAPHIC_MULTIPLE=Constants.SEACREATURE_WEIGHT_GRAPHIC_MULTIPLE;
 			break;
 		}
-<<<<<<< HEAD
+
 		fishImageView.setFitWidth(fish.getWeight()*WEIGHT_GRAPHIC_MULTIPLE);
-=======
-		//double fishImageViewWidth=fish.getWeight()*Constants.COD_WEIGHT_GRAPHIC_MULTIPLE;
-		fishImageView.setFitWidth(fish.getWeight()*WEIGHT_GRAPHIC_MULTIPLE);
-		//fishImageView.setPreserveRatio(true);
->>>>>>> master
 		fishImageView.setFitHeight(this.seaCreatureImage.getHeight()*fishImageView.getFitWidth()/this.seaCreatureImage.getWidth());
 		fishImageView.setSmooth(true);
 		fishImageView.setCache(true);
 		
-<<<<<<< HEAD
-=======
-		/*
-		seaCreatureImage=getImage(fish.getSpecies());
-		System.out.println("got image");
-		seaCreatureImageView.setImage(seaCreatureImage);
-		System.out.println("set image");
-		*/
->>>>>>> master
+
+
 	}
 	
 	public FishImageView getFishImageView(){
 		return fishImageView;
 	}
 	
-<<<<<<< HEAD
-=======
+
 	/*
 	protected ImageView seaCreatureImageView=new ImageView();
 	protected Image seaCreatureImage;
@@ -83,5 +64,5 @@ public class FishGraphic extends AbstractSeaCreatureGraphic{
 		return seaCreatureImageView;
 	}
 	*/
->>>>>>> master
+
 }

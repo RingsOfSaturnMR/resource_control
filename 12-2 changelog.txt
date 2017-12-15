@@ -1,4 +1,0 @@
-Changed MarketPane to SeafoodMarketPane. I made it really generic and it doesnt require any direct references to the player or the SeafoodMarket; GameControl handles setting all the parameters.
-
-Caileigh: I created an object, SeafoodPriceSetEventHandler, which is made a member of SeafoodMarket. It has a method "setPrices()", will cause SeafoodMarket to fetch the current prices again. Right now, for testing purposes, I created "public void forcePriceUpdate()" which fires this event. Somewhere in this class, just call priceSetHandler.setPrices() when it is appropriate to change the prices, and it will be reflected in the rest of the program. 
-

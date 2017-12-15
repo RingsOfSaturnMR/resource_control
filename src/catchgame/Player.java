@@ -2,14 +2,11 @@ package catchgame;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-<<<<<<< HEAD
 
 import catchgame.GameControl.SendStatsHandler;
-=======
 import authentication.User;
 import catchgame.GameControl.SendStatsHandler;
 import javafx.beans.value.ChangeListener;
->>>>>>> master
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -47,9 +44,6 @@ public class Player extends User implements Serializable
 	// allows the player to send stats to the server
 	private transient SendStatsHandler sendStatsHandler = null;
 
-	// allows the player to send stats to the server
-	private transient SendStatsHandler sendStatsHandler = null;
-
 	public Player(String username)
 	{
 		super(username);
@@ -68,15 +62,6 @@ public class Player extends User implements Serializable
 		iceChest.add(item);
 		totalCatches++;
 		sendStatsToServer();
-<<<<<<< HEAD
-	}
-
-	public void removeSeaCreatureFromIceChest(int i)
-	{
-		iceChest.remove(i);
-		sendStatsToServer();
-=======
->>>>>>> master
 	}
 
 	public void addItemToToolChest(Equipment item)
@@ -104,28 +89,8 @@ public class Player extends User implements Serializable
 
 	public void subtractMoney(double amount)
 	{
-<<<<<<< HEAD
-		cashOnHand -= d;
-		sendStatsToServer();
-	}
-
-	public SeaCreature<?> getSeaCreatureAt(int index)
-	{
-		return this.iceChest.get(index);
-	}
-
-	public ObservableList<SeaCreature> getIceChest()
-	{
-		if (observableListsLoaded != true)
-		{
-			loadObservableLists();
-		}
-
-		return iceChest;
-=======
 		cashOnHand -= amount;
 		sendStatsToServer();
->>>>>>> master
 	}
 
 	/**
@@ -208,34 +173,8 @@ public class Player extends User implements Serializable
 		{
 			if (creature.getSpecies() == species)
 			{
-<<<<<<< HEAD
-			case FISHING_POLE:
-				for (int i = 0; i < toolChest.size(); i++)
-				{
-					if (toolChest.get(i).getType() == SimpleFishingItemType.FISHING_POLE)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;
-				
-			case BEER:
-				for (int i = 0; i < toolChest.size(); i++)
-				{
-					if (toolChest.get(i).getType() == SimpleFishingItemType.BEER)
-					{
-						numOfSpecies++;
-					}
-				}
-				return numOfSpecies;		
 
-
-			// TODO - handle this a little better
-			default:
-				return 0;
-=======
 				numSpecies++;
->>>>>>> master
 			}
 		}
 		return numSpecies;
@@ -314,27 +253,4 @@ public class Player extends User implements Serializable
 		this.toolChest.addListener(toolChestChangeListner);
 	}
 
-	public double getTotalEarned()
-	{
-		return this.totalEarned;
-	}
-	
-
-	public int getTotalCatches()
-	{
-		return totalCatches;
-	}
-
-	public void setStatSendHandler(SendStatsHandler sendStatsHandler)
-	{
-		this.sendStatsHandler = sendStatsHandler;
-	}
-	
-	private void sendStatsToServer()
-	{
-		if(sendStatsHandler != null)
-		{
-			sendStatsHandler.send();
-		}
-	}
 }
