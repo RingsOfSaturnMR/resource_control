@@ -53,6 +53,13 @@ public class Constants
 	public final static double CRAB_INITIAL_PRICE_PER_POUND = 11.0;
 	public final static double LOBSTER_INITIAL_PRICE_PER_POUND = 20.0;
 	
+	// Equipment prices 
+	public final static double COMMERCIAL_TRAWLER_PRICE = 120.00;
+	public final static double TRAWLER_PRICE = 85.00;
+	public final static double FISHING_SKIFF_PRICE = 60.00;
+	public final static double BEER_PRICE = 1.00; // who isn't a fan of dollar drafts? 
+	public final static double FISHING_POLE_PRICE = 15.00;
+	
 	// for max and min rand time coeffient 
 	public final static int MIN_PRICE_FLUX = 1;
 	public final static int MAX_PRICE_FLUX = 5;

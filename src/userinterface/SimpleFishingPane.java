@@ -39,12 +39,12 @@ public class SimpleFishingPane extends Pane
 		Image oceanImage=new Image("img/ocean.png");
 		oceanImageView.setImage(oceanImage);
 		oceanImageView.setFitWidth(Constants.INITIAL_SIMPLE_FISHING_PANE_WIDTH);
-		oceanImageView.setFitHeight(Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT*Constants.TOP_COEFFICIENT);
+		oceanImageView.setFitHeight(Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT/*Constants.TOP_COEFFICIENT*/);
 		Rectangle rocksRectangle=new Rectangle(Constants.INITIAL_SIMPLE_FISHING_PANE_WIDTH,
 				Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT*Constants.BOTTOM_COEFFICIENT);
 		rocksRectangle.setTranslateY(Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT*Constants.TOP_COEFFICIENT);
 		rocksRectangle.setFill(Color.LIGHTGREY);
-		this.getChildren().addAll(oceanImageView, rocksRectangle);
+		this.getChildren().addAll(oceanImageView/*, rocksRectangle*/);
 		this.setClip(clippingRectangle);
 	}
 }
