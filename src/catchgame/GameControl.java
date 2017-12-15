@@ -668,16 +668,23 @@ public class GameControl
 		@Override
 		public void handle(ActionEvent arg0)
 		{
-			if (player.getCashOnHand() >= equipMarket.getCurrentPrice(itemType))
+			try
 			{
-				player.addItemToToolChest((Equipment<?>) equipMarket.buyItem(itemType));
-				player.subtractMoney(equipMarket.getCurrentPrice(itemType));
+				if (player.getCashOnHand() >= equipMarket.getCurrentPrice(itemType))
+				{
+					player.addItemToToolChest((Equipment<?>) equipMarket.buyItem(itemType));
+					player.subtractMoney(equipMarket.getCurrentPrice(itemType));
 
-				gamePane.appendOutput("New Fishing Gear Purchased: " + itemType.toString());
+					gamePane.appendOutput("New Fishing Gear Purchased: " + itemType.toString());
+				}
+				else
+				{
+					gamePane.appendOutput("Transaction Declined, Insufficent Funds");
+				}
 			}
-			else
+			catch (Exception e)
 			{
-				gamePane.appendOutput("Transaction Declined, Insufficent Funds");
+				gamePane.appendOutput("Market Problem: " + e.getMessage());
 			}
 
 		}
@@ -689,7 +696,14 @@ public class GameControl
 		{
 			for (int i = 0; i < Constants.SUPPORTED_EQUIPMENT.length; i++)
 			{
-				gamePane.equipmentMarketPane.setCurrentPricesTextAt(i, Double.toString(equipMarket.getCurrentPrice(Constants.SUPPORTED_EQUIPMENT[i])));
+				try
+				{
+					gamePane.equipmentMarketPane.setCurrentPricesTextAt(i, Double.toString(equipMarket.getCurrentPrice(Constants.SUPPORTED_EQUIPMENT[i])));
+				}
+				catch (Exception e)
+				{
+					gamePane.appendOutput("Market Error: " + e.getMessage());
+				}
 			}
 			gamePane.appendOutput("New Market Prices Posted.");
 		}
