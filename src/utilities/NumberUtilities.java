@@ -13,7 +13,11 @@ Modification info:
 new
 */
 import java.util.Random;
-
+/**
+ * 
+ * Useful math oriented utilities
+ *
+ */
 public class NumberUtilities {
 	
 	private static Random rand = new Random();
@@ -32,10 +36,10 @@ public class NumberUtilities {
 	/**
 	 * Returns random double in the specified range.
 	 * @param min min the minimum value for the range
-	 * @param max the minimum value for the range
+	 * @param max the maximum value for the range
 	 * @return A random double in the specified range
 	 */
-	public static double getRandomDouble(double max, double min)
+	public static double getRandomDouble(double min, double max)
 	{
 		double randomDouble = (max - min) * rand.nextDouble() + min;
 		return randomDouble;

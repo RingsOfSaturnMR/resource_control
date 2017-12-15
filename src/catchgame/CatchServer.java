@@ -30,14 +30,8 @@ import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
-
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
 import authentication.BadLoginException;
 import authentication.BadLoginException.LoginError;
 import authentication.BadPasswordException;
@@ -77,7 +71,6 @@ public class CatchServer
 	private ServerPane serverPane = null;
 	private UserDAO userDAO = null;
 	private int serverSocketPort;
-	private String serverIpAddress;
 	private SimpleBooleanProperty listeningForNewClients = new SimpleBooleanProperty(false);
 	private Thread newClientThread = null;
 	
@@ -168,7 +161,6 @@ public class CatchServer
 				// let it decide for itself, set to '0'
 				ServerSocket serverSocket = new ServerSocket(0);
 				serverSocketPort = serverSocket.getLocalPort();
-				serverIpAddress = InetAddress.getLocalHost().getHostAddress();
 				
 				Platform.runLater(() ->
 				{
@@ -517,14 +509,6 @@ public class CatchServer
 	public int getServerSocketPort()
 	{
 		return this.serverSocketPort;
-	}
-	
-	/**
-	 * @return the server's ip address
-	 */
-	public String getServerIp()
-	{
-		return serverIpAddress;
 	}
 	
 	/**

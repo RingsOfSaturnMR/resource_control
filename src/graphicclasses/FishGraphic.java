@@ -3,11 +3,21 @@ package graphicclasses;
 import catchgame.Constants;
 import resources.Fish;
 
-
+/**
+ * Contains a reference to a fish and a FishImageView and makes
+ * the FishImageView sized based on the weight of the fish
+ * @author mattroberts
+ *
+ */
 public class FishGraphic extends AbstractSeaCreatureGraphic{
 	private Fish fish;
 	private FishImageView fishImageView;
 	
+	/**
+	 * Tells super to get the appropriate image and then scales
+	 * it based on the fish's weight
+	 * @param fish the fish to be displayed
+	 */
 	public FishGraphic(Fish fish){
 		this.fish=fish;
 		
@@ -28,41 +38,19 @@ public class FishGraphic extends AbstractSeaCreatureGraphic{
 			WEIGHT_GRAPHIC_MULTIPLE=Constants.SEACREATURE_WEIGHT_GRAPHIC_MULTIPLE;
 			break;
 		}
-
 		fishImageView.setFitWidth(fish.getWeight()*WEIGHT_GRAPHIC_MULTIPLE);
 		fishImageView.setFitHeight(this.seaCreatureImage.getHeight()*fishImageView.getFitWidth()/this.seaCreatureImage.getWidth());
 		fishImageView.setSmooth(true);
 		fishImageView.setCache(true);
 		
-
-
 	}
 	
+	/**
+	 * public method for getting the FishImageView
+	 * @return this graphic's FishImageView
+	 */
 	public FishImageView getFishImageView(){
 		return fishImageView;
 	}
 	
-
-	/*
-	protected ImageView seaCreatureImageView=new ImageView();
-	protected Image seaCreatureImage;
-	
-	public static final Image getImage(final Enum<?> e)
-	{
-		for(int i = 0; i < Constants.SUPPORTED_SPECIES.length; i++ )
-		{
-			if(e == Constants.SUPPORTED_SPECIES[i])
-			{
-				return (new Image("img/" + Constants.SUPPORTED_SPECIES[i].toString().toLowerCase() + ".png"));
-			}
-		}
-		
-		return null;	
-	}
-	
-	public ImageView getSeaCreatureImageView(){
-		return seaCreatureImageView;
-	}
-	*/
-
 }

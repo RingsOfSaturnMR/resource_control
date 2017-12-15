@@ -17,14 +17,11 @@ added Frequency histogram button stuff and menu stuff
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 public class ServerPane extends VBox

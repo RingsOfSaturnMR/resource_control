@@ -1,13 +1,9 @@
 package catchgame;
 
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import authentication.BadLoginException;
-import authentication.EncryptionFilter;
-import authentication.BadLoginException.LoginError;
+
 import catchgame.Packets.LeaderBoardPacket;
 import catchgame.Packets.LeaderBoardRow;
 

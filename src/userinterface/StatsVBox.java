@@ -1,10 +1,7 @@
 package userinterface;
 
-import catchgame.GameControl.FetchStatsHandler;
 import catchgame.Packets.LeaderBoardPacket;
 import catchgame.Packets.LeaderBoardRow;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;

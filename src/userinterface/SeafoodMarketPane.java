@@ -1,7 +1,5 @@
 package userinterface;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 
 import catchgame.Constants;
 import catchgame.GameControl.IsValidQuantityListener;
@@ -14,11 +12,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 
 
 /**
@@ -27,10 +23,9 @@ import javafx.scene.text.TextAlignment;
 public class SeafoodMarketPane extends VBox
 {
 	// for titles
-	private final Label lblPrices = new Label("Current Prices");
-	private final Label lblMyResources = new Label("My Sea Creatures");
-	private final Label lblToSell = new Label("Resources To Sell");
-
+	private Label lblPrices = new Label("Current Prices");
+	private Label lblMyResources = new Label("My Sea Creatures");
+	private Label lblToSell = new Label("Resources To Sell");
 
 	// for the name dispayed at top of the market
 	public Text txtMarketName;

@@ -1,7 +1,8 @@
-package catchgame;
+package animation_work_and_driver;
 
 import java.util.ArrayList;
 
+import catchgame.Constants;
 import graphicclasses.FishImageView;
 import graphicclasses.ShellfishImageView;
 import javafx.animation.KeyFrame;
@@ -11,34 +12,34 @@ import resources.Fish;
 import resources.Shellfish;
 import userinterface.SimpleFishingPane;
 import utilities.NumberUtilities;
-import catchgame.FishingActivity.ClientSubOcean;
+
+
 /**
- * Animates all SeaCreatures in the clientSubOcean object passed 
- * to it on the simpleFishingPane object passed to it
- * 
+ * Animates SeaCreatures on a SimpleFishingPane
  * @author mattroberts
  *
  */
-public class ClientSubOceanAnimator {
+public class ClientSubOceanAnimatorForDriver {
 
 	SimpleFishingPane simpleFishingPane;
-	ClientSubOcean clientSubOcean;
 
-	Timeline seaCreatureAnimationTimeline;
+	ArrayList<Fish> codPopulation = new ArrayList<>();
+	ArrayList<Fish> salmonPopulation = new ArrayList<>();
+	ArrayList<Fish> tunaPopulation = new ArrayList<>();
+
+	// resounces.ShellFishSpecies
+	ArrayList<Shellfish> lobsterPopulation = new ArrayList<>();
+	ArrayList<Shellfish> crabPopulation = new ArrayList<>();
+	ArrayList<Shellfish> oysterPopuliation = new ArrayList<>();
+
+	Timeline timeline;
 
 	/**
-	 * Animates all SeaCreatures in the clientSubOcean object passed 
-	 * to it on the simpleFishingPane object passed to it
-	 * @param simpleFishingPane the pane that it is animated on,
-	 * complete with ocean background and gray rectangle for
-	 * rocky sea floor
-	 * @param clientSubOcean the wrapper class that contains all
-	 * the SeaCreatures to be animated (this class uses the 
-	 * clientSubOcean's array lists.
+	 * Animates SeaCreatures on a SimpleFishingPane
+	 * @param simpleFishingPane the pane on which the animation will occur
 	 */
-	ClientSubOceanAnimator(SimpleFishingPane simpleFishingPane, ClientSubOcean clientSubOcean) {
+	ClientSubOceanAnimatorForDriver(SimpleFishingPane simpleFishingPane) {
 		this.simpleFishingPane = simpleFishingPane;
-		this.clientSubOcean=clientSubOcean;
 	}
 
 	/**
@@ -46,24 +47,24 @@ public class ClientSubOceanAnimator {
 	 * every one-twentieth of a second
 	 */
 	void doBasicClientSubOceanAnimation() {
-		seaCreatureAnimationTimeline = new Timeline();
+		Timeline timeline = new Timeline();
 		KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.05), event -> {
 			makeSeaCreaturesOnScreenGo();
 		});
 
-		seaCreatureAnimationTimeline.getKeyFrames().addAll(keyFrame); // add frame to the timeline
+		timeline.getKeyFrames().addAll(keyFrame); // add frame to the timeline
 													// KeyFrames
-		seaCreatureAnimationTimeline.setCycleCount(Timeline.INDEFINITE);
+		timeline.setCycleCount(Timeline.INDEFINITE);
 
-		seaCreatureAnimationTimeline.play();
+		timeline.play();
 	}
 
 	/**
 	 * So the animation thread can be stopped
 	 */
 	void stopAnimation() {
-		if (seaCreatureAnimationTimeline != null) {
-			seaCreatureAnimationTimeline.stop();
+		if (timeline != null) {
+			timeline.stop();
 		} else {
 			System.out.println("Timeline was null.");
 		}
@@ -73,12 +74,12 @@ public class ClientSubOceanAnimator {
 	 * Animates the SeaCreatures, by animating each individual population
 	 */
 	private void makeSeaCreaturesOnScreenGo() {
-		makeFishOnScreenGo(clientSubOcean.codPopulation);
-		makeFishOnScreenGo(clientSubOcean.salmonPopulation);
-		makeFishOnScreenGo(clientSubOcean.tunaPopulation);
-		makeShellfishOnScreenGo(clientSubOcean.lobsterPopulation);
-		makeShellfishOnScreenGo(clientSubOcean.crabPopulation);
-		makeShellfishOnScreenGo(clientSubOcean.oysterPopuliation);
+		makeFishOnScreenGo(codPopulation);
+		makeFishOnScreenGo(salmonPopulation);
+		makeFishOnScreenGo(tunaPopulation);
+		makeShellfishOnScreenGo(lobsterPopulation);
+		makeShellfishOnScreenGo(crabPopulation);
+		makeShellfishOnScreenGo(oysterPopuliation);
 
 	}
 

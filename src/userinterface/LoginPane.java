@@ -14,7 +14,6 @@ Modification info:
 no modifications known
 */
 
-import catchgame.CatchServer;
 import catchgame.Constants;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

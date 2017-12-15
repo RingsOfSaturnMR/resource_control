@@ -1,29 +1,20 @@
 package animation_work_and_driver;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
-
-import com.sun.javafx.geom.Rectangle;
-
 import catchgame.Constants;
-import catchgame.Catch.LoginHandler;
-import catchgame.Catch.NewServerHandler;
-import catchgame.Catch.NewUserHandler;
-import catchgame.Packets.NewUserPacket;
-import catchgame.Packets.ResultPacket;
 import catchgame.Player;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import userinterface.LoginPane;
-import userinterface.NewUserPane;
 import userinterface.SimpleFishingPane;
 
+/**
+ * This class was originally used for testing the 
+ * ClientSubOceanAnimator, and now isn't fully up to date,
+ * but is useful because it lets you play around with an
+ * animation without having to log in to Catch!
+ * @author mattroberts
+ *
+ */
 public class AnimationDriver extends Application{
 
 	SimpleFishingPane simpleFishingPane;
@@ -38,6 +29,10 @@ public class AnimationDriver extends Application{
 		launch(args);
 	}	
 	
+	/**
+	 * Loads the SimpleFishingPane and launches a FishingActivity
+	 * @param primaryStage
+	 */
 	public void loadSimpleFishingPanePane(Stage primaryStage)
 	{
 		simpleFishingPane = new SimpleFishingPane();
@@ -45,13 +40,13 @@ public class AnimationDriver extends Application{
 				Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT);
 		primaryStage.setScene(simpleFishingScene);
 		primaryStage.setTitle("Fishing Activity");
-		FishingActivityV2 fishingActivityV2=new FishingActivityV2(simpleFishingPane, new Player("JaneFisher"));
+		FishingActivityForDriver fishingActivityV2=new FishingActivityForDriver(simpleFishingPane, new Player("JaneFisher"));
 		primaryStage.setOnCloseRequest(e ->
 		{
 			
 			System.out.println("shutting down animation driver");
 			fishingActivityV2.ocean.shutDownOcean();
-			fishingActivityV2.clientFishingActivityFishManager.stopAnimation();
+			fishingActivityV2.getClientFishingActivityFishManager().stopAnimation();
 			System.out.println("animation driver shut down");
 			
 		});

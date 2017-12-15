@@ -30,19 +30,13 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javafx.util.Duration;
 import market.EquipmentMarket;
 import market.SeafoodMarket;
 import resources.Equipment;
 import resources.SeaCreature;
 import userinterface.GamePane;
-import utilities.NumberUtilities;
-import userinterface.SimpleFishingPane;
 import utilities.NumberUtilities;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -50,9 +44,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.util.Optional;
-import java.net.URL;
-import java.util.Optional;
-import java.util.Random;
 import catchgame.Packets.LeaderBoardPacket;
 import catchgame.Packets.LoginPacket;
 import catchgame.Packets.ResultPacket;
@@ -172,10 +163,8 @@ public class GameControl
 		}
 
 		// add the listeners of this scope
-
-		player.addIceChestListner(new IceChestChangeListener());
-		player.addToolChestListner(new ToolChestChangeListener());
-
+		player.getIceChest().addListener(new IceChestChangeListener());
+		player.getToolChest().addListener(new ToolChestChangeListener());
 		// give player a way to send stats to server after change
 		player.setStatSendHandler(new SendStatsHandler());
 

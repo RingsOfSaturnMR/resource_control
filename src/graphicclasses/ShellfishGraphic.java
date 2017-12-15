@@ -1,17 +1,24 @@
 package graphicclasses;
 
 import catchgame.Constants;
-
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import resources.Fish;
-import resources.FishSpecies;
 import resources.Shellfish;
 
+/**
+ * Contains a reference to a shellfish and a ShellfishImageView and 
+ * makes the ShellfishImageView sized based on the weight of the 
+ * shellfish
+ * @author mattroberts
+ *
+ */
 public class ShellfishGraphic extends AbstractSeaCreatureGraphic{
 	private Shellfish shellfish;
 	private ShellfishImageView shellfishImageView;
 	
+	/**
+	 * Tells super to get the appropriate image and then scales
+	 * it based on the shellfish's weight
+	 * @param shellfish the shellfish to be displayed
+	 */
 	public ShellfishGraphic(Shellfish shellfish){
 		this.shellfish=shellfish;
 		
@@ -36,9 +43,11 @@ public class ShellfishGraphic extends AbstractSeaCreatureGraphic{
 		shellfishImageView.setPreserveRatio(true);
 		shellfishImageView.setSmooth(true);
 		shellfishImageView.setCache(true);
+		
 	}
 	
 	public ShellfishImageView getShellfishImageView(){
 		return shellfishImageView;
 	}
+	
 }

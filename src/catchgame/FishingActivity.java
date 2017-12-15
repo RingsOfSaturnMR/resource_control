@@ -25,11 +25,11 @@ public class FishingActivity {
 	private Player player;
 
 	private ClientSubOcean clientSubOcean;
-	private ClientSubOceanAnimator clientFishingActivityFishManager;
+	private ClientSubOceanAnimator clientSubOceanAnimator;
 
 	
 	public ClientSubOceanAnimator getClientFishingActivityFishManager(){
-		return clientFishingActivityFishManager;
+		return clientSubOceanAnimator;
 	}
 	/**
 	 * This constructs a FishingActivity by putting SeaCreatures on the screen.
@@ -48,12 +48,12 @@ public class FishingActivity {
 			ObjectInputStream fromServer, Player player) {
 		this.simpleFishingPane = gamepane.simpleFishingPane;
 		clientSubOcean = new ClientSubOcean();
-		clientFishingActivityFishManager = new ClientSubOceanAnimator(simpleFishingPane);
+		clientSubOceanAnimator = new ClientSubOceanAnimator(simpleFishingPane, clientSubOcean);
 		this.player = player;
 		this.toServer = toServer;
 		this.fromServer = fromServer;
 		updateSeaCreaturesOnScreen();
-		clientFishingActivityFishManager.doBasicClientSubOceanAnimation();
+		clientSubOceanAnimator.doBasicClientSubOceanAnimation();
 	}
 
 	/**
@@ -69,8 +69,9 @@ public class FishingActivity {
 
 	/**
 	 * Gets a SeaCreaturesPacket from the server, and adds all the Sea Creatures
-	 * to the screen, and increments the ClientSubOcean count for all the
-	 * SeaCreatures added
+	 * to the screen, increments the ClientSubOcean count for all the
+	 * SeaCreatures added, and adds all the seaCreatures to the 
+	 * clientSubOceanAnimator
 	 */
 
 	private void updateSeaCreaturesOnScreen() {
@@ -103,12 +104,12 @@ public class FishingActivity {
 		addShellfishPacketToScreen(seaCreaturesPacket.crabPopulation, 
 				(int)(Constants.INITIAL_SIMPLE_FISHING_PANE_HEIGHT*Constants.TOP_COEFFICIENT)+Constants.ONE_HALF_FISH_SHELLFISH_SEPERATION_HEIGHT, Constants.DISTANCE_FROM_BOTTOM);
 
-		clientFishingActivityFishManager.codPopulation.addAll(seaCreaturesPacket.codPopulation);
-		clientFishingActivityFishManager.salmonPopulation.addAll(seaCreaturesPacket.salmonPopulation);
-		clientFishingActivityFishManager.tunaPopulation.addAll(seaCreaturesPacket.tunaPopulation);
-		clientFishingActivityFishManager.lobsterPopulation.addAll(seaCreaturesPacket.lobsterPopulation);
-		clientFishingActivityFishManager.crabPopulation.addAll(seaCreaturesPacket.crabPopulation);
-		clientFishingActivityFishManager.oysterPopuliation.addAll(seaCreaturesPacket.oysterPopulation);
+		clientSubOcean.codPopulation.addAll(seaCreaturesPacket.codPopulation);
+		clientSubOcean.salmonPopulation.addAll(seaCreaturesPacket.salmonPopulation);
+		clientSubOcean.tunaPopulation.addAll(seaCreaturesPacket.tunaPopulation);
+		clientSubOcean.lobsterPopulation.addAll(seaCreaturesPacket.lobsterPopulation);
+		clientSubOcean.crabPopulation.addAll(seaCreaturesPacket.crabPopulation);
+		clientSubOcean.oysterPopuliation.addAll(seaCreaturesPacket.oysterPopulation);
 	}
 
 	/**
@@ -128,11 +129,8 @@ public class FishingActivity {
 					clientSubOcean.currentPopulationOyster, clientSubOcean.maxPopulationOyster,
 					clientSubOcean.currentPopulationLobster, clientSubOcean.maxPopulationLobster,
 					clientSubOcean.currentPopulationCrab, clientSubOcean.maxPopulationCrab);
-			toServer.writeObject(clientSubOceanSeaCreatureStatePacket); //
-			System.out.println("Sent codStatePacket"); //
-			System.out.println("before getting fish packet");
+			toServer.writeObject(clientSubOceanSeaCreatureStatePacket);
 			SeaCreaturesPacket seaCreaturesPacket = (SeaCreaturesPacket) fromServer.readObject(); //
-			System.out.println("after getting fish packet");
 			return seaCreaturesPacket;
 		} catch (IOException ex) {
 			System.out.println(ex.toString());
@@ -153,8 +151,6 @@ public class FishingActivity {
 	 *            the highest the fish can be on the screen
 	 * @param bottomOffset
 	 *            the lowest the fish can be on the screen
-	 * @param color
-	 *            the color the fish should be given
 	 */
 	public void addFishPacketToScreen(ArrayList<Fish> fishUpdate, int topOffset, int bottomOffset) {
 		for (int i = 0; i <= fishUpdate.size() - 1; i++) {
@@ -172,8 +168,6 @@ public class FishingActivity {
 	 *            the highest the shellfish can be on the screen
 	 * @param bottomOffset
 	 *            the lowest the shellfish can be on the screen
-	 * @param color
-	 *            the color the shellfish should be given
 	 */
 	public void addShellfishPacketToScreen(ArrayList<Shellfish> shellfishUpdate, int topOffset, int bottomOffset) {
 		for (int i = 0; i <= shellfishUpdate.size() - 1; i++) {
@@ -191,8 +185,6 @@ public class FishingActivity {
 	 *            the highest the fish can be on the screen
 	 * @param bottomOffset
 	 *            the lowest the fish can be on the screen
-	 * @param color
-	 *            the color the fish should be given
 	 */
 	public void addFishToScreen(Fish fish, int topOffset, int bottomOffset) {
 		fish.setFishBodyByWeight();
@@ -222,8 +214,6 @@ public class FishingActivity {
 	 *            the highest the shellfish can be on the screen
 	 * @param bottomOffset
 	 *            the lowest the shellfish can be on the screen
-	 * @param color
-	 *            the color the shellfish should be given
 	 */
 	public void addShellfishToScreen(Shellfish shellfish, int topOffset, int bottomOffset) {
 		shellfish.setShellfishBodyByWeight();
@@ -244,7 +234,10 @@ public class FishingActivity {
 	}
 
 	/**
-	 * Action that occurs when a fish is caught.
+	 * When a fish is caught, it is added to the player's ice chest, 
+	 * and the population of that species in the clientSubOcean is 
+	 * decremented, and it is removed from the arrayList in the
+	 * clientSubOcean
 	 */
 	private class ExtractFishAction implements EventHandler<MouseEvent> {
 		Fish fish;
@@ -264,22 +257,19 @@ public class FishingActivity {
 						simpleFishingPane.getChildren().remove(fish.getFishGraphic().getFishImageView());
 						switch (fish.getSpecies()) {
 						case COD:
-							ArrayListUtilities.removeObjectFromArrayList(clientFishingActivityFishManager.codPopulation,
+							ArrayListUtilities.removeObjectFromArrayList(clientSubOcean.codPopulation,
 									fish);
-							System.out.println("Cod: " + clientFishingActivityFishManager.codPopulation.size());
 							clientSubOcean.currentPopulationCod--;
 							break;
 						case SALMON:
 							ArrayListUtilities
-									.removeObjectFromArrayList(clientFishingActivityFishManager.salmonPopulation, fish);
-							System.out.println("Salmon: " + clientFishingActivityFishManager.salmonPopulation.size());
+									.removeObjectFromArrayList(clientSubOcean.salmonPopulation, fish);
 							clientSubOcean.currentPopulationSalmon--;
 							break;
 
 						case TUNA:
 							ArrayListUtilities
-									.removeObjectFromArrayList(clientFishingActivityFishManager.tunaPopulation, fish);
-							System.out.println("Tuna: " + clientFishingActivityFishManager.tunaPopulation.size());
+									.removeObjectFromArrayList(clientSubOcean.tunaPopulation, fish);
 							clientSubOcean.currentPopulationTuna--;
 							break;
 						}
@@ -294,7 +284,10 @@ public class FishingActivity {
 	}
 
 	/**
-	 * Action that occurs when a shellfish is caught.
+	 * When a shellfish is caught, it is added to the player's ice chest, 
+	 * and the population of that species in the clientSubOcean is 
+	 * decremented, and it is removed from the arrayList in the
+	 * clientSubOcean
 	 */
 	private class ExtractShellfishAction implements EventHandler<MouseEvent> {
 		Shellfish shellfish;
@@ -315,22 +308,18 @@ public class FishingActivity {
 						switch (shellfish.getSpecies()) {
 						case LOBSTER:
 							ArrayListUtilities.removeObjectFromArrayList(
-									clientFishingActivityFishManager.lobsterPopulation, shellfish);
-							System.out.println("Lobster: " + clientFishingActivityFishManager.lobsterPopulation.size());
+									clientSubOcean.lobsterPopulation, shellfish);
 							clientSubOcean.currentPopulationLobster--;
 							break;
 						case CRAB:
 							ArrayListUtilities.removeObjectFromArrayList(
-									clientFishingActivityFishManager.crabPopulation, shellfish);
-							System.out.println("Crab: " + clientFishingActivityFishManager.crabPopulation.size());
+									clientSubOcean.crabPopulation, shellfish);
 							clientSubOcean.currentPopulationCrab--;
 							break;
 
 						case OYSTER:
 							ArrayListUtilities.removeObjectFromArrayList(
-									clientFishingActivityFishManager.oysterPopuliation, shellfish);
-							System.out.println("Oyster: " + clientFishingActivityFishManager.oysterPopuliation.size());
-
+									clientSubOcean.oysterPopuliation, shellfish);
 							clientSubOcean.currentPopulationOyster--;
 							break;
 						}
@@ -347,6 +336,14 @@ public class FishingActivity {
 	 * For keeping track of all the SeaCreatures on the client's side.
 	 */
 	class ClientSubOcean {
+		ArrayList<Fish> codPopulation = new ArrayList<>();
+		ArrayList<Fish> salmonPopulation = new ArrayList<>();
+		ArrayList<Fish> tunaPopulation = new ArrayList<>();
+
+		// resounces.ShellFishSpecies
+		ArrayList<Shellfish> lobsterPopulation = new ArrayList<>();
+		ArrayList<Shellfish> crabPopulation = new ArrayList<>();
+		ArrayList<Shellfish> oysterPopuliation = new ArrayList<>();
 
 		int currentPopulationCod = 0;
 		int maxPopulationCod = Constants.COD_MAX_POPULATION / 100;

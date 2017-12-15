@@ -48,8 +48,7 @@ public class Catch extends Application
 	// to save port/ip to
 	private static Integer lastPort = null;
 	private static String lastIp = null;
-	
-	
+
 	/**
 	 * Loads the initial login pane, which also is passed 
 	 * actions for making a new user and creating a server
@@ -180,7 +179,6 @@ public class Catch extends Application
 			if (catchServer != null)
 			{
 				newUserPane.setServerPortNum(catchServer.getServerSocketPort());
-				newUserPane.setServerIpAddress(catchServer.getServerIp());
 			}
 			Scene newUserScene = new Scene(newUserPane, Constants.NEW_USER_PANE_WIDTH, Constants.NEW_USER_PANE_HEIGHT);
 			newUserStage.setScene(newUserScene);
@@ -204,7 +202,6 @@ public class Catch extends Application
 				if(loginPane != null)
 				{
 					loginPane.setClientPortNum(catchServer.getServerSocketPort());
-					loginPane.setServerIpAddress(catchServer.getServerIp());
 				}});
 		}
 	}
@@ -222,11 +219,10 @@ public class Catch extends Application
 		{
 			GameControl gameControl = new GameControl(serverIpAddress, clientPort, playerName, playerPassword);
 			
-			// loads another loginPane and when the game stops.
+			// shuts down loginPane if gameControl launches successfully
 			gameControl.getGameRunning().addListener(ov -> {
 				loadLoginPane();
 				loginPane.setClientPortNum(catchServer.getServerSocketPort());
-				loginPane.setServerIpAddress(catchServer.getServerIp());
 			});
 			
 			loginStage.close();

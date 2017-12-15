@@ -20,17 +20,14 @@ and only if one has not already been launched
 MarketsPane is in progress
 */
 
-import java.util.Random;
 
 import catchgame.Constants;
 import catchgame.GameControl;
-import catchgame.Player;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -41,13 +38,9 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import market.SeafoodMarket;
 import catchgame.GameControl.FetchStatsHandler;
 import catchgame.GameControl.FishingActivityActions;
 
